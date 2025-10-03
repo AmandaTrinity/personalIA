@@ -29,6 +29,10 @@ function App() {
           onChange={(e) => setTreino(e.target.value)} //Atualiza o estado quando digita
           className='input-treino'
         />
+
+        <button onClick={handleEnviar}>
+          Enviar
+        </button>
         
         </div>
 
