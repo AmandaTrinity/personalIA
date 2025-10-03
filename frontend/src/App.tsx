@@ -1,11 +1,12 @@
 import './styles/App.css'
+import Home from '../src/pages/Home'
 
 function App() {
   return (
-      <div>
-        <h1>PersonalIA</h1>
-      </div>
-  );
+    <div>
+      <Home />
+    </div>
+  )
 }
 
 export default App
