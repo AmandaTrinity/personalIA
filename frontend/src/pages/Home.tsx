@@ -8,10 +8,9 @@ function App() {
                                               // "treino" é enviado para a página "Chat" como input inicial
   return (
       <div>
-
         <h1>PersonalIA</h1>
 
-        <div className='card'>
+        <div className='card'>  
 
           <div className='text-card'>
               {'Qual seu treino de hoje?'}
