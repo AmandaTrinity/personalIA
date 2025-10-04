@@ -23,8 +23,9 @@ def gerar_plano_de_treino(data: MensagemChat) -> str:
             f"Por favor, gere uma resposta para o usuário com base nas seguintes informações:\n"
             f"- Nível de Experiência: {data.nivel}\n"
             f"- Objetivo Principal: {data.objetivo}\n"
-            f"- Equipamentos Disponíveis: {data.equipamentos}\n\n"
-            f"Mensagem do Usuário: \"{data.mensagem_usuario}\""
+            f"- Equipamentos Disponíveis: {data.equipamentos}\n"
+            f"- Disponibilidade na semana: {data.frequencia}\n"
+            f"Mensagem do Usuário: {data.mensagem_usuario}"
         )
         chat = client.chats.create(model="gemini-2.5-flash-lite", history=[{"role": "user", "parts": [{"text": system_instruction}]}])
         
