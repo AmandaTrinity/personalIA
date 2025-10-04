@@ -4,12 +4,8 @@ import { Link } from 'react-router-dom';    // Link é um container que vai leva
 
 function App() {
   //Estado para guardar o valor que o usuário digitar
-  const [treino, setTreino] = useState('')
-
-  const handleEnviar = () => {
-    alert(`Seu treino de hoje é: ${treino}`)
-  }
-
+  const [treino, setTreino] = useState('')    // "treino" é a variável que conterá o texto do usuário
+                                              // "treino" é enviado para a página "Chat" como input inicial
   return (
       <div>
 
@@ -30,12 +26,15 @@ function App() {
           className='input-treino'
         />
 
-        <Link to="/chat">  
-          <button onClick={handleEnviar}>
+        {/* "initial_user_input" é uma chave que têm como valor "treino". É enviado para chat como mensagem inicial do usuário*/}
+        
+        <Link to="/chat" state={{ initial_user_input: treino }}>  
+          <button>
             Enviar
           </button>        
         </Link> 
         
+
         </div>
 
       </div>
