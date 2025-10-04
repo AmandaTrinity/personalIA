@@ -1,6 +1,6 @@
 import '../styles/pages/home.css'
 import {useState} from 'react'
-
+import { Link } from 'react-router-dom';    // Link é um container que vai levar a gente de uma página para outra
 
 function App() {
   //Estado para guardar o valor que o usuário digitar
@@ -30,9 +30,11 @@ function App() {
           className='input-treino'
         />
 
-        <button onClick={handleEnviar}>
-          Enviar
-        </button>
+        <Link to="/chat">  
+          <button onClick={handleEnviar}>
+            Enviar
+          </button>        
+        </Link> 
         
         </div>
 
