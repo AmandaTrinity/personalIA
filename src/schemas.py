@@ -6,3 +6,4 @@ class MensagemChat(BaseModel):
     nivel: Optional[str] = "iniciante"
     objetivo: Optional[str] = "condicionamento"
     equipamentos: Optional[str] = "peso corporal" 
+    frequencia: Optional[str] = "2 dias por semana"
