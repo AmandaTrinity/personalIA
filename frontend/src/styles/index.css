@@ -11,15 +11,18 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --primary-color: #05BEBF; /*Cor do Navbar*/
+  --accent-color: #3fdbdb; /*Cor de hover para o botão*/
+  --card-shadow: rgba(0,0,0,0.3);
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--accent-color);
 }
 
 body {
@@ -44,7 +47,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent-color);
 }
 button:focus,
 button:focus-visible {
@@ -57,7 +60,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: var(--accent-color);
   }
   button {
     background-color: #f9f9f9;
