@@ -1,5 +1,5 @@
 // Barra de navegação, deve estar presente em (praticamente) toda página
-import '../styles/components/nav.css'
+import '../styles/components/Nav.css'
 import { Link, useMatch, useResolvedPath } from "react-router-dom"
 
 export default function Navbar() {
