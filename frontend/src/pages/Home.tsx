@@ -7,7 +7,8 @@ function App() {
   const [treino, setTreino] = useState('')    // "treino" é a variável que conterá o texto do usuário
                                               // "treino" é enviado para a página "Chat" como input inicial
   return (
-      <div>
+      <div className='home-page-wrapper'>
+        
         <h1>PersonalIA</h1>
 
         <div className='card'>  

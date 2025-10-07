@@ -2,41 +2,21 @@
   width: 100%;
   min-height: 100vh;
   padding: 0;
-  justify-content: center;
-  align-items: center;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f5f6fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+.home-page-wrapper {
+    display: flex;
+    flex-direction: column; /* Para empilhar o h1 e o card */
+    justify-content: center; /* Centraliza verticalmente! */
+    align-items: center; /* Centraliza horizontalmente */
+    min-height: 100vh; /* OBRIGATÓRIO: Garante que o wrapper ocupe a altura total da tela */
+    width: 100%;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #2c3e50;
-}
-
-.card {
-  width: 500px;
-  max-width: 70%;
-  min-height: 150px;
-  margin: 0 auto;
-  background-image: linear-gradient(to right, rgba(39,39,42,0.9), rgba(63,63,70,0.9));
-  backdrop-filter: blur(12px);
-  border: 1px solid #52525b;
-  border-radius: 1.5rem;
-  padding: 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  color: #4f502c;
 }
 
 .input-treino {
@@ -51,23 +31,12 @@ h1 {
 }
 
 .input-treino:focus {
-  border-color: #6c5ce7;
+  border-color: #ffffff;
   box-shadow: 0 0 8px rgba(108, 92, 231, 0.5);
 }
 
-button {
-  background-color: #6c5ce7;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
 button:hover {
-  background-color: #5a4bcf;
+  background-color: #4bcfc4;
 }
 
 .text-card{
