@@ -6,10 +6,10 @@
 
 .home-page-wrapper {
     display: flex;
-    flex-direction: column; /* Para empilhar o h1 e o card */
-    justify-content: center; /* Centraliza verticalmente! */
-    align-items: center; /* Centraliza horizontalmente */
-    min-height: 100vh; /* OBRIGATÓRIO: Garante que o wrapper ocupe a altura total da tela */
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    min-height: 100vh;
     width: 100%;
 }
 
