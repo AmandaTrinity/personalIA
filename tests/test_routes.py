@@ -40,12 +40,12 @@ class TestRoutes:
         assert data["version"] == "1.0.0"
     
     def test_openapi_docs(self):
-        """Testa se a documentação da API está disponível"""
+        """Testa se a documentação da API está acessível"""
         response = client.get("/docs")
         assert response.status_code == 200
     
     def test_openapi_json(self):
-        """Testa se o schema OpenAPI está disponível"""
+        """Testa se o schema OpenAPI está correto"""
         response = client.get("/openapi.json")
         assert response.status_code == 200
         data = response.json()
