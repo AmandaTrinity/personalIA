@@ -1,20 +1,15 @@
-from google import genai 
+# gemini_service.py
+
+import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 from schemas import MensagemChat
 
-def gerar_plano_de_treino(data: MensagemChat) -> str:
-    """
-    Gera um plano de treino usando o modelo Gemini. O argumento é o prompt_usuario: A descrição do treino solicitado pelo usuário.
-    Retorna: A resposta em texto do modelo.
-    """
-    load_dotenv()
+load_dotenv()
 
-    try:
-        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        
-        # Instrução inicial para o assistente de IA
-        system_instruction = ('Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)'
+global_chat_session = None
+
+system_instruction = ('Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)'
 
                                             'Restrição de Equipamentos: A prioridade máxima é a acessibilidade. Por isso, sugerir exercícios com base no local de treino do usuário. Caso seja em academia, recomende exercícios que usem equipamentos mais específicos. Caso seja em casa, recomenda exercícios que usem o peso do corpo ou objetos domésticos que facilitem sua execução. Caso seja em alguma praça, recomende exercícios que possa usar barras'
 
@@ -53,6 +48,28 @@ def gerar_plano_de_treino(data: MensagemChat) -> str:
                                                 Mais difícil: [Descreva a alternativa mais difícil, ex: Agachamento com salto].
                                             ''')
 
+def gerar_plano_de_treino(data: MensagemChat) -> str:
+    """
+    Gera um plano de treino usando o modelo Gemini, mantendo um único histórico global.
+    Retorna: A resposta em texto do modelo.
+    """
+    global global_chat_session
+
+    try:
+        if global_chat_session is None:
+
+            api_key = os.getenv("GEMINI_API_KEY")
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel("gemini-2.0-flash")
+
+            global_chat_session = model.start_chat(
+                history=[
+                    {'role': 'user', 'parts': [system_instruction]}
+                ]
+            )
+
+        chat = global_chat_session
+        
         prompt_usuario = (
             f"Por favor, gere uma resposta para o usuário com base nas seguintes informações:\n"
             f"- Nível de Experiência: {data.nivel}\n"
@@ -61,9 +78,10 @@ def gerar_plano_de_treino(data: MensagemChat) -> str:
             f"- Disponibilidade na semana: {data.frequencia}\n"
             f"Mensagem do Usuário: {data.mensagem_usuario}"
         )
-        chat = client.chats.create(model="gemini-2.5-flash-lite", history=[{"role": "user", "parts": [{"text": system_instruction}]}])
-        
+    
         resposta = chat.send_message(prompt_usuario)
+
         return resposta.text
+
     except Exception:
         return f"Ocorreu um erro ao se comunicar com a API do Gemini"
