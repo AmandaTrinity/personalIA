@@ -7,7 +7,7 @@ from schemas import MensagemChat
 
 load_dotenv()
 
-global_chat_session = None
+chat_session = None
 
 system_instruction = ('Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)'
 
@@ -53,22 +53,22 @@ def gerar_plano_de_treino(data: MensagemChat) -> str:
     Gera um plano de treino usando o modelo Gemini, mantendo um único histórico global.
     Retorna: A resposta em texto do modelo.
     """
-    global global_chat_session
+    global chat_session
 
     try:
-        if global_chat_session is None:
+        if chat_session is None:
 
             api_key = os.getenv("GEMINI_API_KEY")
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            model = genai.GenerativeModel("gemini-2.5-flash")
 
-            global_chat_session = model.start_chat(
+            chat_session = model.start_chat(
                 history=[
                     {'role': 'user', 'parts': [system_instruction]}
                 ]
             )
 
-        chat = global_chat_session
+        chat = chat_session
         
         prompt_usuario = (
             f"Por favor, gere uma resposta para o usuário com base nas seguintes informações:\n"
