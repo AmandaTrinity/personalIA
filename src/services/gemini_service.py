@@ -1,15 +1,19 @@
-import os
 import google.generativeai as genai
-from dotenv import load_dotenv
+from config.settings import settings
 from schemas import MensagemChat
-
-load_dotenv()
 
 def gerar_plano_de_treino(data: MensagemChat) -> str:
     """
     Gera o texto do plano de treino usando o modelo Gemini.
+    
+    Args:
+        data: Dados do chat com informações do usuário
+        
+    Returns:
+        str: Plano de treino gerado pela IA
     """
-    api_key = os.getenv("GEMINI_API_KEY")
+    
+    api_key = settings.GEMINI_API_KEY
     if not api_key:
         return "Erro: GEMINI_API_KEY não configurada no ambiente."
     

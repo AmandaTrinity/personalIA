@@ -7,17 +7,14 @@ from datetime import datetime
 from pymongo.mongo_client import MongoClient
 from pymongo.errors import ConnectionFailure
 from pymongo.server_api import ServerApi
-from dotenv import load_dotenv
+from config.settings import settings
 
-# Carregar variáveis de ambiente (arquivo .env na raiz do projeto)
-load_dotenv(dotenv_path="../.env")
-
-# Carregar URI do MongoDB do .env
-uri = os.getenv("MONGO_URI")
-database_name = os.getenv("DATABASE_NAME", "personalai_db")
+# Carregar configurações da aplicação
+uri = settings.MONGO_URI
+database_name = settings.DATABASE_NAME
 
 # Verificar se estamos em ambiente de teste
-is_testing = os.getenv("ENVIRONMENT") == "test" or "pytest" in os.environ.get("_", "")
+is_testing = settings.is_testing
 
 # Detectar se estamos no processo worker do uvicorn (não no reloader)
 import multiprocessing

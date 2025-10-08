@@ -1,12 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
-
+from config.settings import settings
 from routes.treino_routes import treino_router
 
 app = FastAPI(
-    title="PersonalIA Backend",
-    description="API para sistema de treinos personalizados com IA",
-    version="1.0.0",
+    title=settings.APP_NAME,
+    description=settings.APP_DESCRIPTION,
+    version=settings.APP_VERSION,
 )
 
 app.include_router(treino_router)
@@ -28,8 +28,8 @@ if __name__ == "__main__":
     # Configurações do servidor
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,  # Recarrega automaticamente quando você edita o código
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.is_development,  # Só habilita reload em desenvolvimento
         log_level="info",
     )

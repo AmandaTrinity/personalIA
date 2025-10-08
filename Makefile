@@ -34,7 +34,7 @@ check-env: ## Verifica se o arquivo .env está configurado
 	@echo "🔍 Verificando configuração do ambiente..."
 	@if [ ! -f .env ]; then \
 		echo "❌ Arquivo .env não encontrado!"; \
-		echo "📝 Crie o arquivo .env com: cp .env.example .env"; \
+		echo "📝 Crie o arquivo .env com: cp config/.env.example .env"; \
 		exit 1; \
 	fi
 	@if ! grep -q "GEMINI_API_KEY=" .env || grep -q "sua_api_key_aqui" .env; then \
@@ -55,11 +55,11 @@ test: ## Executa todos os testes
 		echo "def test_example():" >> $(TEST_DIR)/test_example.py; \
 		echo "    assert True" >> $(TEST_DIR)/test_example.py; \
 	fi
-	$(PYTHON) -m pytest $(TEST_DIR) -v --tb=short
+	$(PYTHON) -m pytest $(TEST_DIR) -v --tb=short -c config/pytest.ini
 
 test-cov: ## Executa testes com cobertura de código
 	@echo "🧪 Executando testes com cobertura..."
-	$(PYTHON) -m pytest $(TEST_DIR) -v --cov=$(SRC_DIR) --cov-report=html --cov-report=term
+	$(PYTHON) -m pytest $(TEST_DIR) -v --cov=$(SRC_DIR) --cov-report=html --cov-report=term -c config/pytest.ini
 
 test-gemini: check-env ## Testa a conexão com a API do Gemini
 	@echo "🤖 Testando conexão com API do Gemini..."
@@ -73,19 +73,19 @@ test-gemini: check-env ## Testa a conexão com a API do Gemini
 # Qualidade de Código
 lint: ## Executa verificação de estilo de código (flake8 + pylint)
 	@echo "🔍 Verificando estilo de código com flake8..."
-	$(PYTHON) -m flake8 $(SRC_DIR) --exclude=venv,src/venv
+	$(PYTHON) -m flake8 $(SRC_DIR) --config=config/.flake8 --exclude=venv,src/venv
 	@echo "🔍 Verificando qualidade de código com pylint..."
-	$(PYTHON) -m pylint $(SRC_DIR) --rcfile=.pylintrc
+	$(PYTHON) -m pylint $(SRC_DIR) --rcfile=config/.pylintrc
 	@echo "✅ Verificação de estilo e qualidade concluída!"
 
 lint-flake8: ## Executa apenas flake8
 	@echo "🔍 Verificando estilo com flake8..."
-	$(PYTHON) -m flake8 $(SRC_DIR) --exclude=venv,src/venv
+	$(PYTHON) -m flake8 $(SRC_DIR) --config=config/.flake8 --exclude=venv,src/venv
 	@echo "✅ Verificação flake8 concluída!"
 
 lint-pylint: ## Executa apenas pylint
 	@echo "🔍 Verificando qualidade com pylint..."
-	$(PYTHON) -m pylint $(SRC_DIR) --rcfile=.pylintrc
+	$(PYTHON) -m pylint $(SRC_DIR) --rcfile=config/.pylintrc
 	@echo "✅ Verificação pylint concluída!"
 
 format: ## Formata o código usando black e isort
