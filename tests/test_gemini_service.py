@@ -21,11 +21,10 @@ from schemas import MensagemChat
 class TestGeminiService:
     """Testes para o serviço do Gemini"""
     
-    @patch('services.gemini_service.load_dotenv')
-    @patch('services.gemini_service.os.getenv')
-    def test_gerar_plano_de_treino_sem_api_key(self, mock_getenv, mock_load_dotenv):
+    @patch('services.gemini_service.settings')
+    def test_gerar_plano_de_treino_sem_api_key(self, mock_settings):
         """Testa comportamento quando API key não está configurada"""
-        mock_getenv.return_value = None  # Simula API key não configurada
+        mock_settings.GEMINI_API_KEY = ""  # Simula API key não configurada
         
         data = MensagemChat(
             mensagem_usuario="Quero um treino para casa",
@@ -39,10 +38,10 @@ class TestGeminiService:
         assert "GEMINI_API_KEY não configurada" in resultado
     
     @patch('services.gemini_service.genai')
-    @patch('services.gemini_service.os.getenv')
-    def test_gerar_plano_de_treino_sucesso(self, mock_getenv, mock_genai):
+    @patch('services.gemini_service.settings')
+    def test_gerar_plano_de_treino_sucesso(self, mock_settings, mock_genai):
         """Testa geração de plano de treino com sucesso"""
-        mock_getenv.return_value = 'test_key'
+        mock_settings.GEMINI_API_KEY = 'test_key'
         
         # Mock da resposta da API
         mock_model = MagicMock()
@@ -68,10 +67,10 @@ class TestGeminiService:
         mock_model.generate_content.assert_called_once()
     
     @patch('services.gemini_service.genai')
-    @patch('services.gemini_service.os.getenv')
-    def test_gerar_plano_de_treino_erro_api(self, mock_getenv, mock_genai):
+    @patch('services.gemini_service.settings')
+    def test_gerar_plano_de_treino_erro_api(self, mock_settings, mock_genai):
         """Testa comportamento quando há erro na API"""
-        mock_getenv.return_value = 'test_key'
+        mock_settings.GEMINI_API_KEY = 'test_key'
         
         # Mock de erro na API
         mock_genai.GenerativeModel.side_effect = Exception("Erro na API")
