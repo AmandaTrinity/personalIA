@@ -9,7 +9,10 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     Gera um plano de treino com o Gemini e salva no MongoDB.
     Retorna o documento inserido.
     """
-    plano = gerar_plano_de_treino(data)
+    historico = listar_treinos_por_usuario(usuario_id)
+    historico = [treino["plano_gerado"] for treino in historico]
+    historico = "\n\n---\n\n".join(historico)
+    plano = gerar_plano_de_treino(historico, data)
 
     treino_doc = {
         "usuario_id": ObjectId(usuario_id) if treinos_collection is not None else usuario_id,

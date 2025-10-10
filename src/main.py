@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from config.settings import settings
 from routes.treino_routes import treino_router
+from routes.user_routes import user_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -10,7 +11,7 @@ app = FastAPI(
 )
 
 app.include_router(treino_router)
-
+app.include_router(user_router)
 
 @app.get("/")
 def root():
