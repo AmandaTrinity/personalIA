@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+
 from config.settings import settings
 from routes.treino_routes import treino_router
 
