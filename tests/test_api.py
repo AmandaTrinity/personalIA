@@ -33,7 +33,7 @@ def test_api():
     treino_data = {
         "nivel": "iniciante",
         "objetivo": "perda de peso",
-        "equipamentos": ["halteres", "esteira"],
+        "equipamentos": ["halteres", "esteira"],  # Array como você queria
         "frequencia": "3x por semana",
         "mensagem_usuario": "Quero um treino para perder peso e ganhar condicionamento"
     }

@@ -24,14 +24,14 @@ class TestSchemas:
             mensagem_usuario="Quero um treino para casa",
             nivel="iniciante",
             objetivo="perder peso",
-            equipamentos="peso corporal",
+            equipamentos=["peso corporal"],  # Mudou para array
             frequencia="3 vezes por semana"
         )
         
         assert data.mensagem_usuario == "Quero um treino para casa"
         assert data.nivel == "iniciante"
         assert data.objetivo == "perder peso"
-        assert data.equipamentos == "peso corporal"
+        assert data.equipamentos == ["peso corporal"]  # Mudou para array
         assert data.frequencia == "3 vezes por semana"
     
     def test_mensagem_chat_valores_padrao(self):
@@ -41,7 +41,7 @@ class TestSchemas:
         assert data.mensagem_usuario == "Teste"
         assert data.nivel == "iniciante"
         assert data.objetivo == "condicionamento"
-        assert data.equipamentos == "peso corporal"
+        assert data.equipamentos == ["peso corporal"]  # Mudou para array
         assert data.frequencia == "2 dias por semana"
     
     def test_mensagem_chat_campo_obrigatorio(self):

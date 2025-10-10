@@ -30,7 +30,7 @@ class TestGeminiService:
             mensagem_usuario="Quero um treino para casa",
             nivel="iniciante",
             objetivo="perder peso",
-            equipamentos="peso corporal",
+            equipamentos=["peso corporal"],  # Mudou para array
             frequencia="3 vezes por semana"
         )
         
@@ -54,7 +54,7 @@ class TestGeminiService:
             mensagem_usuario="Quero um treino para casa",
             nivel="iniciante",
             objetivo="perder peso",
-            equipamentos="peso corporal",
+            equipamentos=["peso corporal"],  # Mudou para array
             frequencia="3 vezes por semana"
         )
         
@@ -63,7 +63,11 @@ class TestGeminiService:
         # Verificações
         assert resultado == "Plano de treino gerado com sucesso"
         mock_genai.configure.assert_called_once_with(api_key='test_key')
-        mock_genai.GenerativeModel.assert_called_once_with('gemini-2.5-flash')
+        # Verifica que GenerativeModel foi chamado com model_name e system_instruction
+        mock_genai.GenerativeModel.assert_called_once()
+        call_args = mock_genai.GenerativeModel.call_args
+        assert call_args.kwargs['model_name'] == 'gemini-2.5-flash'
+        assert 'system_instruction' in call_args.kwargs
         mock_model.generate_content.assert_called_once()
     
     @patch('services.gemini_service.genai')
@@ -79,7 +83,7 @@ class TestGeminiService:
             mensagem_usuario="Quero um treino para casa",
             nivel="iniciante",
             objetivo="perder peso",
-            equipamentos="peso corporal",
+            equipamentos=["peso corporal"],  # Mudou para array
             frequencia="3 vezes por semana"
         )
         
