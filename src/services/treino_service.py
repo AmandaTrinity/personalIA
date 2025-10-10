@@ -1,8 +1,11 @@
 from datetime import datetime
+
 from bson import ObjectId
+
 from database.mongodb import treinos_collection
 from schemas import MensagemChat
 from services.gemini_service import gerar_plano_de_treino
+
 
 def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     """
@@ -10,26 +13,28 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     Retorna o documento inserido.
     """
     plano = gerar_plano_de_treino(data)
-
-    treino_doc = {
+    # 1. Pega TODOS os dados de entrada
+    treino_doc = data.model_dump()
+    # 2. Adiciona os campos gerados e de controle
+    treino_doc.update({
         "usuario_id": ObjectId(usuario_id) if treinos_collection is not None else usuario_id,
-        "nivel": data.nivel,
-        "objetivo": data.objetivo,
-        "equipamentos": data.equipamentos,
-        "frequencia": data.frequencia,
-        "mensagem_usuario": data.mensagem_usuario,
         "plano_gerado": plano,
-        "criado_em": datetime.utcnow()
-    }
+        "criado_em": datetime.utcnow(),
+    })
 
     if treinos_collection is not None:
-        result = treinos_collection.insert_one(treino_doc)
-        treino_doc["_id"] = str(result.inserted_id)
-        treino_doc["usuario_id"] = str(treino_doc["usuario_id"])
+        try:
+            result = treinos_collection.insert_one(treino_doc)
+            treino_doc["_id"] = str(result.inserted_id)
+            treino_doc["usuario_id"] = str(treino_doc["usuario_id"])
+        except Exception as e:
+            print(f"Erro ao salvar no MongoDB: {e}")
+            # Em caso de erro, trate de forma apropriada, talvez elevando a exceção
     else:
         # Modo de teste/desenvolvimento
         treino_doc["_id"] = "mock_id"
-        
+        treino_doc["usuario_id"] = usuario_id # Mantém como string no mock
+
     return treino_doc
 
 
@@ -40,16 +45,17 @@ def listar_treinos_por_usuario(usuario_id: str) -> list:
     if treinos_collection is None:
         # Modo de teste/desenvolvimento
         return []
-        
+
     treinos = treinos_collection.find({"usuario_id": ObjectId(usuario_id)}).sort("criado_em", -1)
-    
+
     return [
         {
             "_id": str(t["_id"]),
-            "nivel": t["nivel"],
-            "objetivo": t["objetivo"],
-            "plano_gerado": t["plano_gerado"],
-            "criado_em": t["criado_em"]
+            "nivel": t.get("nivel"),
+            "objetivo": t.get("objetivo"),
+            "equipamentos": t.get("equipamentos"),
+            "plano_gerado": t.get("plano_gerado"),
+            "criado_em": t.get("criado_em"),
         }
         for t in treinos
     ]
@@ -62,7 +68,7 @@ def buscar_treino_por_id(treino_id: str) -> dict | None:
     if treinos_collection is None:
         # Modo de teste/desenvolvimento
         return None
-        
+
     treino = treinos_collection.find_one({"_id": ObjectId(treino_id)})
     if treino:
         treino["_id"] = str(treino["_id"])
