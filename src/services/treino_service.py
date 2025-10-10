@@ -1,8 +1,11 @@
 from datetime import datetime
+
 from bson import ObjectId
+
 from database.mongodb import treinos_collection
 from schemas import MensagemChat
 from services.gemini_service import gerar_plano_de_treino
+
 
 def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     """
@@ -22,7 +25,7 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
         "frequencia": data.frequencia,
         "mensagem_usuario": data.mensagem_usuario,
         "plano_gerado": plano,
-        "criado_em": datetime.utcnow()
+        "criado_em": datetime.utcnow(),
     }
 
     if treinos_collection is not None:
@@ -32,7 +35,7 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     else:
         # Modo de teste/desenvolvimento
         treino_doc["_id"] = "mock_id"
-        
+
     return treino_doc
 
 
@@ -43,16 +46,16 @@ def listar_treinos_por_usuario(usuario_id: str) -> list:
     if treinos_collection is None:
         # Modo de teste/desenvolvimento
         return []
-        
+
     treinos = treinos_collection.find({"usuario_id": ObjectId(usuario_id)}).sort("criado_em", -1)
-    
+
     return [
         {
             "_id": str(t["_id"]),
             "nivel": t["nivel"],
             "objetivo": t["objetivo"],
             "plano_gerado": t["plano_gerado"],
-            "criado_em": t["criado_em"]
+            "criado_em": t["criado_em"],
         }
         for t in treinos
     ]
@@ -65,7 +68,7 @@ def buscar_treino_por_id(treino_id: str) -> dict | None:
     if treinos_collection is None:
         # Modo de teste/desenvolvimento
         return None
-        
+
     treino = treinos_collection.find_one({"_id": ObjectId(treino_id)})
     if treino:
         treino["_id"] = str(treino["_id"])

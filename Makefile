@@ -4,7 +4,7 @@
 .PHONY: help install test lint format clean dev build docker run-server test-gemini check-env all
 
 # Variáveis
-PYTHON = python3
+PYTHON = python
 PIP = pip
 VENV = venv
 SRC_DIR = src

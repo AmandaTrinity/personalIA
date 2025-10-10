@@ -1,9 +1,9 @@
 import google.generativeai as genai
-from schemas import MensagemChat
+
 from config.settings import settings
+from schemas import MensagemChat
 
-
-instrucoes =    """ 'Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)'
+instrucoes = """ 'Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)'
 
                 'Restrição de Equipamentos: A prioridade máxima é a acessibilidade. Por isso, sugerir exercícios com base no local de treino do usuário. Caso seja em academia, recomende exercícios que usem equipamentos mais específicos. Caso seja em casa, recomenda exercícios que usem o peso do corpo ou objetos domésticos que facilitem sua execução. Caso seja em alguma praça, recomende exercícios que possa usar barras'
 
@@ -42,27 +42,30 @@ instrucoes =    """ 'Seu papel: Você será um personal trainer digital que pass
                     Mais difícil: [Descreva a alternativa mais difícil, ex: Agachamento com salto].
                 """
 
+
 def gerar_plano_de_treino(historico: str, data: MensagemChat) -> str:
     """
     Gera o texto do plano de treino usando o modelo Gemini.
-    
+
     Args:
         data: Dados do chat com informações do usuário
-        
+
     Returns:
         str: Plano de treino gerado pela IA
-    """    
+    """
     api_key = settings.GEMINI_API_KEY
     if not api_key:
         return "Erro: GEMINI_API_KEY não configurada no ambiente."
-    
+
     try:
         genai.configure(api_key=api_key)
-        
+
         # Construir o prompt baseado nos dados da mensagem
-        
-        model = genai.GenerativeModel("gemini-2.5-flash", system_instruction = instrucoes)
-        prompt = historico + f"""
+
+        model = genai.GenerativeModel("gemini-2.5-flash", system_instruction=instrucoes)
+        prompt = (
+            historico
+            + f"""
         Crie um plano de treino personalizado com as seguintes especificações:
         
         Mensagem do usuário: {data.mensagem_usuario}
@@ -73,8 +76,9 @@ def gerar_plano_de_treino(historico: str, data: MensagemChat) -> str:
         
         Por favor, forneça um plano detalhado que seja adequado para essas características.
         """
+        )
         response = model.generate_content(prompt)
         return response.text
-    
+
     except Exception as e:
         return f"Ocorreu um erro ao se comunicar com a API do Gemini: {str(e)}"

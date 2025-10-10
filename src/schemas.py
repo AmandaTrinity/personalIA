@@ -9,6 +9,8 @@ class MensagemChat(BaseModel):
     objetivo: Optional[str] = "condicionamento"
     equipamentos: Optional[str] = "peso corporal"
     frequencia: Optional[str] = "2 dias por semana"
+
+
 class DadosUsr(BaseModel):
     email_usuario: str
     nome_usuario: str
@@ -20,6 +22,3 @@ class DadosUsr(BaseModel):
     minutos_usuario: int
 
     lugar_usuario: str
-
-
-
