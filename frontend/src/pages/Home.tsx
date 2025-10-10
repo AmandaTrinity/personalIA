@@ -9,7 +9,7 @@ function App() {
   return (
       <div className='home-page-wrapper'>
         
-        <h1>PersonalIA</h1>
+        <h1>PersonalIA</h1> 
 
         <div className='card'>  
 
