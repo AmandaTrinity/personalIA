@@ -1,0 +1,44 @@
+#root {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.home-page-wrapper {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #4f502c;
+}
+
+.input-treino {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 1rem;
+}
+
+.input-treino:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 8px rgba(108, 92, 231, 0.5);
+}
+
+button:hover {
+  background-color: #4bcfc4;
+}
+
+.text-card{
+  color: cornsilk;
+}
