@@ -20,5 +20,5 @@ class DadosUsr(BaseModel):
     limitacoes_usuario: bool
     dias_usuario: int
     minutos_usuario: int
-
+    senha_usuario: str
     lugar_usuario: str
