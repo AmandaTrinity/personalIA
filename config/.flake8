@@ -1,0 +1,41 @@
+[flake8]
+# Máximo de caracteres por linha
+max-line-length = 100
+
+# Códigos de erro a ignorar
+ignore = 
+    E203,
+    E501,
+    W503,
+    F401,
+    E402
+
+# Diretórios e arquivos a ignorar
+exclude = 
+    .git,
+    __pycache__,
+    .pytest_cache,
+    venv,
+    src/venv,
+    env,
+    .env,
+    build,
+    dist,
+    *.egg-info,
+    tests,
+    frontend,
+    personalia,
+    node_modules,
+    htmlcov
+
+# Máximo de complexidade ciclomática
+max-complexity = 10
+
+# Contar linhas em branco lógicas
+count = True
+
+# Mostrar código fonte dos erros
+show-source = True
+
+# Estatísticas
+statistics = True
