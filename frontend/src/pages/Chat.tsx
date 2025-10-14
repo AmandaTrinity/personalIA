@@ -4,6 +4,7 @@ import ChatArea from '../components/ChatArea';
 import ChatInput from '../components/ChatInput';
 import '../styles/pages/chat.css'; 
 import '../styles/components/Chat.css';
+import { getTreinos } from '../services/treino_api';
 
 function Chat() {
   const location = useLocation();
@@ -32,20 +33,21 @@ function Chat() {
   }, [initialPrompt]);
 
   // Função que será chamada ao clicar em "Enviar"
-  const handleSend = () => {
-    //1. Simulação do envio para o Backend
+  const handleSend = async () => {
+    if (!currentPrompt.trim()) return; // Não envia se o input estiver vazio
+
+    //ativa o estado de carregamento
     setIsLoading(true);
-    
-    //Simulação da resposta da IA após 2 segundos
-    setTimeout(() => {
-      //2. Atualiza a resposta (aqui entraria o resultado real da API)
-      setIaResponse(`Entendido! Você disse: "${currentPrompt}".\n\nAqui está um treino de 30 minutos focado em pernas para fazer em casa:...\n\nO que achou? Quer adaptar algo?`);
-      
-      //3. Limpa o input e desliga o loading
-      setCurrentPrompt('');
-      setIsLoading(false);
-    }, 2000);
-    
+
+    //chama a API com o prompt do usuário
+    const response = await getTreinos(currentPrompt);
+
+    //Atualiza a resposta da IA com o retorno da API
+    setIaResponse(response);
+
+    //Limpa o input e desativa o carregamento
+    setCurrentPrompt('');
+    setIsLoading(false);
   };
 
   return (
