@@ -34,6 +34,8 @@ class Settings:
 
     # Configurações de ambiente
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    # Configurações de segurança
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
 
     @property
     def is_development(self) -> bool:
