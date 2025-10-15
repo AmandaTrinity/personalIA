@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from config.settings import settings
 from routes.treino_routes import treino_router
@@ -10,6 +11,22 @@ app = FastAPI(
     description=settings.APP_DESCRIPTION,
     version=settings.APP_VERSION,
 )
+
+# CONFIGURAÇÃO DO CORS
+
+# Lista de origens que podem fazer requisições para a API
+origins = [
+    "http://localhost:5173",  # Endereço do frontend React/Vite
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Permite as origens da lista
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos os cabeçalhos
+)
+
 
 app.include_router(treino_router)
 app.include_router(user_router)

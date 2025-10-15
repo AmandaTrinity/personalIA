@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 from bson import ObjectId
 
 from database.mongodb import treinos_collection
@@ -29,12 +30,18 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     }
 
     if treinos_collection is not None:
-        result = treinos_collection.insert_one(treino_doc)
-        treino_doc["_id"] = str(result.inserted_id)
-        treino_doc["usuario_id"] = str(treino_doc["usuario_id"])
+        try:
+            result = treinos_collection.insert_one(treino_doc)
+            treino_doc["_id"] = str(result.inserted_id)
+            treino_doc["usuario_id"] = str(treino_doc["usuario_id"])
+        except Exception as e:
+            print(f"Erro ao salvar no MongoDB: {e}")
+            # Em caso de erro, trate de forma apropriada, talvez elevando a exceção
     else:
         # Modo de teste/desenvolvimento
         treino_doc["_id"] = "mock_id"
+
+        treino_doc["usuario_id"] = usuario_id  # Mantém como string no mock
 
     return treino_doc
 
@@ -47,7 +54,9 @@ def listar_treinos_por_usuario(usuario_id: str) -> list:
         # Modo de teste/desenvolvimento
         return []
 
+
     treinos = treinos_collection.find({"usuario_id": ObjectId(usuario_id)}).sort("criado_em", -1)
+
 
     return [
         {
@@ -68,6 +77,7 @@ def buscar_treino_por_id(treino_id: str) -> dict | None:
     if treinos_collection is None:
         # Modo de teste/desenvolvimento
         return None
+
 
     treino = treinos_collection.find_one({"_id": ObjectId(treino_id)})
     if treino:

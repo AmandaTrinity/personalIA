@@ -1,11 +1,12 @@
-from passlib.context import CryptContext
-
-modelo_hash = CryptContext(schemes=["pbkdf2_sha256"])
+import bcrypt
 
 
 def hash_pass(senha: str) -> str:
-    return modelo_hash.hash(senha)
+    # Gerar salt e hash
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(senha.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
 
 
 def verifica_senha(senha: str, hash_senha: str) -> bool:
-    return modelo_hash.verify(senha, hash_senha)
+    return bcrypt.checkpw(senha.encode('utf-8'), hash_senha.encode('utf-8'))
