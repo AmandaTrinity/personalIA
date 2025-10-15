@@ -16,11 +16,13 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     # 1. Pega TODOS os dados de entrada
     treino_doc = data.model_dump()
     # 2. Adiciona os campos gerados e de controle
-    treino_doc.update({
-        "usuario_id": ObjectId(usuario_id) if treinos_collection is not None else usuario_id,
-        "plano_gerado": plano,
-        "criado_em": datetime.utcnow(),
-    })
+    treino_doc.update(
+        {
+            "usuario_id": ObjectId(usuario_id) if treinos_collection is not None else usuario_id,
+            "plano_gerado": plano,
+            "criado_em": datetime.utcnow(),
+        }
+    )
 
     if treinos_collection is not None:
         try:
@@ -33,7 +35,7 @@ def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
     else:
         # Modo de teste/desenvolvimento
         treino_doc["_id"] = "mock_id"
-        treino_doc["usuario_id"] = usuario_id # Mantém como string no mock
+        treino_doc["usuario_id"] = usuario_id  # Mantém como string no mock
 
     return treino_doc
 

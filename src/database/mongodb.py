@@ -17,10 +17,6 @@ database_name = settings.DATABASE_NAME
 
 # Verificar se estamos em ambiente de teste
 is_testing = settings.is_testing
-
-
-# Detectar se estamos no processo worker do uvicorn (não no reloader)
-import multiprocessing
 is_main_process = multiprocessing.current_process().name == "MainProcess"
 
 # Flags para evitar inicialização dupla
