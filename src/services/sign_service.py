@@ -16,8 +16,15 @@ def criar_usuario(data: DadosUsr):
             usuario = usuarios_collection.insert_one(usr_data)
             id_usuario = str(usuario.inserted_id)
             usr_data["_id"] = id_usuario
-        return "Cadastro feito com sucesso", usr_data
-    return "Já existe cadastro nesse email", usr_data
+        # Não expor senha_hash ao retornar para a API
+        usr_safe = {k: v for k, v in usr_data.items() if k != "senha_hash"}
+        return "Cadastro feito com sucesso", usr_safe
+    # Já existe cadastro -> não expor senha_hash
+    if usr_data and isinstance(usr_data, dict):
+        usr_safe = {k: v for k, v in usr_data.items() if k != "senha_hash"}
+    else:
+        usr_safe = usr_data
+    return "Já existe cadastro nesse email", usr_safe
 
 
 def ler_usuario(email_usuario: str):
