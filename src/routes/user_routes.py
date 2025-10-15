@@ -10,7 +10,13 @@ user_router = APIRouter(prefix="/usuario", tags=["Usr"])
 async def post_usuario(data: DadosUsr):
     try:
         status, usr = criar_usuario(data)
-        return {"status": {status}, "usuario": usr}
+        # Retornar 201 quando criado, 409 quando já existe
+        from fastapi.responses import JSONResponse
+
+        if str(status).startswith("Cadastro feito"):
+            return JSONResponse(status_code=201, content={"status": status, "usuario": usr})
+        else:
+            return JSONResponse(status_code=409, content={"status": status, "usuario": usr})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
