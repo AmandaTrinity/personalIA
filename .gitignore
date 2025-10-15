@@ -1,42 +1,47 @@
- __pycache__/
- *.py[cod]
- *$py.class
- 
- # Pacotes
- .Python
- build/
- develop-eggs/
- dist/
- downloads/
- eggs/
- .eggs/
- lib/
- lib64/
- parts/
- sdist/
- var/
- wheels/
- *.egg-info/
- .installed.cfg
- *.egg
- MANIFEST
- 
- # pyenv
- .python-version
- 
- # venv
- venv
- venv/
- .venv/
- env/
- .env/
- ENV/
- 
- # Variáveis de Ambiente
- .env
- 
- # IDE
- .idea/
- .vscode/
- *.sublime-project
- *.sublime-workspace
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg
+*.egg-info/
+MANIFEST
+
+# Build
+build/
+dist/
+downloads/
+sdist/
+wheels/
+var/
+parts/
+lib/
+lib64/
+.eggs/
+develop-eggs/
+.installed.cfg
+
+# pyenv
+.python-version
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+src/venv
+src/__pycache__
+
+# Configuração
+src/config
+package-lock.json
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Ambiente
+.env
