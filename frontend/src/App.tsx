@@ -6,7 +6,7 @@ import { Routes, Route } from 'react-router-dom' // A gente precisa disso pra po
 function App() {
   return (
     // O container Routes vai cuidar do redirecionamento entre as páginas
-    <>
+    <>  
       <Navbar/>
       <div>
         <Routes>
