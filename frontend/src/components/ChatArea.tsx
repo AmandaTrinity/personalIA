@@ -1,13 +1,19 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown'; // <-- PASSO 1
 import '../styles/components/Chat.css';
 
 interface ChatAreaProps {
   iaResponse: string;
 }
 
+//Componente renderiza a caixa de conversa da IA
 const ChatArea: React.FC<ChatAreaProps> = ({ iaResponse }) => {
-  // A lógica de 'formattedResponse' foi removida. ReactMarkdown vai cumprir esta função agora
+  // Função para garantir que as quebras de linha do texto sejam renderizadas corretamente no HTML
+  const formattedResponse = iaResponse.split('\n').map((line, index) => (
+    <React.Fragment key={index}>
+      {line}
+      <br />
+    </React.Fragment>
+  ));
 
   return (
     <div className="chat-area-container">
@@ -17,11 +23,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({ iaResponse }) => {
         <hr className="header-divider" />
       </div>
       
+      {/* Esta é a caixa principal da resposta da IA */}
       <div className="ia-response-box">
-        {/* Usamos o ReactMarkdown aqui */}
-        <div className="ia-text">
-          <ReactMarkdown>{iaResponse}</ReactMarkdown>
-        </div>
+        <p className="ia-text">{formattedResponse}</p>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
 const API_URL = 'http://localhost:8000';
 
-export async function getTreinos(usuarioId: string, prompt: string): Promise<string> {
-        
+export async function getTreinos(prompt: string): Promise <string> {
+    
     try {
-        const response = await fetch(`${API_URL}/treinos/${usuarioId}`, {
+        const response = await fetch(`${API_URL}/mensagem/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -16,15 +16,7 @@ export async function getTreinos(usuarioId: string, prompt: string): Promise<str
             const errorData = await response.text();
             throw new Error(`Falha na requisição: ${response.status} ${response.statusText} - ${errorData}`);
         }
-
-        // Converte a resposta completa para um objeto JSON
-        const data = await response.json();
-
-        // Extrai APENAS o texto do plano de treino de dentro do objeto
-        const planoGerado = data.treino.plano_gerado;
-
-        // Retorna somente a string do plano, que será formatada pelo ReactMarkdown
-        return planoGerado;
+        return response.text();
     }
     catch (error) {
         console.error('Erro ao buscar treinos', error);

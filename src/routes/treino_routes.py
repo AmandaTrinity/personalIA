@@ -12,9 +12,6 @@ async def criar_treino(usuario_id: str, data: MensagemChat):
         treino = salvar_treino(usuario_id, data)
         return {"status": "ok", "treino": treino}
     except Exception as e:
-        print("!!!!!!!!!!!! ERRO DETALHADO !!!!!!!!!!!!")
-        print(e)  # <--- ADICIONE ESTA LINHA!
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         raise HTTPException(status_code=500, detail=str(e))
 
 

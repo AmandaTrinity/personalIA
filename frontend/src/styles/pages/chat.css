@@ -1,7 +1,6 @@
 :root {
-  --primary-color: #033247;   /*Cor do Navbar*/
+  --primary-color: #033247; /*Cor do Navbar*/
   --bg-color: #ffffff;        /* Fundo escuro */
-  --page-bg-color: #f4f6f8;   /* Fundo cinza claro para a PÁGINA INTEIRA */
   --text-color: #000000;      /* Cor do texto principal */
   --input-bg-color: #09486d;  /* Fundo do input */
 }
@@ -10,7 +9,7 @@
 
 .chat-area-container {
   width: 100%;
-  max-width: 10000px;
+  max-width: 600px;
   padding: 20px;
   background: var(--bg-color); 
   border-radius: 8px;
