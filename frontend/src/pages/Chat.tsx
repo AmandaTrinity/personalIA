@@ -44,7 +44,8 @@ function Chat() {
     
     //chama a API com o prompt do usuário
     const response = await getTreinos(usuarioId, currentPrompt);
-
+    
+    console.log('RESPOSTA BRUTA DA API:', response);
     //Atualiza a resposta da IA com o retorno da API
     setIaResponse(response);
 

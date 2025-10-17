@@ -3,6 +3,7 @@
   --bg-color: #ffffff;        /* Fundo escuro */
   --text-color: #000000;      /* Cor do texto principal */
   --input-bg-color: #09486d;  /* Fundo do input */
+  --background-color: #f5f6fa;
 }
 
 /*Estilo da Área de Chat (ChatArea)*/
