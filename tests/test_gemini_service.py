@@ -34,7 +34,7 @@ class TestGeminiService:
             frequencia="3 vezes por semana"
         )
         
-        resultado = gerar_plano_de_treino(data)
+        resultado = gerar_plano_de_treino("", data)
         assert "GEMINI_API_KEY não configurada" in resultado
     
     @patch('services.gemini_service.genai')
@@ -58,7 +58,7 @@ class TestGeminiService:
             frequencia="3 vezes por semana"
         )
         
-        resultado = gerar_plano_de_treino(data)
+        resultado = gerar_plano_de_treino("", data)
         
         # Verificações
         assert resultado == "Plano de treino gerado com sucesso"
@@ -87,7 +87,7 @@ class TestGeminiService:
             frequencia="3 vezes por semana"
         )
         
-        resultado = gerar_plano_de_treino(data)
+        resultado = gerar_plano_de_treino("", data)
         
         assert "Ocorreu um erro ao se comunicar com a API do Gemini" in resultado
         assert "Erro na API" in resultado
