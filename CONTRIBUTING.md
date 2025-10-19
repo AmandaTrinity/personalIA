@@ -13,7 +13,7 @@ Toda contribuição ao código deve seguir o fluxo abaixo, que começa com o reg
 Toda tarefa (nova funcionalidade, correção de bug ou melhoria) **deve** ser rastreada por uma Issue no GitHub.
 
 * **Propósito:** A Issue deve descrever o problema ou a funcionalidade a ser implementada, baseando-se nas **Histórias de Usuário** ou nos **Requisitos**.
-* **Título:** Deve ser conciso e descritivo (ex: `Implementar a restrição de acesso por login (RF02)`).
+* **Título:** Deve ser conciso e descritivo (ex: `Implementar a restrição de acesso por login `).
 * **Atribuição:** Atribua a Issue ao desenvolvedor responsável.
 
 ### 1.2. Desenvolvendo o Código (A Branch de Trabalho)
@@ -63,7 +63,7 @@ Usamos o padrão **Commits Convencionais** (Conventional Commits).
 * **Tipo e Escopo:** Use os mesmos definidos na tabela acima. O **Escopo** é **obrigatório** e deve ser um dos módulos do projeto.
 * **Descrição:** Resumo conciso e no modo **imperativo** (ex: `corrigir`, `adicionar`, `remover`).
 
-**Exemplo:** `feat(perfil): permitir ao usuário registrar restrições físicas (RF04)`
+**Exemplo:** `feat(perfil): permitir ao usuário registrar restrições físicas`
 
 ---
 
@@ -75,20 +75,20 @@ O desenvolvedor deve copiar e preencher este checklist no corpo do PR antes de s
 
 * A branch de trabalho foi sincronizada com a `main` e conflitos foram resolvidos.
 * O código segue os padrões de formatação e nomenclatura do time.
-* O código é modular, respeitando o **RNF17** (Manutenibilidade).
+* O código é modular.
 
 ### 3.2. Testes e Funcionalidade
 
 * A funcionalidade implementada atende 100% à descrição da Issue e foi testada manualmente.
-* A funcionalidade roda corretamente em pelo menos um dispositivo **Android** e um **iOS** (ou conforme o ambiente de testes). **(RNF15)**
-* (Se aplicável) O sistema lida com o **cenário offline** conforme o **RNF12**.
+* A funcionalidade roda corretamente em pelo menos um dispositivo **Android** e um **iOS** (ou conforme o ambiente de testes). 
+* (Se aplicável) O sistema lida com o **cenário offline** .
 * Novos testes (unitários/integração) foram criados para cobrir o código novo/alterado.
 
-### 3.3. Usabilidade e Experiência (Foco no RNF)
+### 3.3. Usabilidade e Experiência 
 
-* A função de carregamento ocorre em menos de **3 segundos** (foco no **RNF06** - Desempenho).
-* A interface é responsiva, se ajusta a diferentes telas e é acessível **(RNF04, RNF16)**.
-* Todo o texto para o usuário está em **Português claro e coeso** (**RNF02**).
+* A função de carregamento ocorre em menos de **3 segundos**.
+* A interface é responsiva, se ajusta a diferentes telas e é acessível.
+* Todo o texto para o usuário está em **Português claro e coeso**.
 
 ### 3.4. Documentação e Fechamento
 
