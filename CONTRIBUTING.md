@@ -2,7 +2,9 @@
 
 Este documento estabelece as regras e padrões para o uso do Git/GitHub, garantindo a excelência técnica, a rastreabilidade do código e a eficiência nos Code Reviews.
 
+
 ---
+
 
 ## 1. Fluxo de Colaboração (Do Início à Entrega)
 
