@@ -101,4 +101,4 @@ O desenvolvedor deve copiar e preencher este checklist no corpo do PR antes de s
 ## 4. Como configurar o projeto localmente?
  * As instruções detalhadas para configurar o projeto no ambiente de desenvolvimento local estão disponíveis no arquivo **README.md**.
 
-* **Acesso:** [https://github.com/AmandaTrinity/personalIA/commit/7e35814121c90186a89b605c581f2de438c168cd]
+* **Acesso:** [https://github.com/AmandaTrinity/personalIA/blob/main/README.md]
