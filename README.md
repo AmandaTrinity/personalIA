@@ -1,16 +1,6 @@
 # 🏋️‍♂️ PersonalIA  
 
-O **PersonalIA** é um projeto que ├── .env.example               # 🔧 Modelo de configuração segura
-├── .env                       # 🔒 Variáveis de ambiente (não commitado)
-├── .gitignore                 # 🚫 Arquivos ignorados pelo Git
-├── .pylintrc                  # ⚙️ Configuração do Pylint
-├── .flake8                    # 📏 Configuração do Flake8
-├── pytest.ini                # 🧪 Configuração dos testes
-├── Makefile                   # 🔨 Automação de comandos
-├── run_tests.py               # 🏃 Script para execução de testes
-├── list_models.py             # 📋 Utilitário para listar modelos Gemini
-├── README.md                  # 📚 Documentação do projeto
-└── pyproject.toml             # 📋 Configuração do projeto Python*Inteligência Artificial** para oferecer planos de treino personalizados sem necessidade de equipamentos de academia. O objetivo é tornar o acesso ao fitness mais acessível, adaptando os treinos ao perfil do usuário e ao seu progresso.  
+O **PersonalIA** é um projeto que usa *Inteligência Artificial** para oferecer planos de treino personalizados sem necessidade de equipamentos de academia. O objetivo é tornar o acesso ao fitness mais acessível, adaptando os treinos ao perfil do usuário e ao seu progresso.  
 
 ---
 

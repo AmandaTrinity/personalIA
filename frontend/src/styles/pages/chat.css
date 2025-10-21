@@ -1,15 +1,16 @@
 :root {
-  --primary-color: #033247; /*Cor do Navbar*/
+  --primary-color: #033247;   /*Cor do Navbar*/
   --bg-color: #ffffff;        /* Fundo escuro */
   --text-color: #000000;      /* Cor do texto principal */
   --input-bg-color: #09486d;  /* Fundo do input */
+  --background-color: #f5f6fa;
 }
 
 /*Estilo da Área de Chat (ChatArea)*/
 
 .chat-area-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 10000px;
   padding: 20px;
   background: var(--bg-color); 
   border-radius: 8px;

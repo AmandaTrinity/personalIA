@@ -39,9 +39,13 @@ function Chat() {
     //ativa o estado de carregamento
     setIsLoading(true);
 
+    // Cria um ID de usuário fixo para o teste
+    const usuarioId = "68e96d1811086a10ae8c9173"; // CORREÇÃO PARA BACK E FRONT RODAREM. DEVE SER SUBSTITUÍDO POR ALGO MELHOR DEPOIS
+    
     //chama a API com o prompt do usuário
-    const response = await getTreinos(currentPrompt);
-
+    const response = await getTreinos(usuarioId, currentPrompt);
+    
+    console.log('RESPOSTA BRUTA DA API:', response);
     //Atualiza a resposta da IA com o retorno da API
     setIaResponse(response);
 
