@@ -30,12 +30,13 @@ Com a Issue criada, crie uma **Branch** para isolar o trabalho:
 
 Ao concluir e testar o trabalho localmente, abra um **Pull Request (PR)**:
 
-1.  **Destino:** O PR deve ser sempre aberto para a branch **`main`**.
+1.  **Destino:** O PR deve ser sempre aberto para a branch **`develop`**.
 2.  **Descrição:** Preencha a descrição com:
     * Um resumo das mudanças.
     * A ligação com a Issue que está sendo resolvida (ex: `Fecha #ID_DA_ISSUE`).
     * O **Checklist de Qualidade Mínima** (Seção 3) preenchido e validado.
 3.  **Revisão:** Solicite a revisão de pelo menos um colega de equipe (Revisor). O merge só pode ser feito após a aprovação formal do Revisor.
+4.  A branch **`main`** ficará isolada no momento para separar o código funcional das futuras implementações que estarão em **`develop`**.
 
 ---
 
