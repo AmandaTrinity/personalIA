@@ -14,7 +14,10 @@ const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => 
   const handleSubmit = (event:FormEvent<HTMLFormElement>) : void => {
     event.preventDefault();
 
-    if (prompt.trim() !== '' && !isLoading) {
+    const isPromptValid = prompt.trim() !== "";
+    const canSend = isPromptValid && !isLoading;
+
+    if (canSend) {
       onSend();
     }
   };
