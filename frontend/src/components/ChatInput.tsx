@@ -27,6 +27,9 @@ const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => 
     setPrompt(event.target.value);
   };
 
+  //Determina se o botão deve estar desativado
+  const isButtonDisabled = isLoading || prompt.trim().length === 0;
+
   return (
     <form className="chat-input-form" onSubmit={handleSubmit}>
       <input
@@ -40,7 +43,7 @@ const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => 
       <button 
         type="submit" 
         className="recommend-button"
-        disabled={isLoading}
+        disabled={isButtonDisabled}
       >
         {isLoading ? 'Enviando...' : 'Enviar'}
       </button>
