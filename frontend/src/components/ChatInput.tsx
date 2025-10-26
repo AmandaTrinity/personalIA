@@ -1,4 +1,4 @@
-import React from 'react';
+import { type FormEvent } from 'react';
 import '../styles/components/Chat.css';
 
 interface ChatInputProps {
@@ -8,10 +8,12 @@ interface ChatInputProps {
   isLoading: boolean;
 }
 
-// Componente que lida com o input do usuário e o botão
-const ChatInput: React.FC<ChatInputProps> = ({ prompt, setPrompt, onSend, isLoading }) => {
-  const handleSubmit = (e: React.FormEvent) => { //e --> define o parametro que a função receberá
-    e.preventDefault();
+// Componente responsável por capturar e enviar mensagens do usuário
+const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => {
+  // Previne envio de mensagens vazias ou durante loanding
+  const handleSubmit = (event:FormEvent<HTMLFormElement>) : void => {
+    event.preventDefault();
+
     if (prompt.trim() !== '' && !isLoading) {
       onSend();
     }
