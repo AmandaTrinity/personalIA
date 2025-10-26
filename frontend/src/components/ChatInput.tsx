@@ -1,4 +1,4 @@
-import { type FormEvent } from 'react';
+import { type ChangeEvent, type FormEvent } from 'react';
 import '../styles/components/Chat.css';
 
 interface ChatInputProps {
@@ -11,7 +11,7 @@ interface ChatInputProps {
 // Componente responsável por capturar e enviar mensagens do usuário
 const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => {
   // Previne envio de mensagens vazias ou durante loanding
-  const handleSubmit = (event:FormEvent<HTMLFormElement>) : void => {
+  const handleSubmit = (event:FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     const isPromptValid = prompt.trim() !== "";
@@ -22,13 +22,18 @@ const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => 
     }
   };
 
+  //Atualiza o estado do prompt conforme o usuário digita
+  const handleInputChange = (event:ChangeEvent<HTMLInputElement>): void => {
+    setPrompt(event.target.value);
+  };
+
   return (
     <form className="chat-input-form" onSubmit={handleSubmit}>
       <input
         type="text"
         className="prompt-input-field"
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Qual sua dúvida sobre o treino recomendado?"
         disabled={isLoading}
       />
