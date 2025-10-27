@@ -1,5 +1,5 @@
 import { type ChangeEvent, type FormEvent } from 'react';
-import '../styles/components/Chat.css';
+import '../styles/components/chatInput.css';
 
 interface ChatInputProps {
   prompt: string;
