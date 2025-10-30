@@ -15,6 +15,8 @@ function App() {
 
           {/* Este é o padrão de código para outras páginas que não sejam "Home" */}
           <Route path="/chat" element={<Chat />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </div>
     </>
