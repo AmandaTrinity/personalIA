@@ -1,7 +1,7 @@
 from database.mongodb import usuarios_collection
 from schemas import DadosUsr
 from utils.hash import hash_pass
-
+from utils.reset import criar_token, verifica_token
 
 def criar_usuario(data: DadosUsr):
 
@@ -34,3 +34,25 @@ def ler_usuario(email_usuario: str):
     if usuario:
         usuario["_id"] = str(usuario["_id"])
     return usuario
+
+
+def solicitar_recuperacao(email_usuario: str):
+    usuario = ler_usuario(email_usuario)
+    if not usuario:
+        return "Usuário não existe", usuario
+    token = criar_token(email_usuario)
+    usuarios_collection.update_one({"email": email_usuario}, {"$set": {"token": token}})
+    return "Solicitação feita com sucesso", email_usuario
+
+
+def mudar_senha(token: str, senha_nova: str):
+    email = verifica_token(token)
+    if not email:
+        return "Token incorreto"
+    if usuarios_collection.find_one({"email": email, "token": token}):
+        senha_nova = hash_pass(senha_nova)
+        usuarios_collection.update_one(
+            {"email": email}, {"$set": {"senha_hash": senha_nova}, "$unset": {"token": token}}
+        )
+        return "Senha alterada com sucesso"
+    return "Não foi possivel alterar a senha"
