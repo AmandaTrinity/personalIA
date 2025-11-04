@@ -1,61 +1,57 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// Importamos o tipo e a função da nossa API
+// 1. Importamos o TIPO de dados que a API espera
 import { register, type RegisterData } from "../services/auth_api";
-// Importamos o CSS de autenticação
-import "../styles/pages/auth.css"; 
+import "../styles/pages/auth.css"; // (Mantendo o estilo que criamos)
 
 export default function RegisterPage() {
   const navigate = useNavigate();
 
-  // --- States para TODOS os campos ---
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nome, setNome] = useState("");
-  const [idade, setIdade] = useState("");
-  const [sexo, setSexo] = useState("masculino"); // Valor padrão
-  const [altura, setAltura] = useState("");
-  const [peso, setPeso] = useState("");
-  const [objetivo, setObjetivo] = useState("perder_peso"); // Valor padrão
-  const [limitacoes, setLimitacoes] = useState(""); // Campo de texto
-  const [frequencia, setFrequencia] = useState("sedentario"); // Valor padrão
-  // ---------------------------------
-
+  // 2. Criamos um estado para TODOS os campos
+  const [formData, setFormData] = useState<RegisterData>({
+    email: "",
+    senha: "",
+    nome: "",
+    idade: 18, // Valor padrão
+    sexo: "masculino", // Valor padrão
+    altura: 170, // Valor padrão (em cm)
+    peso: 70, // Valor padrão (em kg)
+    objetivo: "condicionamento", // Valor padrão
+    limitacoes: "",
+    frequencia: "3-4 dias", // Valor padrão
+  });
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // 3. Handler genérico para atualizar o estado
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target;
+    
+    // Converte 'number' inputs para números reais
+    const valorProcessado = type === 'number' ? parseFloat(value) : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: valorProcessado,
+    }));
+  };
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    // Validação de números
-    if (isNaN(Number(idade)) || isNaN(Number(altura)) || isNaN(Number(peso))) {
-        setError("Idade, altura e peso devem ser números.");
-        setLoading(false);
-        return;
-    }
-    
-    // 1. Monta o objeto de dados EXATAMENTE como o backend espera
-    const data: RegisterData = {
-      email: email.trim(),
-      senha: password, 
-      nome: nome.trim(),
-      idade: Number(idade),
-      sexo: sexo,
-      altura: Number(altura), 
-      peso: Number(peso),     
-      objetivo: objetivo,
-      limitacoes: limitacoes.trim(), 
-      frequencia: frequencia
-    };
-
     try {
-      // 2. Envia o objeto completo para a API
-      await register(data);
-      navigate("/chat"); // Redireciona após o sucesso
+      // 4. Enviamos o objeto 'formData' completo
+      await register(formData);
+      // Após o registro, enviamos para a tela de Login
+      // (É melhor do que logar direto, para o usuário confirmar a senha)
+      navigate("/login"); 
     } catch (err: any) {
-      setError(err?.message ?? "Falha no cadastro");
+      setError(err?.message ?? "Falha no cadastro. Verifique os campos.");
     } finally {
       setLoading(false);
     }
@@ -66,120 +62,116 @@ export default function RegisterPage() {
       <h1>Criar conta</h1>
       <form onSubmit={handleSubmit} className="auth-form">
         
+        {/* --- DADOS DE LOGIN --- */}
         <label>
           Nome Completo
           <input
             type="text"
-            placeholder="Seu nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            name="nome"
+            value={formData.nome}
+            onChange={handleChange}
             required
           />
         </label>
-        
         <label>
           E-mail
           <input
             type="email"
-            placeholder="voce@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             required
             autoComplete="email"
           />
         </label>
-
         <label>
-          Senha
+          Senha (mínimo 6 caracteres)
           <input
             type="password"
-            placeholder="Crie uma senha (mín. 6 caracteres)"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="senha"
+            value={formData.senha}
+            onChange={handleChange}
             required
             minLength={6}
             autoComplete="new-password"
           />
         </label>
-        
-        {/* --- Linha Dupla --- */}
+
+        {/* --- DADOS DO PERFIL (Obrigatórios) --- */}
         <div className="form-row">
-          <label className="form-label-half">
+          <label>
             Idade
             <input
               type="number"
-              placeholder="Sua idade"
-              value={idade}
-              onChange={(e) => setIdade(e.target.value)}
+              name="idade"
+              value={formData.idade}
+              onChange={handleChange}
+              min={13}
+              max={100}
               required
-              min="1"
             />
           </label>
-          <label className="form-label-half">
+          <label>
             Sexo
-            <select value={sexo} onChange={(e) => setSexo(e.target.value)} className="styled-select">
+            <select name="sexo" value={formData.sexo} onChange={handleChange}>
               <option value="masculino">Masculino</option>
               <option value="feminino">Feminino</option>
               <option value="outro">Outro</option>
             </select>
           </label>
         </div>
-
-        {/* --- Linha Dupla --- */}
+        
         <div className="form-row">
-          <label className="form-label-half">
+          <label>
             Altura (cm)
             <input
               type="number"
-              placeholder="ex: 175"
-              value={altura}
-              onChange={(e) => setAltura(e.target.value)}
+              name="altura"
+              value={formData.altura}
+              onChange={handleChange}
               required
-              min="1"
             />
           </label>
-          <label className="form-label-half">
+          <label>
             Peso (kg)
             <input
               type="number"
-              placeholder="ex: 70.5"
-              value={peso}
-              onChange={(e) => setPeso(e.target.value)}
+              name="peso"
+              step="0.1"
+              value={formData.peso}
+              onChange={handleChange}
               required
-              min="1"
-              step="0.1" 
             />
           </label>
         </div>
-        
+
         <label>
-          Objetivo Principal
-          <select value={objetivo} onChange={(e) => setObjetivo(e.target.value)} className="styled-select">
-            <option value="perder_peso">Perder Peso</option>
-            <option value="ganhar_massa">Ganhar Massa Muscular</option>
-            <option value="manter_saude">Manter Saúde/Forma</option>
+          Qual seu objetivo principal?
+          <select name="objetivo" value={formData.objetivo} onChange={handleChange}>
+            <option value="condicionamento">Condicionamento Físico</option>
+            <option value="perda_de_peso">Perda de Peso</option>
+            <option value="ganho_de_massa">Ganho de Massa Muscular</option>
+            <option value="saude">Saúde / Bem-estar</option>
           </select>
         </label>
-        
+
         <label>
-          Você possui alguma limitação física ou condição de saúde?
+          Frequência de Atividades Físicas
+          <select name="frequencia" value={formData.frequencia} onChange={handleChange}>
+            <option value="1-2 dias">1-2 dias por semana</option>
+            <option value="3-4 dias">3-4 dias por semana</option>
+            <option value="5+ dias">5 ou mais dias por semana</option>
+          </select>
+        </label>
+
+        <label>
+          Limitação física ou condição de saúde? (Opcional)
           <textarea
-            className="styled-textarea"
-            placeholder="Ex: Dor no joelho, asma, etc. (Opcional)"
-            value={limitacoes}
-            onChange={(e) => setLimitacoes(e.target.value)}
-            rows={3}
+            name="limitacoes"
+            value={formData.limitacoes || ""}
+            onChange={handleChange}
+            placeholder="Ex: Dor no joelho, hérnia de disco, etc."
           />
-        </label>
-        
-        <label>
-          Com que frequência você pratica atividades físicas?
-          <select value={frequencia} onChange={(e) => setFrequencia(e.target.value)} className="styled-select">
-            <option value="sedentario">Sedentário (nenhuma)</option>
-            <option value="1-2_vezes">1-2 vezes/semana</option>
-            <option value="3-4_vezes">3-4 vezes/semana</option>
-            <option value="5-7_vezes">5-7 vezes/semana</option>
-          </select>
         </label>
 
         {error && <p className="error">{error}</p>}
