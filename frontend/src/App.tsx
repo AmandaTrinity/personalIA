@@ -1,6 +1,8 @@
 import Navbar from './pages/Navbar'
 import Home from './pages/Home'     
 import Chat from './pages/Chat'
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import { Routes, Route } from 'react-router-dom' // A gente precisa disso pra poder ter múltiplas páginas
 
 function App() {

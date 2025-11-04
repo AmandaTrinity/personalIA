@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/auth_api";
+import "../styles/pages/auth.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function LoginPage() {
       await login(email.trim(), password);
       navigate("/chat"); // ou "/" se quiser ir pra home
     } catch (err: any) {
-      setError(err?.message ?? "Falha no login");
+      setError(err?.message ?? "Falha no login. Verifique seu e-mail e senha.");
     } finally {
       setLoading(false);
     }
