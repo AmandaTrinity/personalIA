@@ -4,11 +4,12 @@ from config.settings import settings
 from schemas import MensagemChat
 
 
-def gerar_plano_de_treino(data: MensagemChat) -> str:
+def gerar_plano_de_treino(historico: str, data: MensagemChat) -> str:
     """
     Gera o texto do plano de treino usando o modelo Gemini.
 
     Args:
+        historico: Histórico de treinos anteriores do usuário
         data: Dados do chat com informações do usuário
 
     Returns:
@@ -59,12 +60,14 @@ def gerar_plano_de_treino(data: MensagemChat) -> str:
 
         # Construir o prompt baseado nos dados da mensagem
         equipamentos_str = ", ".join(data.equipamentos) if data.equipamentos else "peso corporal"
+        historico_str = f"\nHistórico de Treinos Anteriores:\n{historico}\n\n" if historico else ""
         prompt_usuario = (
             f"Por favor, gere uma resposta para o usuário com base nas seguintes informações:\n"
             f"- Nível de Experiência: {data.nivel}\n"
             f"- Objetivo Principal: {data.objetivo}\n"
             f"- Equipamentos Disponíveis: {equipamentos_str}\n"
             f"- Disponibilidade na semana: {data.frequencia}\n"
+            f"{historico_str}"
             f"Mensagem do Usuário: {data.mensagem_usuario}"
         )
 
