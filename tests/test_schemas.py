@@ -12,7 +12,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(project_root))
     sys.path.insert(0, str(src_path))
 
-from schemas import MensagemChat
+from models.schemas import MensagemChat
 
 
 class TestSchemas:

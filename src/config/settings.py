@@ -8,7 +8,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Carregar variáveis de ambiente
-project_root = Path(__file__).parent.parent.parent
+# (Ele procura o .env na pasta raiz do projeto, 'personalIA/')
+project_root = Path(__file__).parent.parent.parent 
 load_dotenv(dotenv_path=project_root / ".env")
 
 
@@ -32,6 +33,11 @@ class Settings:
     # Configurações da API do Gemini
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
 
+    # --- ADICIONE ESTA LINHA ---
+    # Chave para Tokens JWT (Lida do .env)
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
+    # -----------------------
+
     # Configurações de ambiente
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
 
@@ -53,3 +59,4 @@ class Settings:
 
 # Instância global das configurações
 settings = Settings()
+

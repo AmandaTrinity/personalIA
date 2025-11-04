@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from config.settings import settings 
 from routes.treino_routes import treino_router
 from routes.auth_routes import auth_router 
+from config.settings import settings 
 
 app = FastAPI(
     title=settings.APP_NAME,

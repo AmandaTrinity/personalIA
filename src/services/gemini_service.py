@@ -1,29 +1,21 @@
 import google.generativeai as genai
 
+# Importa as configurações (seu main.py também usa)
 from config.settings import settings
-from schemas import MensagemChat
 
-
-def gerar_plano_de_treino(historico: str, data: MensagemChat) -> str:
+# Esta é a versão SÍNCRONA
+def gerar_plano_de_treino(mensagem: str, user: dict, historico: str) -> str:
     """
-    Gera o texto do plano de treino usando o modelo Gemini.
-
-    Args:
-        historico: Histórico de treinos anteriores do usuário
-        data: Dados do chat com informações do usuário
-
-    Returns:
-        str: Plano de treino gerado pela IA
+    Gera o texto do plano de treino (SÍNCRONO).
     """
-
     api_key = settings.GEMINI_API_KEY
     if not api_key:
-        return "Erro: GEMINI_API_KEY não configurada no ambiente."
+        return "Erro: GEMINI_API_KEY não configurada."
 
     try:
         genai.configure(api_key=api_key)
-
-        # Instrução inicial para o assistente de IA
+        
+        # O seu 'gemini_service.py' antigo tinha um prompt de sistema, vamos mantê-lo
         system_instruction = (
             "Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)"
             "Restrição de Equipamentos: A prioridade máxima é a acessibilidade. Por isso, sugerir exercícios com base no local de treino do usuário. Caso seja em academia, recomende exercícios que usem equipamentos mais específicos. Caso seja em casa, recomenda exercícios que usem o peso do corpo ou objetos domésticos que facilitem sua execução. Caso seja em alguma praça, recomende exercícios que possa usar barras"
@@ -58,25 +50,30 @@ def gerar_plano_de_treino(historico: str, data: MensagemChat) -> str:
                                             """
         )
 
-        # Construir o prompt baseado nos dados da mensagem
-        equipamentos_str = ", ".join(data.equipamentos) if data.equipamentos else "peso corporal"
+        # Constrói o prompt com os dados do usuário (lidos do 'user')
         historico_str = f"\nHistórico de Treinos Anteriores:\n{historico}\n\n" if historico else ""
         prompt_usuario = (
-            f"Por favor, gere uma resposta para o usuário com base nas seguintes informações:\n"
-            f"- Nível de Experiência: {data.nivel}\n"
-            f"- Objetivo Principal: {data.objetivo}\n"
-            f"- Equipamentos Disponíveis: {equipamentos_str}\n"
-            f"- Disponibilidade na semana: {data.frequencia}\n"
+            f"Por favor, gere uma resposta para o usuário com base no seu perfil completo:\n"
+            f"- Objetivo Principal: {user.get('objetivo', 'condicionamento')}\n"
+            f"- Disponibilidade na semana: {user.get('frequencia', '3 dias por semana')}\n"
+            f"- Idade: {user.get('idade', 'Não informado')}\n"
+            f"- Peso (kg): {user.get('peso', 'Não informado')}\n"
+            f"- Altura (cm): {user.get('altura', 'Não informado')}\n"
+            f"- Limitações: {user.get('limitacoes', 'Nenhuma informada')}\n"
             f"{historico_str}"
-            f"Mensagem do Usuário: {data.mensagem_usuario}"
+            f"Mensagem do Usuário: {mensagem}"
         )
 
-        # chat = client.chats.create(model="gemini-2.5-flash-lite", history=[{"role": "user", "parts": [{"text": system_instruction}]}])
         model = genai.GenerativeModel(
-            model_name="gemini-2.5-flash", system_instruction=system_instruction
+            model_name="gemini-1.5-flash",
+            system_instruction=system_instruction
         )
+        
+        # Chamada SÍNCRONA
         response = model.generate_content(prompt_usuario)
         return response.text
 
     except Exception as e:
+        print(f"!!!!!!!!!!!! ERRO NO GEMINI !!!!!!!!!!!!\n{e}\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return f"Ocorreu um erro ao se comunicar com a API do Gemini: {str(e)}"
+
