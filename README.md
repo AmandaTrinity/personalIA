@@ -20,15 +20,18 @@ O PersonalIA segue uma arquitetura **Full-Stack** moderna com separação clara 
 PersonalIA/
 │
 ├── frontend/                  # 🎨 Interface do usuário (React + TypeScript)
-│   ├── public/
-│   │   └── index.html         # Template HTML principal
 │   ├── src/
 │   │   ├── App.tsx            # Componente principal da aplicação
 │   │   ├── main.tsx           # Ponto de entrada do React
 │   │   └── styles/            # Estilos CSS da aplicação
+│   │   └── components/        # Componentes reutilizáveis da interface
+│   │   └── pages/             # Componentes de páginas específicas da aplicação
+│   │   └── services/          # Funções ou chamadas a APIs externas
+│   │   └── tests/             # Testes da aplicação
 │   ├── package.json           # Dependências e scripts do frontend
 │   ├── vite.config.ts         # Configuração do Vite (build tool)
 │   └── tsconfig.json          # Configuração do TypeScript
+│   └── index.html             # Template HTML principal
 │
 ├── src/                       # 🖥️ Backend (FastAPI + MongoDB)
 │   ├── routes/

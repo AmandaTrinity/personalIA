@@ -1,24 +1,21 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown'; // <-- PASSO 1
-import '../styles/components/Chat.css';
+import ReactMarkdown from 'react-markdown';
+import '../styles/components/chatArea.css';
 
 interface ChatAreaProps {
   iaResponse: string;
 }
-
-const ChatArea: React.FC<ChatAreaProps> = ({ iaResponse }) => {
-  // A lógica de 'formattedResponse' foi removida. ReactMarkdown vai cumprir esta função agora
+//Exibe o cabeçalho da PersonalIA e a área de resposta com suporte a Markdown
+const ChatArea = ({ iaResponse }: ChatAreaProps) => {
 
   return (
     <div className="chat-area-container">
-      <div className="personal-ia-header">
+      <header className="personal-ia-header">
         <h1 className="personal-ia-title">PersonalIA</h1>
         <p className="personal-ia-subtitle">Descreva o seu objetivo e eu criarei o seu treino perfeito.</p>
         <hr className="header-divider" />
-      </div>
+      </header>
       
       <div className="ia-response-box">
-        {/* Usamos o ReactMarkdown aqui */}
         <div className="ia-text">
           <ReactMarkdown>{iaResponse}</ReactMarkdown>
         </div>
