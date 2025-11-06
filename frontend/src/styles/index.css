@@ -1,38 +1,66 @@
 :root {
+  /* Cores principais*/
+  --primary-color: #033247; 
+  --accent-color: #05BEBF;
+  --primary-hover: #0b537c;
+
+  /* Cores de fundo*/
+  --page-bg: #f5f6fa;
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  
+  /* Sombras*/
+  --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow: 0 4px 12px rgba(3, 141, 130, 0.4);
+
+  /* Tipografia*/
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  /* Otimização de renderização*/
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --primary-color: #05BEBF; /*Cor do Navbar*/
-  --accent-color: #3fdbdb; /*Cor de hover para o botão*/
-  --card-shadow: rgba(0,0,0,0.3);
 }
 
-a {
-  font-weight: 500;
-  color: var(--primary-color);
-  text-decoration: inherit;
-}
-a:hover {
-  color: var(--accent-color);
+/* Reset básico*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background-color: #f0f2f5
+  background-color: var(--page-bg);
+  color: var(--text-color);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  text-align: center;
+  color: var(--primary-color);
+  font-weight: 900;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: var(--accent-color);
 }
 
 button {
@@ -42,31 +70,23 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--primary-color);
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.3s ease;
 }
-button:hover {
+
+button:hover:not(:disabled) {
+  background-color: var(--primary-hover);
   border-color: var(--accent-color);
 }
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: var(--accent-color);
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-* {
-  box-sizing: border-box;
 }
