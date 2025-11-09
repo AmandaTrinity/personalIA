@@ -1,5 +1,6 @@
 from database.mongodb import usuarios_collection
 from schemas import DadosUsr
+from services.email_service import enviar_email
 from utils.hash import hash_pass
 from utils.reset import criar_token, verifica_token
 
@@ -42,6 +43,7 @@ def solicitar_recuperacao(email_usuario: str):
         return "Usuário não existe", usuario
     token = criar_token(email_usuario)
     usuarios_collection.update_one({"email": email_usuario}, {"$set": {"token": token}})
+    enviar_email(email_usuario, token)
     return "Solicitação feita com sucesso", email_usuario
 
 
