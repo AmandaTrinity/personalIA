@@ -1,36 +1,24 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom'; 
+import { useState } from 'react';
+import { Link } from 'react-router-dom'; 
 import ChatArea from '../components/ChatArea';
 import ChatInput from '../components/ChatInput';
-import '../styles/pages/chat.css'; 
-import '../styles/components/Chat.css';
 import { getTreinos } from '../services/treino_api';
+import '../styles/pages/chat.css'; 
 
 function Chat() {
-  const location = useLocation();
-  // Pega o input inicial (se houver) e o define como o prompt inicial
-  const initialPrompt = location.state?.initial_user_input || '';
-
   // A resposta da IA. Mensagem fixa do PersonalIA para simular a tela
   const [iaResponse, setIaResponse] = useState(
-    "Ótimo! Encontrar o treino perfeito começa com o seu estado de espírito e objetivos. Para que eu possa te ajudar, me diga um pouco mais:" + 
-    "\n\n1. Como você se sente agora?** (Ex: Com energia, cansado, estressado.)" + 
-    "\n2. Qual o seu principal objetivo?** (Ex: Perder peso, ganhar massa, flexibilidade.)" + 
-    "\n3. Quanto tempo você tem disponível?** (Ex: 20 minutos, 1 hora.)"
+    "Olá! Bem-Vindo ao PersonalIa Encontrar o treino perfeito começa com o seu estado de espírito e objetivos. Para que eu possa te ajudar, me diga um pouco mais:" + 
+    "\n1. Como você se sente agora? (Ex: Com energia, cansado, estressado.)" + 
+    "\n2. Qual o seu principal objetivo? (Ex: Perder peso, ganhar massa, flexibilidade.)" + 
+    "\n3. Quanto tempo você tem disponível? (Ex: 20 minutos, 1 hora.)"
   );
   
   // O que o usuário vai digitar no input.
-  const [currentPrompt, setCurrentPrompt] = useState(initialPrompt); 
+  const [currentPrompt, setCurrentPrompt] = useState(""); 
   
   //Estado para simular o carregamento (envio para a API)
   const [isLoading, setIsLoading] = useState(false);
-
-  // Efeito para garantir que o prompt inicial seja carregado no input.
-  useEffect(() => {
-    if (initialPrompt) {
-      setCurrentPrompt(initialPrompt);
-    }
-  }, [initialPrompt]);
 
   // Função que será chamada ao clicar em "Enviar"
   const handleSend = async () => {
@@ -39,15 +27,23 @@ function Chat() {
     //ativa o estado de carregamento
     setIsLoading(true);
 
-    //chama a API com o prompt do usuário
-    const response = await getTreinos(currentPrompt);
-
-    //Atualiza a resposta da IA com o retorno da API
-    setIaResponse(response);
-
-    //Limpa o input e desativa o carregamento
-    setCurrentPrompt('');
-    setIsLoading(false);
+    // Cria um ID de usuário fixo para o teste
+    const usuarioId = "68e96d1811086a10ae8c9173"; // CORREÇÃO PARA BACK E FRONT RODAREM. DEVE SER SUBSTITUÍDO POR ALGO MELHOR DEPOIS
+    
+    try {
+      //chama a API com o prompt do usuário
+      const response = await getTreinos(usuarioId, currentPrompt);
+      console.log('Resposta bruta da API:', response);
+      
+      //Atualiza a resposta da IA com o retorno da API
+      setIaResponse(response);
+      setCurrentPrompt('');
+    } catch(error) {
+      console.error('Erro ao buscar treinos', error);
+      setIaResponse('Erro ao processar sua solicitação. Tente novamente.')
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

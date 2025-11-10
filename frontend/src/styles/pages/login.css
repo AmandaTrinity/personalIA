@@ -1,33 +1,32 @@
-/* Container principal que centraliza o formulário */
+/* Container principal da página de login */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Garante que ocupe a altura da tela, menos a navbar (aprox.) */
-  min-height: calc(100vh - 80px); 
-  padding: 2rem 0;
-  background-color: #f4f7f6; /* Um fundo levemente cinza */
+  padding: 3rem 0;
+  background-color: #f4f7f6;
+  min-height: calc(100vh - 80px); /* Altura total menos o navbar */
 }
 
-/* O card/caixa do formulário */
+/* O card do formulário */
 .login-form {
   background: #ffffff;
   padding: 2.5rem;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 420px; /* Largura máxima do formulário */
-  box-sizing: border-box; /* Garante que o padding não afete a largura */
+  max-width: 400px;
+  box-sizing: border-box;
 }
 
 .login-form h1 {
   text-align: center;
-  color: #333;
+  color: #000; /* Alterado para preto */
   margin-bottom: 2rem;
   font-weight: 600;
 }
 
-/* Agrupamento de label e input */
+/* Grupo de input (label + campo) */
 .input-group {
   margin-bottom: 1.5rem;
 }
@@ -35,7 +34,7 @@
 .input-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #555;
+  color: #000; /* Alterado para preto */
   font-weight: 500;
 }
 
@@ -44,8 +43,14 @@
   padding: 0.85rem;
   border: 1px solid #ddd;
   border-radius: 5px;
-  box-sizing: border-box; /* Importante para o padding funcionar bem */
+  box-sizing: border-box; /* Garante que o padding não afete a largura */
   font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #007bff; /* Destaque azul no foco */
 }
 
 /* Botão de submit */
@@ -54,7 +59,7 @@
   padding: 0.9rem;
   border: none;
   border-radius: 5px;
-  background-color: #007bff; /* Azul primário */
+  background-color: #007bff;
   color: white;
   font-size: 1rem;
   font-weight: bold;
@@ -63,7 +68,7 @@
 }
 
 .login-button:hover {
-  background-color: #0056b3; /* Azul mais escuro no hover */
+  background-color: #0056b3;
 }
 
 /* Links abaixo do formulário */
@@ -74,8 +79,8 @@
 }
 
 .login-links p {
-  margin-top: 0.5rem;
-  color: #555;
+  color: #000; /* Alterado para preto */
+  margin-top: 0.8rem;
 }
 
 .login-links a {

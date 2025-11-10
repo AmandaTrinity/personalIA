@@ -1,0 +1,80 @@
+/* Container principal do ChatArea */
+.chat-area-container {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  background: var(--bg-color); 
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(3, 141, 130, 0.4);
+}
+
+/* Cabeçalho "PersonalIA - Seu assistente..." */
+.personal-ia-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Título "PersonalIA" */
+.personal-ia-title {
+  font-size: 2.5em;
+  color: var(--primary-color);
+  margin: 0 0 5px 0;
+  font-weight: 900;
+}
+
+/* Subtítulo "Seu assistente de treinos personalizado" */
+.personal-ia-subtitle {
+  color: #033247;
+  font-size: 1em;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Linha divisória (horizontal rule) */
+.header-divider {
+  border: none;
+  height: 2px;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
+  margin: 15px 0;
+}
+
+/* Caixa com a resposta da IA */
+.ia-response-box {
+  min-height: 200px;
+  max-height: 500px;
+  padding: 20px 10px 20px 20px;
+  color: var(--text-color);
+  line-height: 1.6;
+  font-size: 1.05em;
+  white-space: pre-wrap; /* Mantém quebras de linha */
+  overflow-y: auto; /* Adiciona scroll se muito texto */
+  overflow-wrap: break-word; /* Quebra palavras longas */
+}
+
+/* Texto da resposta da IA */
+.ia-text {
+  margin: 0;
+}
+
+/* Destaque para textos em negrito (perguntas) */
+.ia-text strong {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .chat-area-container {
+    padding: 15px;
+  }
+  
+  .personal-ia-title {
+    font-size: 2em;
+  }
+  
+  .ia-response-box {
+    font-size: 1em;
+    padding: 15px;
+  }
+}

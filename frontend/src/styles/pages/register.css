@@ -5,6 +5,7 @@
   align-items: center;
   padding: 3rem 0; /* Mais padding vertical */
   background-color: #f4f7f6;
+  min-height: calc(100vh - 80px); /* Ajusta altura menos o navbar */
 }
 
 /* O card do formulário */
@@ -20,7 +21,7 @@
 
 .register-form h1 {
   text-align: center;
-  color: #333;
+  color: #000; /* Alterado para preto */
   margin-bottom: 1rem;
   font-weight: 600;
 }
@@ -28,7 +29,7 @@
 /* Títulos das seções (ex: "Informações da Conta") */
 .register-form h2 {
   font-size: 1.25rem;
-  color: #555;
+  color: #000; /* Alterado para preto */
   border-bottom: 1px solid #eee;
   padding-bottom: 0.5rem;
   margin-top: 1.5rem;
@@ -44,7 +45,7 @@
 .input-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #555;
+  color: #000; /* Alterado para preto */
   font-weight: 500;
 }
 
@@ -57,19 +58,29 @@
   border-radius: 5px;
   box-sizing: border-box;
   font-size: 1rem;
-  font-family: inherit; /* Garante que a fonte seja a mesma */
-  background-color: #fff; /* Necessário para o <select> no modo escuro */
+  font-family: inherit;
+  background-color: #fff;
+  transition: border-color 0.2s;
 }
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #007bff; /* Destaque azul no foco */
+}
+
 
 /* Estilo específico para a ajuda de texto */
 .input-group small {
+  display: block;
   font-size: 0.8rem;
-  color: #777;
+  color: #000; /* Alterado para preto */
   margin-top: 0.25rem;
 }
 
 .input-group textarea {
-  resize: vertical; /* Permite ao usuário redimensionar a altura */
+  resize: vertical;
   min-height: 80px;
 }
 
@@ -94,8 +105,8 @@
 
 /* Caixa de erro */
 .register-error {
-  color: #721c24; /* Vermelho escuro */
-  background-color: #f8d7da; /* Fundo rosa claro */
+  color: #721c24;
+  background-color: #f8d7da;
   border: 1px solid #f5c6cb;
   padding: 0.75rem 1.25rem;
   margin-bottom: 1rem;
@@ -113,12 +124,13 @@
 }
 
 .register-links p {
-  color: #555;
+  color: #000; /* Alterado para preto */
 }
 
 .register-links a {
   color: #007bff;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .register-links a:hover {

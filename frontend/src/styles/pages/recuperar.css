@@ -1,107 +1,135 @@
-
-/* Minimal, clean design for the recovery page */
+/* Container (baseado no login.css) */
 .rec-container {
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+  background-color: #f4f7f6;
+  min-height: calc(100vh - 80px);
 }
 
+/* Card (baseado no login.css) */
 .rec-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 440px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.20);
-  backdrop-filter: blur(6px);
+  max-width: 420px;
+  box-sizing: border-box;
 }
 
 .rec-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
+  text-align: center;
+  color: #000; /* Alterado para preto */
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .rec-subtitle {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 18px;
+  text-align: center;
+  color: #000; /* Alterado para preto */
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
+/* Alertas de sucesso e erro */
+.rec-alert {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.rec-alert.ok {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.rec-alert.err {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* Formulário */
 .rec-form {
-  display: grid;
-  gap: 14px;
+  margin-top: 1rem;
 }
 
 .rec-label {
-  font-size: 13px;
-  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #000; /* Alterado para preto */
+  font-weight: 500;
 }
 
 .rec-input {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.04);
-  color: inherit;
-  outline: none;
+  padding: 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.2s;
 }
 
 .rec-input:focus {
-  border-color: var(--accent-color, #646cff);
-  box-shadow: 0 0 0 3px rgba(100,108,255,0.20);
+  outline: none;
+  border-color: #007bff;
 }
 
 .rec-actions {
   display: flex;
-  gap: 10px;
-  align-items: center;
   justify-content: space-between;
-  margin-top: 4px;
+  align-items: center;
+  margin-top: 1.5rem;
 }
 
 .rec-btn {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: var(--accent-color, #646cff);
-  color: #fff;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: bold;
   cursor: pointer;
-  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.rec-btn:hover {
+  background-color: #0056b3;
 }
 
 .rec-btn:disabled {
-  opacity: 0.7;
+  background-color: #aaa;
   cursor: not-allowed;
 }
 
 .rec-link {
-  font-size: 13px;
-  opacity: 0.9;
+  color: #007bff;
   text-decoration: none;
+  font-size: 0.9rem;
 }
 
-.rec-alert {
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.rec-alert.ok {
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-}
-
-.rec-alert.err {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.35);
+.rec-link:hover {
+  text-decoration: underline;
 }
 
 .rec-hint {
-  font-size: 12px;
-  opacity: 0.7;
+  font-size: 0.8rem;
+  color: #000; /* Alterado para preto */
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.rec-hint code {
+  background-color: #e9ecef;
+  padding: 2px 4px;
+  border-radius: 3px;
 }
