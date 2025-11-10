@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 # Importações absolutas (sem '..')
 from models.user import UserCreate, UserLogin, TokenResponse, UserResponse
 from services import auth_service, security
-from services import gemini_service
+from services import gemini_service, email_service
 
 auth_router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
@@ -58,3 +58,21 @@ def login_user(form_data: UserLogin, background_tasks: BackgroundTasks): # <-- S
 
     return TokenResponse(access_token=access_token, user=user_resp)
 
+@auth_router.post("/forgot-password")
+def forgot_password(email: str):
+    user = auth_service.get_user_by_email(email)
+    if not user:
+        return {"message": "Se o e-mail estiver cadastrado, um link de recuperação será enviado."}
+    reset_token = security.create_recovery_token(email)
+    auth_service.update_token(email, reset_token)
+    email_service.send_email(email, reset_token)
+    return {"message": "Se o e-mail estiver cadastrado, um link de recuperação será enviado."}
+
+@auth_router.post("/reset-password")
+def reset_password(token: str, password: str):
+    email = security.verify_recovery_token(token)
+    if not email:
+        return {"message": "não foi possivel alterar"}
+    senha_hash = security.hash_password(password)
+    msg = auth_service.update_user_password(email, senha_hash, token)
+    return {"message": msg}
