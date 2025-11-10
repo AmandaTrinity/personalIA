@@ -1,10 +1,12 @@
 from datetime import datetime
 from bson import ObjectId
+from fastapi import HTTPException
 
 # Importa a coleção SÍNCRONA do seu arquivo mongodb.py
 from database.mongodb import treinos_collection
-# NÃO importamos mais gemini_service aqui!
-from services import gemini_service # Importamos para usar a nova função
+
+# OBS: não importamos o gemini_service aqui (serviço separado). Este módulo
+# apenas salva/lista treinos no banco.
 
 def salvar_treino(usuario_id: str, plano_gerado: str, user_context: dict) -> dict:
     """
@@ -13,8 +15,10 @@ def salvar_treino(usuario_id: str, plano_gerado: str, user_context: dict) -> dic
     if treinos_collection is None:
         raise HTTPException(status_code=503, detail="Conexão com banco de dados não disponível")
 
-    treino_doc = user_context 
-    
+    # copie o contexto do usuário para evitar modificar o dicionário recebido
+    treino_doc = dict(user_context) if isinstance(user_context, dict) else {}
+
+    # Garantir campos esperados (definir explicitamente se estiverem faltando)
     treino_doc.update(
         {
             "usuario_id": ObjectId(usuario_id),
