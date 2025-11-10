@@ -37,6 +37,9 @@ class Settings:
     # Chave para Tokens JWT (Lida do .env)
     SECRET_KEY: str = os.getenv("SECRET_KEY", "")
     # -----------------------
+    # Configurações de email
+    EMAIL: str = os.getenv("EMAIL", "")
+    SENHA_SMTP: str = os.getenv("SENHA_SMTP", "")
 
     # Configurações de ambiente
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
