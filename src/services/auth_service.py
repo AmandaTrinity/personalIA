@@ -75,6 +75,20 @@ def authenticate(email: str, senha: str):
     return normalize_user(user_raw, safe=True)
 
 
+def update_token(email:str, token: str):
+    usuarios_collection.update_one({"email": email}, {"$set": {"token": token}})
+
+def update_user_password(email: str, senha: str, token: str):
+    if usuarios_collection is None:
+        return None
+    if usuarios_collection.find_one({"email": email, "token": token}):
+        senha_nova = (senha)
+        usuarios_collection.update_one(
+            {"email": email}, {"$set": {"senha_hash": senha_nova}, "$unset": {"token": token}}
+        )
+        return "Senha alterada com sucesso"
+    return "Não foi possivel alterar a senha"
+
 # Backwards compatibility: antiga função ainda disponível
 # note: removed legacy `authenticate_user` wrapper; use `authenticate` directly
 
