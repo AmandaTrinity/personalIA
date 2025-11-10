@@ -1,0 +1,88 @@
+/* Container principal que centraliza o formulário */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Garante que ocupe a altura da tela, menos a navbar (aprox.) */
+  min-height: calc(100vh - 80px); 
+  padding: 2rem 0;
+  background-color: #f4f7f6; /* Um fundo levemente cinza */
+}
+
+/* O card/caixa do formulário */
+.login-form {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 420px; /* Largura máxima do formulário */
+  box-sizing: border-box; /* Garante que o padding não afete a largura */
+}
+
+.login-form h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+/* Agrupamento de label e input */
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box; /* Importante para o padding funcionar bem */
+  font-size: 1rem;
+}
+
+/* Botão de submit */
+.login-button {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Azul primário */
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  background-color: #0056b3; /* Azul mais escuro no hover */
+}
+
+/* Links abaixo do formulário */
+.login-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.login-links p {
+  margin-top: 0.5rem;
+  color: #555;
+}
+
+.login-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}

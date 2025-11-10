@@ -1,0 +1,126 @@
+/* Container principal - igual ao de login */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0; /* Mais padding vertical */
+  background-color: #f4f7f6;
+}
+
+/* O card do formulário */
+.register-form {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 550px; /* Um pouco mais largo que o de login */
+  box-sizing: border-box;
+}
+
+.register-form h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* Títulos das seções (ex: "Informações da Conta") */
+.register-form h2 {
+  font-size: 1.25rem;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Estilos de input-group (copiados do login.css) */
+.input-group {
+  margin-bottom: 1.25rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-family: inherit; /* Garante que a fonte seja a mesma */
+  background-color: #fff; /* Necessário para o <select> no modo escuro */
+}
+
+/* Estilo específico para a ajuda de texto */
+.input-group small {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.25rem;
+}
+
+.input-group textarea {
+  resize: vertical; /* Permite ao usuário redimensionar a altura */
+  min-height: 80px;
+}
+
+/* Botão de submit */
+.register-button {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745; /* Verde para "sucesso" */
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 1rem;
+}
+
+.register-button:hover {
+  background-color: #218838;
+}
+
+/* Caixa de erro */
+.register-error {
+  color: #721c24; /* Vermelho escuro */
+  background-color: #f8d7da; /* Fundo rosa claro */
+  border: 1px solid #f5c6cb;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+
+/* Links abaixo do formulário */
+.register-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.register-links p {
+  color: #555;
+}
+
+.register-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-links a:hover {
+  text-decoration: underline;
+}
