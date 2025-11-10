@@ -6,22 +6,36 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import importlib
 
 # Importa as configurações (do Passo 1)
 from config.settings import settings 
 
 # --- Configuração de Senha ---
-# (Seu requirements.txt tem 'passlib')
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Evitamos importar CryptContext no nível de módulo para reduzir warnings
+# durante a coleta de testes; inicializamos o contexto sob demanda.
+_pwd_context = None
+
+
+def get_pwd_context():
+    """Inicializa e retorna o CryptContext (lazy import)."""
+    global _pwd_context
+    if _pwd_context is None:
+        passlib = importlib.import_module("passlib.context")
+        CryptContext = getattr(passlib, "CryptContext")
+        # Usamos PBKDF2-SHA256 como esquema seguro e amplamente suportado
+        _pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+    return _pwd_context
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifica a senha simples contra o hash salvo."""
-    return pwd_context.verify(plain_password, hashed_password)
+    return get_pwd_context().verify(plain_password, hashed_password)
+
 
 def hash_password(password: str) -> str:
-    """Cria um hash bcrypt da senha."""
-    return pwd_context.hash(password)
+    """Cria um hash seguro (PBKDF2-SHA256) da senha."""
+    return get_pwd_context().hash(password)
 
 # --- Configuração de Token JWT ---
 # (Seu requirements.txt tem 'python-jose')

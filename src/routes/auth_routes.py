@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 # Importações absolutas (sem '..')
 from models.user import UserCreate, UserLogin, TokenResponse, UserResponse
 from services import auth_service, security
+from services import gemini_service
 
 auth_router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
@@ -24,9 +25,9 @@ def register_user(user_data: UserCreate): # <-- SÍNCRONO
     return TokenResponse(access_token=access_token, user=user_resp)
 
 @auth_router.post("/login", response_model=TokenResponse)
-def login_user(form_data: UserLogin): # <-- SÍNCRONO
+def login_user(form_data: UserLogin, background_tasks: BackgroundTasks): # <-- SÍNCRONO
     """ Rota síncrona para login """
-    user = auth_service.authenticate_user(form_data.email, form_data.senha)
+    user = auth_service.authenticate(form_data.email, form_data.senha)
     
     if not user:
         raise HTTPException(
@@ -38,7 +39,22 @@ def login_user(form_data: UserLogin): # <-- SÍNCRONO
     access_token = security.create_access_token(
         data={"sub": user["email"]}
     )
+    # Normalizar _id para string antes de validar com Pydantic
+    if user and "_id" in user:
+        try:
+            user["_id"] = str(user["_id"])
+        except Exception:
+            pass
+
     user_resp = UserResponse.model_validate(user)
-    
+    # Agendamos envio do contexto do usuário ao Gemini em background.
+    # O `user_resp` já é safe (sem hashed_password) e tem o perfil cadastrado
+    # (idade, peso, altura, objetivo, limitacoes, etc) — passamos o dict.
+    try:
+        background_tasks.add_task(gemini_service.registrar_contexto_usuario, user_resp.model_dump())
+    except Exception:
+        # Não queremos falhar o login por conta de problemas ao enfileirar a task.
+        pass
+
     return TokenResponse(access_token=access_token, user=user_resp)
 
