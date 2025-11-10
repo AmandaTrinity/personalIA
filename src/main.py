@@ -1,4 +1,15 @@
+import warnings
 import uvicorn
+
+# Suprimir warning específico do passlib que aparece em alguns ambientes
+# quando o módulo 'crypt' (stdlib) emite DeprecationWarning. Isso evita
+# spam nos logs de teste/CI; o comportamento de hash não é afetado.
+warnings.filterwarnings(
+    "ignore",
+    message=r".*crypt is deprecated and slated for removal.*",
+    category=DeprecationWarning,
+    module=r".*passlib.*",
+)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv

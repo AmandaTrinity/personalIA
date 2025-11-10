@@ -63,10 +63,10 @@ test-cov: ## Executa testes com cobertura de código
 
 test-gemini: check-env ## Testa a conexão com a API do Gemini
 	@echo "🤖 Testando conexão com API do Gemini..."
-	@if [ -f test_gemini_service.py ]; then \
-		$(PYTHON) test_gemini_service.py; \
+	@if [ -f tests/test_gemini_service.py ]; then \
+		$(PYTHON) tests/test_gemini_service.py; \
 	else \
-		echo "❌ Arquivo test_gemini.py não encontrado!"; \
+		echo "❌ Arquivo test_gemini_service.py não encontrado!"; \
 		exit 1; \
 	fi
 
