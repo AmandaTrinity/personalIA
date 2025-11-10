@@ -42,6 +42,7 @@ def hash_password(password: str) -> str:
 SECRET_KEY = settings.SECRET_KEY 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 dias
+RECOVERY_TOKEN_EXPIRE_MINUTES = 15
 
 def create_access_token(data: dict) -> str:
     """Cria um novo token JWT."""
@@ -50,6 +51,22 @@ def create_access_token(data: dict) -> str:
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def create_recovery_token(email: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=RECOVERY_TOKEN_EXPIRE_MINUTES)
+    dados_token = {"exp": expire, "sub": email}
+    token = jwt.encode(dados_token, SECRET_KEY, algorithm=ALGORITHM)
+    return token
+
+def verify_recovery_token(token: str):
+    try:
+        verificador = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+        email_usuario = verificador.get("sub")
+        if email_usuario is None:
+            return None
+        return email_usuario
+    except JWTError:
+        return None
 
 # --- Dependência de Rota Protegida (SÍNCRONA) ---
 # Diz ao FastAPI para procurar o token em /auth/login
