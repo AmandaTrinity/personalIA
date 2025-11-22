@@ -8,6 +8,12 @@ from services import treino_service
 
 treino_router = APIRouter(prefix="/treinos", tags=["Treinos"])
 
+# Compatibilidade: exportar aliases para que testes possam patchar
+# diretamente `routes.treino_routes.salvar_treino` ou
+# `routes.treino_routes.listar_treinos_por_usuario`.
+salvar_treino = treino_service.salvar_treino
+listar_treinos_por_usuario = treino_service.listar_treinos_por_usuario
+
 @treino_router.post("/")
 def criar_treino(
     data: MensagemChat, 
@@ -46,10 +52,11 @@ def criar_treino(
         }
         
         # 4. Rota salva no DB (síncrono)
-        treino_salvo = treino_service.salvar_treino(
+        # Use alias `salvar_treino` para permitir patching em testes
+        treino_salvo = salvar_treino(
             usuario_id=str(user["_id"]), 
             plano_gerado=plano_de_treino,
-            user_context=user_context
+            user_context=user_context,
         )
         
         return {"status": "ok", "treino": treino_salvo}
@@ -69,9 +76,8 @@ def get_treinos(
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
         
-    treinos = treino_service.listar_treinos_por_usuario(
-        usuario_id=str(user["_id"])
-    )
+    # Use alias `listar_treinos_por_usuario` para permitir patching em testes
+    treinos = listar_treinos_por_usuario(str(user["_id"]))
     return treinos
 
 
@@ -87,9 +93,7 @@ def get_treinos(
 def criar_treino_public(usuario_id: str, data: MensagemChat):
     """Cria um novo plano de treino para o usuário identificado por ID (público).
 
-    Este endpoint é destinado apenas para compatibilidade com testes que
-    executam chamadas sem autenticação. Ele gera um plano (via gemini_service)
-    e salva no banco com o `usuario_id` informado.
+    Endpoint de compatibilidade usado por testes sem autenticação.
     """
     try:
         plano_de_treino = gemini_service.gerar_plano_de_treino(data)
@@ -102,7 +106,7 @@ def criar_treino_public(usuario_id: str, data: MensagemChat):
             "frequencia": getattr(data, "frequencia", None),
         }
 
-        treino_salvo = treino_service.salvar_treino(
+        treino_salvo = salvar_treino(
             usuario_id=usuario_id, plano_gerado=plano_de_treino, user_context=user_context
         )
 
@@ -115,45 +119,8 @@ def criar_treino_public(usuario_id: str, data: MensagemChat):
 @treino_router.get("/{usuario_id}", operation_id="get_treinos_public_get")
 def get_treinos_public(usuario_id: str):
     """Retorna treinos salvos para um usuário (compatibilidade pública)."""
-    return treino_service.listar_treinos_por_usuario(usuario_id=usuario_id)
-
-
-# ---------- Rotas públicas de compatibilidade (usadas nos testes antigos) ----------
-@treino_router.post("/{usuario_id}")
-def criar_treino_public(usuario_id: str, data: MensagemChat):
-    """Compatibilidade: cria um treino para `usuario_id` (sem autenticação).
-
-    Usada pelos testes que fazem requests diretos para /treinos/{usuario_id}.
-    """
     try:
-        plano_de_treino = gemini_service.gerar_plano_de_treino(data)
-
-        # Prepara contexto mínimo e salva
-        user_context = {
-            "mensagem_usuario": data.mensagem_usuario,
-            "nivel": getattr(data, "nivel", None),
-            "objetivo": getattr(data, "objetivo", None),
-            "equipamentos": getattr(data, "equipamentos", None),
-            "frequencia": getattr(data, "frequencia", None),
-        }
-
-        treino_salvo = treino_service.salvar_treino(
-            usuario_id=usuario_id,
-            plano_gerado=plano_de_treino,
-            user_context=user_context,
-        )
-
-        return {"treino": treino_salvo}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@treino_router.get("/{usuario_id}")
-def get_treinos_public(usuario_id: str):
-    """Compatibilidade: lista treinos do `usuario_id` sem autenticação."""
-    try:
-        return treino_service.listar_treinos_por_usuario(usuario_id)
+        return listar_treinos_por_usuario(usuario_id)
     except Exception:
         return []
 
