@@ -15,7 +15,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(src_path))
 
 from services.gemini_service import gerar_plano_de_treino
-from schemas import MensagemChat
+from models.schemas import MensagemChat
 
 
 class TestGeminiService:

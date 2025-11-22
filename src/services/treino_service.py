@@ -1,78 +1,62 @@
 from datetime import datetime
-
 from bson import ObjectId
+from fastapi import HTTPException
 
+# Importa a coleção SÍNCRONA do seu arquivo mongodb.py
 from database.mongodb import treinos_collection
-from schemas import MensagemChat
-from services.gemini_service import gerar_plano_de_treino
 
+# OBS: não importamos o gemini_service aqui (serviço separado). Este módulo
+# apenas salva/lista treinos no banco.
 
-def salvar_treino(usuario_id: str, data: MensagemChat) -> dict:
+def salvar_treino(usuario_id: str, plano_gerado: str, user_context: dict) -> dict:
     """
-    Gera um plano de treino com o Gemini e salva no MongoDB.
-    Retorna o documento inserido.
+    Salva um plano de treino gerado no MongoDB (SÍNCRONO).
     """
-    plano = gerar_plano_de_treino(data)
-    # 1. Pega TODOS os dados de entrada
-    treino_doc = data.model_dump()
-    # 2. Adiciona os campos gerados e de controle
+    if treinos_collection is None:
+        raise HTTPException(status_code=503, detail="Conexão com banco de dados não disponível")
+
+    # copie o contexto do usuário para evitar modificar o dicionário recebido
+    treino_doc = dict(user_context) if isinstance(user_context, dict) else {}
+
+    # Garantir campos esperados (definir explicitamente se estiverem faltando)
     treino_doc.update(
         {
-            "usuario_id": ObjectId(usuario_id) if treinos_collection is not None else usuario_id,
-            "plano_gerado": plano,
+            "usuario_id": ObjectId(usuario_id),
+            "plano_gerado": plano_gerado,
             "criado_em": datetime.utcnow(),
         }
     )
-
-    if treinos_collection is not None:
-        try:
-            result = treinos_collection.insert_one(treino_doc)
-            treino_doc["_id"] = str(result.inserted_id)
-            treino_doc["usuario_id"] = str(treino_doc["usuario_id"])
-        except Exception as e:
-            print(f"Erro ao salvar no MongoDB: {e}")
-            # Em caso de erro, trate de forma apropriada, talvez elevando a exceção
-    else:
-        # Modo de teste/desenvolvimento
-        treino_doc["_id"] = "mock_id"
-        treino_doc["usuario_id"] = usuario_id  # Mantém como string no mock
-
-    return treino_doc
-
+    
+    try:
+        result = treinos_collection.insert_one(treino_doc)
+        
+        treino_doc["_id"] = str(result.inserted_id)
+        treino_doc["usuario_id"] = str(treino_doc["usuario_id"])
+        return treino_doc
+        
+    except Exception as e:
+        print(f"Erro ao salvar no MongoDB: {e}")
+        raise e 
 
 def listar_treinos_por_usuario(usuario_id: str) -> list:
     """
-    Retorna todos os treinos salvos de um usuário específico.
+    Retorna todos os treinos salvos de um usuário (SÍNCRONO).
     """
     if treinos_collection is None:
-        # Modo de teste/desenvolvimento
-        return []
+        return [] # Evita crash se DB estiver fora
 
-    treinos = treinos_collection.find({"usuario_id": ObjectId(usuario_id)}).sort("criado_em", -1)
+    cursor = treinos_collection.find(
+        {"usuario_id": ObjectId(usuario_id)}
+    ).sort("criado_em", -1)
 
-    return [
-        {
+    treinos = []
+    for t in cursor:
+        treinos.append({
             "_id": str(t["_id"]),
-            "nivel": t.get("nivel"),
             "objetivo": t.get("objetivo"),
-            "equipamentos": t.get("equipamentos"),
+            "frequencia": t.get("frequencia"),
             "plano_gerado": t.get("plano_gerado"),
             "criado_em": t.get("criado_em"),
-        }
-        for t in treinos
-    ]
+        })
+    return treinos
 
-
-def buscar_treino_por_id(treino_id: str) -> dict | None:
-    """
-    Retorna um treino específico pelo ID.
-    """
-    if treinos_collection is None:
-        # Modo de teste/desenvolvimento
-        return None
-
-    treino = treinos_collection.find_one({"_id": ObjectId(treino_id)})
-    if treino:
-        treino["_id"] = str(treino["_id"])
-        treino["usuario_id"] = str(treino["usuario_id"])
-    return treino
