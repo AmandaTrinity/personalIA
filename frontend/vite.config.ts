@@ -10,8 +10,9 @@ export default defineConfig({
     setupFiles: './src/tests/setup.ts',
     css: true,
     coverage: {
-      provider: 'v8',
+      provider: 'istanbul',
       reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'node_modules/',
         'src/tests/',
