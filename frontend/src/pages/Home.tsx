@@ -1,4 +1,9 @@
 import Navbar from "../components/NavbarLanding";
+import { UserRound } from 'lucide-react';
+import { Target } from 'lucide-react';
+import { ClipboardList } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
+import { PartyPopper } from 'lucide-react';
 import "../styles/pages/home.css";
 
 function App() {
@@ -46,6 +51,90 @@ function App() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+            <div className="section-como-funciona">
+        <div className="title-como-funciona">
+           <h2>Como Funciona?</h2>
+           <p>Em apenas 5 passos simples, você terá seu plano de treino personalizado</p>
+        </div>
+        
+        <div className="passos-como-funciona">
+          <div className="passo">
+            <div className="numero-passo">1</div>
+            <div className="icone-cadastro"><UserRound/></div>
+            <h3>Cadastro visual</h3>
+            <p>Responda perguntas de forma visual e intuitiva sobre seu perfil</p>
+          </div>
+
+          <div className="passo">
+              <div className="numero-passo">2</div>
+              <div className="icone-cadastro"><Target/></div>
+              <h3>Escolha seu objetivo</h3>
+              <p>Selecione visualmente entre ganho de massa, perda de peso, ou condicionamento</p>
+          </div>
+
+          <div className="passo">
+              <div className="numero-passo">3</div>
+              <div className="icone-cadastro"><ClipboardList/></div>
+              <h3>Suas Características</h3>
+              <p>Informe altura, peso e nível de experiência de forma simples</p>
+          </div>
+
+          <div className="passo">
+              <div className="numero-passo">4</div>
+              <div className="icone-cadastro"><MessageCircle/></div>
+              <h3>Chat Inteligente</h3>
+              <p>Converse com a IA que lembra de todas suas informações</p>
+          </div>
+
+          <div className="passo">
+              <div className="numero-passo">5</div>
+              <div className="icone-cadastro"><PartyPopper/></div>
+              <h3>Seu plano pronto</h3>
+              <p>Receba, salve e tire dúvidas sobre seu treino personalizado</p>
+          </div>
+        </div>
+
+        <div className="cadastro-visual">
+          <div className="explicacao-cadastro">
+            <h2>Cadastro 100% Visual</h2>
+            <p>Esqueça formulários chatos! Nosso cadastro é interativo e visual. Escolha ícones, selecione imagens e deslize opções para criar seu perfil.</p>
+            <ul>
+              <li>Interface intuitiva e amigável</li>
+              <li>Sem textos longos e cansativos</li>
+              <li>Experiência rápida e divertida</li>
+            </ul>
+          </div>
+
+          <div className="container-cadastro">
+            <h2>Qual seu objetivo?</h2>
+
+            <div className="opcoes-objetivo">
+              <div className="opcao-objetivo">
+                <div className="icone-ganho-massa"></div>
+                <span>Ganho de Massa</span>
+              </div>
+
+              <div className="opcao-objetivo">
+                <div className="icone-perda-peso"></div>
+                <span>Perda de Peso</span>
+              </div>
+
+              <div className="opcao-objetivo">
+                <div className="icone-condicionamento"></div>
+                <span>Condicionamento</span>
+              </div>
+
+              <div className="opcao-objetivo">
+                <div className="icone-flexibilidade"></div>
+                <span>Flexibilidade</span>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </div>
