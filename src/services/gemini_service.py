@@ -29,7 +29,8 @@ def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, histo
         # se o valor não for uma string não vazia (por exemplo um MagicMock nos
         # testes), usamos o valor padrão compatível com os testes.
         if not isinstance(model_name, str) or not model_name:
-            model_name = "gemini-2.5-flash"
+            # Padrão compatível com os testes / ambientes atuais
+            model_name = "gemini-2.5-flash-lite"
 
         system_instruction = (
             "Seu papel: Você será um personal trainer digital que passará modelos de treino para os usuários. Em hipótese alguma, dê resposta sobre outros assuntos(ex: culinária, música, filmes, etc)"
@@ -176,7 +177,7 @@ def registrar_contexto_usuario(user: dict) -> None:
     # Modelo configurável
     model_name = getattr(settings, "GEMINI_MODEL", None)
     if not isinstance(model_name, str) or not model_name:
-        model_name = "gemini-2.5-flash"
+        model_name = "gemini-2.5-flash-lite"
 
     try:
         model = genai.GenerativeModel(model_name=model_name)
