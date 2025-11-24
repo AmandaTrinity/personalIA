@@ -8,32 +8,50 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Carregar variáveis de ambiente
-project_root = Path(__file__).parent.parent.parent
+# (Ele procura o .env na pasta raiz do projeto, 'personalIA/')
+project_root = Path(__file__).parent.parent.parent 
 load_dotenv(dotenv_path=project_root / ".env")
 
 
 class Settings:
-    """Configurações centralizadas da aplicação"""
+    """Configurações centralizadas da aplicação
 
-    # Configurações da API
-    APP_NAME: str = "PersonalIA Backend"
-    APP_VERSION: str = "1.0.0"
-    APP_DESCRIPTION: str = "API para sistema de treinos personalizados com IA"
+    Observação: algumas baterias de testes precisam sobrescrever
+    `settings.is_testing`. Para permitir patching (mock/patch), essa
+    flag é criada como atributo de instância no __init__ em vez de
+    ser uma property somente leitura.
+    """
 
-    # Configurações do servidor
-    HOST: str = os.getenv("HOST", "0.0.0.0")
-    PORT: int = int(os.getenv("PORT", "8000"))
-    DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
+    def __init__(self) -> None:
+        # Configurações da API
+        self.APP_NAME: str = "PersonalIA Backend"
+        self.APP_VERSION: str = "1.0.0"
+        self.APP_DESCRIPTION: str = "API para sistema de treinos personalizados com IA"
 
-    # Configurações do banco de dados
-    MONGO_URI: str = os.getenv("MONGO_URI", "")
-    DATABASE_NAME: str = os.getenv("DATABASE_NAME", "personalai_db")
+        # Configurações do servidor
+        self.HOST: str = os.getenv("HOST", "0.0.0.0")
+        self.PORT: int = int(os.getenv("PORT", "8000"))
+        self.DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
 
-    # Configurações da API do Gemini
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+        # Configurações do banco de dados
+        self.MONGO_URI: str = os.getenv("MONGO_URI", "")
+        self.DATABASE_NAME: str = os.getenv("DATABASE_NAME", "personalai_db")
 
-    # Configurações de ambiente
-    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+        # Configurações da API do Gemini
+        self.GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+
+        # Chave para Tokens JWT (Lida do .env)
+        self.SECRET_KEY: str = os.getenv("SECRET_KEY", "")
+
+        # Configurações de email
+        self.EMAIL: str = os.getenv("EMAIL", "")
+        self.SENHA_SMTP: str = os.getenv("SENHA_SMTP", "")
+
+        # Configurações de ambiente
+        self.ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+
+        # Flag patchável para indicar modo de testes
+        self.is_testing: bool = self.ENVIRONMENT.lower() == "test" or "pytest" in os.environ.get("_", "")
 
     @property
     def is_development(self) -> bool:
@@ -45,11 +63,7 @@ class Settings:
         """Verifica se está em ambiente de produção"""
         return self.ENVIRONMENT.lower() in ["production", "prod"]
 
-    @property
-    def is_testing(self) -> bool:
-        """Verifica se está em ambiente de teste"""
-        return self.ENVIRONMENT.lower() == "test" or "pytest" in os.environ.get("_", "")
-
 
 # Instância global das configurações
 settings = Settings()
+

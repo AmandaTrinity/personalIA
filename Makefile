@@ -61,12 +61,21 @@ test-cov: ## Executa testes com cobertura de código
 	@echo "🧪 Executando testes com cobertura..."
 	$(PYTHON) -m pytest $(TEST_DIR) -v --cov=$(SRC_DIR) --cov-report=html --cov-report=term -c config/pytest.ini
 
+# Atalhos para execução com flag de jobs do make (por conveniência)
+test-j1: ## Executa todos os testes (atalho para executar com -j1 se preferir)
+	@echo "🧪 Executando testes (atalho test-j1)..."
+	$(PYTHON) -m pytest $(TEST_DIR) -v --tb=short -c config/pytest.ini
+
+test-jl: ## Alias legível para quem digitou "-jl" por engano (executa os testes)
+	@echo "🧪 Executando testes (atalho test-jl)..."
+	$(PYTHON) -m pytest $(TEST_DIR) -v --tb=short -c config/pytest.ini
+
 test-gemini: check-env ## Testa a conexão com a API do Gemini
 	@echo "🤖 Testando conexão com API do Gemini..."
-	@if [ -f test_gemini_service.py ]; then \
-		$(PYTHON) test_gemini_service.py; \
+	@if [ -f tests/test_gemini_service.py ]; then \
+		$(PYTHON) tests/test_gemini_service.py; \
 	else \
-		echo "❌ Arquivo test_gemini.py não encontrado!"; \
+		echo "❌ Arquivo test_gemini_service.py não encontrado!"; \
 		exit 1; \
 	fi
 

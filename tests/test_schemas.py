@@ -12,7 +12,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(project_root))
     sys.path.insert(0, str(src_path))
 
-from schemas import MensagemChat
+from models.schemas import MensagemChat
 
 
 class TestSchemas:
@@ -41,7 +41,7 @@ class TestSchemas:
         assert data.mensagem_usuario == "Teste"
         assert data.nivel == "iniciante"
         assert data.objetivo == "condicionamento"
-        assert data.equipamentos == ["peso corporal"]  # Mudou para array
+        assert data.equipamentos == ["peso corporal"] 
         assert data.frequencia == "2 dias por semana"
     
     def test_mensagem_chat_campo_obrigatorio(self):
