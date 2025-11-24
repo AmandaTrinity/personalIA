@@ -1,5 +1,5 @@
 import Navbar from "../components/NavbarLanding";
-import { UserRound, Users, Lock, Zap, Save, Brain } from 'lucide-react';
+import { UserRound, Users, Lock, Zap, Save, Brain, CheckCircle2 } from 'lucide-react';
 import { Target } from 'lucide-react';
 import { ClipboardList } from 'lucide-react';
 import { MessageCircle } from 'lucide-react';
@@ -99,12 +99,12 @@ function App() {
 
         <div className="cadastro-visual">
           <div className="explicacao-cadastro">
-            <h2>Cadastro 100% Visual</h2>
-            <p>Esqueça formulários chatos! Nosso cadastro é interativo e visual. Escolha ícones, selecione imagens e deslize opções para criar seu perfil.</p>
+            <h2>Cadastro 100% Visual e Interativo</h2>
+            <p>Esqueça formulários chatos! Nosso cadastro foi desenhado para ser uma experiência fluida. Escolha ícones, selecione imagens e deslize opções para criar seu perfil em segundos.</p>
             <ul>
-              <li>Interface intuitiva e amigável</li>
-              <li>Sem textos longos e cansativos</li>
-              <li>Experiência rápida e divertida</li>
+              <li><CheckCircle2 size={20} className="check-icon" /> Interface intuitiva e amigável</li>
+              <li><CheckCircle2 size={20} className="check-icon" /> Sem textos longos e cansativos</li>
+              <li><CheckCircle2 size={20} className="check-icon" /> Experiência rápida e divertida</li>
             </ul>
           </div>
 
@@ -113,27 +113,28 @@ function App() {
 
             <div className="opcoes-objetivo">
               <div className="opcao-objetivo">
-                <div className="icone-ganho-massa"></div>
+                <Zap size={32} />
                 <span>Ganho de Massa</span>
               </div>
 
               <div className="opcao-objetivo">
-                <div className="icone-perda-peso"></div>
+                <Target size={32} />
                 <span>Perda de Peso</span>
               </div>
 
               <div className="opcao-objetivo">
-                <div className="icone-condicionamento"></div>
+                <Brain size={32} />
                 <span>Condicionamento</span>
               </div>
 
               <div className="opcao-objetivo">
-                <div className="icone-flexibilidade"></div>
+                <UserRound size={32} />
                 <span>Flexibilidade</span>
               </div>
             </div>
           </div>
         </div>
+        
         <div className="porque-escolher">
           <div className="header-escolher">
             <h2>Por que escolher o <span>FitPlan AI</span>?</h2>
@@ -146,9 +147,9 @@ function App() {
                 <Brain size={32} />
               </div>
               <h3>IA Personalizada</h3>
-              <p>Nossa inteligência artificial cria treinos únicos baseados no seu perfil completo</p>
+              <p>Nossa inteligência artificial cria treinos únicos baseados no seu perfil completo, não apenas templates genéricos.</p>
             </div>
-
+           
             <div className="card-motivo">
               <div className="icone-motivo">
                 <MessageCircle size={32} />
