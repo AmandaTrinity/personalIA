@@ -9,8 +9,10 @@ import "../styles/pages/home.css";
 function App() {
   return (
     <div>
+      {/* ========== NAVBAR ========== */}
       <Navbar/>
 
+      {/* ========== INTRODUÇÃO ========== */}
       <div className="container-inicial">
         <div className="texto-inicial">
           <div className="plano">Planos de treino personalizados com IA</div>
@@ -54,7 +56,8 @@ function App() {
         </div>
       </div>
 
-            <div className="section-como-funciona">
+      {/* ========== COMO FUNCIONA? ========== */}
+            <div id="como-funciona" className="section-como-funciona">
         <div className="title-como-funciona">
            <h2>Como Funciona?</h2>
            <p>Em apenas 5 passos simples, você terá seu plano de treino personalizado</p>
@@ -97,6 +100,7 @@ function App() {
           </div>
         </div>
 
+      {/* ========== CADASTRO 100% VISUAL ========== */}
         <div className="cadastro-visual">
           <div className="explicacao-cadastro">
             <h2>Cadastro 100% Visual e Interativo</h2>
@@ -134,8 +138,9 @@ function App() {
             </div>
           </div>
         </div>
-        
-        <div className="porque-escolher">
+
+      {/* ========== PORQUE ESCOLHER PERSONALIA? ========== */}
+        <div id="porque-nos-escolher" className="porque-escolher">
           <div className="header-escolher">
             <h2>Por que escolher o <span>PersonalIA</span>?</h2>
             <p>Tecnologia de ponta combinada com simplicidade para transformar seu treino</p>
@@ -192,8 +197,8 @@ function App() {
           </div>
         </div>
     </div>
-     {/* Essa parte aqui tá na raiz do negócio ao invés do container principal, é pra ser assim mesmo se não ele não preenche o tela*/}
-        <div className="cta-transformacao">
+      {/* ========== PRONTO PARA COMEÇAR SUA TRANSFORMAÇÃO? ========== */}
+        <div id="comecar-transformacao" className="cta-transformacao">
           <div className="cta-conteudo">
             <h2>Pronto para Começar sua Transformação?</h2>
             <p>Junte-se as pessoas que já mudaram de vida com o <span>PersonalIA</span>. Seu plano perfeito está a apenas alguns cliques de distância.</p>
