@@ -487,12 +487,99 @@
   font-size: 1rem;
   line-height: 1.6;
 }
+/* SEÇÃO PRONTO PARA COMEÇAR SUA TRANSFORMAÇÃO */
+.cta-transformacao {
+  margin-top: 10rem;
+  width: 100%;
+  /* Fundo Azul Solido solicitado */
+  background-color: #174DAD; 
+  padding: 6rem 2rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  /* Borda superior arredondada para estilo moderno */
+  border-top-left-radius: 60px;
+  border-top-right-radius: 60px;
+  /* Sombra suave no topo para dar profundidade */
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+}
+
+.cta-conteudo {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-transformacao h2 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.cta-transformacao p {
+  font-size: 1.4rem;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+  max-width: 650px;
+  line-height: 1.6;
+}
+
+/* Botão Gigante de CTA */
+.btn-cta-final {
+  background-color: #E8FE61; /* Verde Neon */
+  color: #174DAD; /* Azul no texto */
+  padding: 1.2rem 4rem;
+  border-radius: 50px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-cta-final:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  background-color: #fff; /* Fica branco no hover para destaque */
+}
+
+/* Decoração de fundo sutil (Círculos transparentes) */
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  z-index: 1;
+}
+.circle-1 { width: 600px; height: 600px; top: -200px; left: -200px; }
+.circle-2 { width: 400px; height: 400px; bottom: -100px; right: -100px; }
+
 
 /* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+  .grid-motivos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .container-inicial {
     flex-direction: column;
     text-align: center;
+    padding-top: 4rem;
+  }
+  
+  .container {
+      min-width: auto;
   }
 
   .texto-inicial {
@@ -502,11 +589,63 @@
 
   .texto-inicial h1 {
     text-align: center;
-    font-size: 2.8rem;
-  }
-
-  .icone {
-    display: none; /* Opcional: esconder o ícone em telas pequenas */
+    font-size: 2.5rem;
   }
   
+  .botoes-iniciais {
+      flex-direction: column;
+      width: 100%;
+  }
+  
+  .botao-inicial, .botao-saiba-mais {
+      width: 100%;
+  }
+
+  .cadastro-visual {
+      flex-direction: column;
+      padding: 2rem;
+      gap: 2rem;
+  }
+
+  .explicacao-cadastro {
+      text-align: center;
+      align-items: center;
+  }
+  
+  .explicacao-cadastro ul {
+      align-items: flex-start;
+      display: inline-flex;
+  }
+
+  .porque-escolher {
+    margin-top: 4rem;
+  }
+  
+  .grid-motivos {
+    grid-template-columns: 1fr;
+  }
+
+  .card-motivo {
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Responsividade CTA */
+  .cta-transformacao {
+    margin-top: 6rem;
+    padding: 4rem 1.5rem;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+  }
+
+  .cta-transformacao h2 {
+    font-size: 2.2rem;
+  }
+
+  .btn-cta-final {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
 }

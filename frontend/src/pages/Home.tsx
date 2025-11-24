@@ -1,5 +1,5 @@
 import Navbar from "../components/NavbarLanding";
-import { UserRound, Users, Lock, Zap, Save, Brain, CheckCircle2 } from 'lucide-react';
+import { UserRound, Users, Lock, Zap, Save, Brain, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Target } from 'lucide-react';
 import { ClipboardList } from 'lucide-react';
 import { MessageCircle } from 'lucide-react';
@@ -137,7 +137,7 @@ function App() {
         
         <div className="porque-escolher">
           <div className="header-escolher">
-            <h2>Por que escolher o <span>FitPlan AI</span>?</h2>
+            <h2>Por que escolher o <span>PersonalIA</span>?</h2>
             <p>Tecnologia de ponta combinada com simplicidade para transformar seu treino</p>
           </div>
 
@@ -189,6 +189,20 @@ function App() {
               <h3>Suporte Dedicado</h3>
               <p>Nossa equipe está sempre pronta para ajudar você</p>
             </div>
+          </div>
+        </div>
+
+        <div className="cta-transformacao">
+          <div className="bg-circle circle-1"></div>
+          <div className="bg-circle circle-2"></div>
+          
+          <div className="cta-conteudo">
+            <h2>Pronto para Começar sua Transformação?</h2>
+            <p>Junte-se as pessoas que já mudaram de vida com o PersonalIA. Seu plano perfeito está a apenas alguns cliques de distância.</p>
+            
+            <button className="btn-cta-final">
+              Começar agora <ArrowRight size={24} />
+            </button>
           </div>
         </div>
       </div>
