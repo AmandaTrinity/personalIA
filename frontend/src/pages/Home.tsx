@@ -1,5 +1,5 @@
 import Navbar from "../components/NavbarLanding";
-import { UserRound } from 'lucide-react';
+import { UserRound, Users, Lock, Zap, Save, Brain } from 'lucide-react';
 import { Target } from 'lucide-react';
 import { ClipboardList } from 'lucide-react';
 import { MessageCircle } from 'lucide-react';
@@ -132,9 +132,63 @@ function App() {
                 <span>Flexibilidade</span>
               </div>
             </div>
-
+          </div>
+        </div>
+        <div className="porque-escolher">
+          <div className="header-escolher">
+            <h2>Por que escolher o <span>FitPlan AI</span>?</h2>
+            <p>Tecnologia de ponta combinada com simplicidade para transformar seu treino</p>
           </div>
 
+          <div className="grid-motivos">
+            <div className="card-motivo">
+              <div className="icone-motivo">
+                <Brain size={32} />
+              </div>
+              <h3>IA Personalizada</h3>
+              <p>Nossa inteligência artificial cria treinos únicos baseados no seu perfil completo</p>
+            </div>
+
+            <div className="card-motivo">
+              <div className="icone-motivo">
+                <MessageCircle size={32} />
+              </div>
+              <h3>Chat Inteligente</h3>
+              <p>Tire dúvidas, ajuste exercícios e converse sobre seu treino a qualquer momento</p>
+            </div>
+
+            <div className="card-motivo">
+              <div className="icone-motivo">
+                <Save size={32} />
+              </div>
+              <h3>Salve seus Treinos</h3>
+              <p>Guarde todos os seus planos de treino e acesse quando precisar</p>
+            </div>
+
+            <div className="card-motivo">
+              <div className="icone-motivo">
+                <Zap size={32} />
+              </div>
+              <h3>Resultados Rápidos</h3>
+              <p>Receba seu plano personalizado em segundos, não em dias</p>
+            </div>
+
+            <div className="card-motivo">
+              <div className="icone-motivo">
+                <Lock size={32} />
+              </div>
+              <h3>Seus Dados Seguros</h3>
+              <p>Mantemos suas informações pessoais protegidas e privadas</p>
+            </div>
+
+            <div className="card-motivo">
+              <div className="icone-motivo">
+                <Users size={32} />
+              </div>
+              <h3>Suporte Dedicado</h3>
+              <p>Nossa equipe está sempre pronta para ajudar você</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

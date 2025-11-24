@@ -291,6 +291,86 @@
   gap: 1rem;
 }
 
+.porque-escolher {
+  margin-top: 6rem; /* Espaço para separar da seção anterior */
+  width: 100%;
+}
+
+.header-escolher {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header-escolher h2 {
+  font-size: 2.5rem;
+  color: #174DAD;
+  margin-bottom: 1rem;
+}
+
+.header-escolher span {
+  color: #5EA8E5; /* Um tom de azul mais claro para destaque, conforme screenshot */
+}
+
+.header-escolher p {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Grid System para os Cards */
+.grid-motivos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+/* Estilo Individual do Card */
+.card-motivo {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinhado à esquerda conforme screenshot */
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-motivo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(23, 77, 173, 0.15);
+}
+
+/* Ícone com fundo azul */
+.icone-motivo {
+  background-color: #174DAD; /* Azul primário */
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px; /* Bordas arredondadas (squircle) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Títulos e Textos do Card */
+.card-motivo h3 {
+  color: #3883CE;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.card-motivo p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 @media (max-width: 768px) {
   .container-inicial {
     flex-direction: column;
