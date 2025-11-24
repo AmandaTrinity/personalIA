@@ -191,14 +191,12 @@ function App() {
             </div>
           </div>
         </div>
-
+    </div>
+     {/* Essa parte aqui tá na raiz do negócio ao invés do container principal, é pra ser assim mesmo se não ele não preenche o tela*/}
         <div className="cta-transformacao">
-          <div className="bg-circle circle-1"></div>
-          <div className="bg-circle circle-2"></div>
-          
           <div className="cta-conteudo">
             <h2>Pronto para Começar sua Transformação?</h2>
-            <p>Junte-se as pessoas que já mudaram de vida com o PersonalIA. Seu plano perfeito está a apenas alguns cliques de distância.</p>
+            <p>Junte-se as pessoas que já mudaram de vida com o <span>PersonalIA</span>. Seu plano perfeito está a apenas alguns cliques de distância.</p>
             
             <button className="btn-cta-final">
               Começar agora <ArrowRight size={24} />
@@ -206,7 +204,6 @@ function App() {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
