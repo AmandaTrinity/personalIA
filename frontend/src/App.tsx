@@ -4,6 +4,7 @@ import Chat from './pages/Chat'
 import RecuperarSenha from './pages/RecuperarSenha'
 import Login from './pages/Login.tsx'
 import Register from './pages/Register.tsx'
+import ProfileSetup from './pages/ProfileSetup.tsx';
 import { Routes, Route } from 'react-router-dom' // A gente precisa disso pra poder ter múltiplas páginas
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile-setup" element={<ProfileSetup />} />
           <Route path="/recuperar-senha" element={<RecuperarSenha />} />
         </Routes>
       </div>
