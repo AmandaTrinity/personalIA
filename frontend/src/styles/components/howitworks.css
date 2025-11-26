@@ -1,0 +1,211 @@
+.onboarding-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #174DAD, #3883CE, #5EA8E5);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding-blur {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.3;
+}
+
+.blur-1 {
+  top: 120px;
+  right: 80px;
+  width: 260px;
+  height: 260px;
+  background: #E8FE61;
+}
+
+.blur-2 {
+  bottom: 120px;
+  left: 60px;
+  width: 360px;
+  height: 360px;
+  background: #5EA8E5;
+}
+
+.onboarding-wrapper {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  z-index: 10;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.hello {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.progress-title {
+  font-size: 1.4rem;
+  margin-top: 4px;
+}
+
+.progress-count .step {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.progress-count .total {
+  opacity: 0.6;
+  margin-left: 2px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #E8FE61;
+  transition: width 0.4s ease;
+}
+
+.onboarding-card {
+  background: white;
+  border-radius: 25px;
+  padding: 40px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.onboarding-title {
+  font-size: 2.3rem;
+  color: #174DAD;
+  margin-bottom: 10px;
+}
+
+.onboarding-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.step-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.option-grid.column {
+  grid-template-columns: 1fr;
+}
+
+.option-card {
+  padding: 28px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.25s;
+}
+
+.option-card:hover {
+  transform: scale(1.03);
+  border-color: #5EA8E5;
+}
+
+.option-card.active {
+  background: #174DAD;
+  border-color: #174DAD;
+  color: white;
+}
+
+.option-card.active .option-desc {
+  color: rgba(255,255,255,0.7);
+}
+
+.emoji {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.option-title {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+.option-desc {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.textarea {
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: 18px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.navigation {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.back-btn, .next-btn {
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  border-color: #aaa;
+}
+
+.next-btn {
+  flex: 1;
+  border: none;
+  background: #b6b6b6;
+  color: white;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
+.next-btn.enabled {
+  background: #E8FE61;
+  color: #174DAD;
+  cursor: pointer;
+}
+
+.next-btn.enabled:hover {
+  filter: brightness(1.1);
+}
