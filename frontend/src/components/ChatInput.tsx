@@ -1,3 +1,4 @@
+import { type ChangeEvent, type FormEvent } from 'react';
 import React from 'react';
 import '../styles/components/chatInput.css';
 
@@ -8,14 +9,27 @@ interface ChatInputProps {
   isLoading: boolean;
 }
 
-// Componente que lida com o input do usuário e o botão
-const ChatInput: React.FC<ChatInputProps> = ({ prompt, setPrompt, onSend, isLoading }) => {
-  const handleSubmit = (e: React.FormEvent) => { //e --> define o parametro que a função receberá
-    e.preventDefault();
-    if (prompt.trim() !== '' && !isLoading) {
+// Componente responsável por capturar e enviar mensagens do usuário
+const ChatInput = ({ prompt, setPrompt, onSend, isLoading }: ChatInputProps) => {
+  // Previne envio de mensagens vazias ou durante loanding
+  const handleSubmit = (event:FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    const isPromptValid = prompt.trim() !== "";
+    const canSend = isPromptValid && !isLoading;
+
+    if (canSend) {
       onSend();
     }
   };
+
+  //Atualiza o estado do prompt conforme o usuário digita
+  const handleInputChange = (event:ChangeEvent<HTMLInputElement>): void => {
+    setPrompt(event.target.value);
+  };
+
+  //Determina se o botão deve estar desativado
+  const isButtonDisabled = isLoading || prompt.trim().length === 0;
 
   return (
     <form className="chat-input-form" onSubmit={handleSubmit}>
@@ -23,14 +37,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ prompt, setPrompt, onSend, isLoad
         type="text"
         className="prompt-input-field"
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Qual sua dúvida sobre o treino recomendado?"
         disabled={isLoading}
       />
       <button 
         type="submit" 
         className="recommend-button"
-        disabled={isLoading}
+        disabled={isButtonDisabled}
       >
         {isLoading ? 'Enviando...' : 'Enviar'}
       </button>

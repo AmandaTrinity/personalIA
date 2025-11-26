@@ -1,31 +1,25 @@
+import ReactMarkdown from 'react-markdown';
 import React from 'react';
 import '../styles/components/chatArea.css';
 
 interface ChatAreaProps {
   iaResponse: string;
 }
-
-//Componente renderiza a caixa de conversa da IA
-const ChatArea: React.FC<ChatAreaProps> = ({ iaResponse }) => {
-  // Função para garantir que as quebras de linha do texto sejam renderizadas corretamente no HTML
-  const formattedResponse = iaResponse.split('\n').map((line, index) => (
-    <React.Fragment key={index}>
-      {line}
-      <br />
-    </React.Fragment>
-  ));
+//Exibe o cabeçalho da PersonalIA e a área de resposta com suporte a Markdown
+const ChatArea = ({ iaResponse }: ChatAreaProps) => {
 
   return (
     <div className="chat-area-container">
-      <div className="personal-ia-header">
+      <header className="personal-ia-header">
         <h1 className="personal-ia-title">PersonalIA</h1>
         <p className="personal-ia-subtitle">Descreva o seu objetivo e eu criarei o seu treino perfeito.</p>
         <hr className="header-divider" />
-      </div>
+      </header>
       
-      {/* Esta é a caixa principal da resposta da IA */}
       <div className="ia-response-box">
-        <p className="ia-text">{formattedResponse}</p>
+        <div className="ia-text">
+          <ReactMarkdown>{iaResponse}</ReactMarkdown>
+        </div>
       </div>
     </div>
   );
