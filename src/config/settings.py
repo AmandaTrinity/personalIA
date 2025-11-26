@@ -34,6 +34,12 @@ class Settings:
 
     # Configurações de ambiente
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    # Configurações de segurança
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
+    # Configurações de email
+    EMAIL: str = os.getenv("EMAIL", "")
+    SENHA_SMTP: str = os.getenv("SENHA_SMTP", "")
+
 
     @property
     def is_development(self) -> bool:

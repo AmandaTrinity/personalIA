@@ -86,3 +86,42 @@
     font-size: 1rem;
   }
 }
+
+.start-button {
+  background-color: #ffffff;
+  color: #033247;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.start-button:hover {
+  background-color: #4bcfc4;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(75, 207, 196, 0.4);
+}
+
+@media (max-width: 600px) {
+  .home-page-wrapper h1 {
+    font-size: 2.5rem;
+  }
+  
+  .home-page-wrapper .card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .text-card {
+    font-size: 1.2rem;
+  }
+  
+  .description-text {
+    font-size: 1rem;
+  }
+}

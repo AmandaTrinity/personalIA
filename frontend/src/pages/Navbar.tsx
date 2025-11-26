@@ -11,7 +11,8 @@ export default function Navbar() {
       {/* Adicione novas páginas para a Navbar aqui */}
       <ul>
         <CustomLink to="/chat">Chat</CustomLink>
-        <CustomLink to="/chat">Chat</CustomLink>
+        <CustomLink to="/login">Login</CustomLink>
+        <CustomLink to="/register">Registrar</CustomLink>
       </ul>
     </nav>
   )

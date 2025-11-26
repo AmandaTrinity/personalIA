@@ -4,7 +4,7 @@
 .PHONY: help install test lint format clean dev build docker run-server test-gemini check-env all
 
 # Variáveis
-PYTHON = python3
+PYTHON = python
 PIP = pip
 VENV = venv
 SRC_DIR = src
@@ -66,7 +66,7 @@ test-gemini: check-env ## Testa a conexão com a API do Gemini
 	@if [ -f test_gemini_service.py ]; then \
 		$(PYTHON) test_gemini_service.py; \
 	else \
-		echo "❌ Arquivo test_gemini.py não encontrado!"; \
+		echo "❌ Arquivo test_gemini_service.py não encontrado!"; \
 		exit 1; \
 	fi
 

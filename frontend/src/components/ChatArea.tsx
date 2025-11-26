@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown';
+import React from 'react';
 import '../styles/components/chatArea.css';
 
 interface ChatAreaProps {

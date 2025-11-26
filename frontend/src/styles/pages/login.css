@@ -1,0 +1,93 @@
+/* Container principal da página de login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+  background-color: #f4f7f6;
+  min-height: calc(100vh - 80px); /* Altura total menos o navbar */
+}
+
+/* O card do formulário */
+.login-form {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.login-form h1 {
+  text-align: center;
+  color: #000; /* Alterado para preto */
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+/* Grupo de input (label + campo) */
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #000; /* Alterado para preto */
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box; /* Garante que o padding não afete a largura */
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #007bff; /* Destaque azul no foco */
+}
+
+/* Botão de submit */
+.login-button {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+/* Links abaixo do formulário */
+.login-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.login-links p {
+  color: #000; /* Alterado para preto */
+  margin-top: 0.8rem;
+}
+
+.login-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}
