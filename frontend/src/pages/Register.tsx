@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/pages/register.css'; // Importando o CSS
 
 function Registro() {
+  const navigate = useNavigate();
   // Estados para todos os campos do formulário
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [idade, setIdade] = useState('');
-  const [peso, setPeso] = useState('');
-  const [altura, setAltura] = useState('');
-  const [genero, setGenero] = useState('');
-  const [equipamentos, setEquipamentos] = useState('');
-  const [limitacoes, setLimitacoes] = useState('');
   
   // Estado para mensagens de erro
   const [error, setError] = useState('');
@@ -34,20 +29,15 @@ function Registro() {
       nome,
       email,
       senha, // Em um app real, NUNCA logue a senha!
-      idade,
-      peso,
-      altura,
-      genero,
-      equipamentos: equipamentos.split(',').map(item => item.trim()), // Transforma a string em array
-      limitacoes,
     };
     
     console.log('Dados do novo usuário:', dadosDoUsuario);
     setError(''); // Limpa a mensagem de erro em caso de sucesso
     
-    //
     // TODO: Adicionar lógica de API aqui
-    //
+
+    // Após o sucesso, redireciona para a tela de personalização do perfil
+    navigate('/profile-setup', { state: { nome: nome } });
   };
 
   return (
@@ -98,80 +88,6 @@ function Registro() {
             value={confirmarSenha}
             onChange={(e) => setConfirmarSenha(e.target.value)}
             required 
-          />
-        </div>
-
-        {/* --- Seção 2: Informações Pessoais --- */}
-        <h2>Sobre Você</h2>
-        <div className="input-group">
-          <label htmlFor="idade">Idade</label>
-          <input 
-            type="number" 
-            id="idade"
-            value={idade}
-            onChange={(e) => setIdade(e.target.value)}
-            required 
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="genero">Gênero</label>
-          <select 
-            id="genero" 
-            value={genero} 
-            onChange={(e) => setGenero(e.target.value)}
-            required
-          >
-            <option value="" disabled>Selecione...</option>
-            <option value="masculino">Masculino</option>
-            <option value="feminino">Feminino</option>
-            <option value="outro">Outro</option>
-            <option value="prefiro_nao_dizer">Prefiro não dizer</option>
-          </select>
-        </div>
-        <div className="input-group">
-          <label htmlFor="peso">Peso (em kg)</label>
-          <input 
-            type="number" 
-            id="peso"
-            value={peso}
-            onChange={(e) => setPeso(e.target.value)}
-            placeholder="Ex: 70.5"
-            step="0.1"
-            required 
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="altura">Altura (em cm)</label>
-          <input 
-            type="number" 
-            id="altura"
-            value={altura}
-            onChange={(e) => setAltura(e.target.value)}
-            placeholder="Ex: 175"
-            required 
-          />
-        </div>
-
-        {/* --- Seção 3: Informações de Treino --- */}
-        <h2>Informações para o Treino</h2>
-        <div className="input-group">
-          <label htmlFor="equipamentos">Equipamentos Disponíveis</label>
-          <input 
-            type="text" 
-            id="equipamentos"
-            value={equipamentos}
-            onChange={(e) => setEquipamentos(e.target.value)}
-            placeholder="Ex: halteres, esteira, barra fixa"
-          />
-          <small>Separe os equipamentos por vírgula.</small>
-        </div>
-        <div className="input-group">
-          <label htmlFor="limitacoes">Limitações Físicas ou Lesões</label>
-          <textarea 
-            id="limitacoes"
-            value={limitacoes}
-            onChange={(e) => setLimitacoes(e.target.value)}
-            placeholder="Ex: Dor no joelho direito ao agachar, cirurgia no ombro..."
           />
         </div>
         
