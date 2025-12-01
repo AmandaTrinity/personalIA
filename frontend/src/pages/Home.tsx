@@ -6,7 +6,7 @@ import { MessageCircle } from 'lucide-react';
 import { PartyPopper } from 'lucide-react';
 import "../styles/pages/home.css";
 
-function App() {
+function Home() {
   return (
     <div>
       <Navbar/>
@@ -18,7 +18,7 @@ function App() {
           <p> Crie planos de treino personalizados baseados nos seus objetivos, 
               experiência e preferências. Tudo de forma visual e intuitiva.</p>
           <div className="botoes-iniciais">
-            <button className="botao-inicial">Começar Agora</button>
+            <a href="Chat" className="botao-inicial" >Começar Agora</a>
             <button className="botao-saiba-mais">Saiba Mais</button>
           </div>
         </div>
@@ -125,7 +125,7 @@ function App() {
               <div className="opcao-objetivo">
                 <Brain size={32} />
                 <span>Condicionamento</span>
-              </div>
+              </div>button
 
               <div className="opcao-objetivo">
                 <UserRound size={32} />
@@ -146,7 +146,7 @@ function App() {
               <div className="icone-motivo">
                 <Brain size={32} />
               </div>
-              <h3>IA Personalizada</h3>
+              <h3>IA Personalizada</h3>button
               <p>Nossa inteligência artificial cria treinos únicos baseados no seu perfil completo, não apenas templates genéricos.</p>
             </div>
            
@@ -196,14 +196,14 @@ function App() {
           <div className="cta-conteudo">
             <h2>Pronto para Começar sua Transformação?</h2>
             <p>Junte-se as pessoas que já mudaram de vida com o <span>PersonalIA</span>. Seu plano perfeito está a apenas alguns cliques de distância.</p>
-            
-            <button className="btn-cta-final">
+
+            <a href="Chat" className="btn-cta-final">
               Começar agora <ArrowRight size={24} />
-            </button>
+            </a>
           </div>
         </div>
-      </div>
+    </div>
   );
 };
 
-export default App
+export default Home;
