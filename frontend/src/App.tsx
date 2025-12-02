@@ -1,5 +1,5 @@
 import Home from './pages/Home'     
-import Chat from './pages/Chat'
+import Chat from './pages/Chat.tsx'
 import RecuperarSenha from './pages/RecuperarSenha'
 import Login from './pages/Login.tsx'
 import Register from './pages/Register.tsx'
