@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft, Dumbbell, Flame, Zap, HeartPulse, Leaf, Target, Trophy, Home} from "lucide-react";
 import "../styles/components/howitworks.css";
 
 interface OnboardingProps {
@@ -63,7 +63,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
         {/* Progress */}
         <div className="progress-header">
           <div className="progress-info">
-            <div className="hello">Olá, {userName}! 👋</div>
+            <div className="hello">Olá, {userName}!</div>
             <div className="progress-title">Vamos personalizar seu treino</div>
           </div>
 
@@ -94,7 +94,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setObjective('ganhar-massa')}
                   className={`option-card ${objective === 'ganhar-massa' ? "active" : ""}`}
                 >
-                  <div className="emoji">💪</div>
+                  <div className={`emoji ${objective === 'ganhar-massa' ? "icon-active" : ""}`}>
+                    <Dumbbell size={32} />
+                  </div>
                   <div className="option-title">Ganhar Massa</div>
                   <div className="option-desc">Hipertrofia e força</div>
                 </button>
@@ -103,7 +105,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setObjective('perder-peso')}
                   className={`option-card ${objective === 'perder-peso' ? "active" : ""}`}
                 >
-                  <div className="emoji">🔥</div>
+                  <div className={`emoji ${objective === 'perder-peso' ? "icon-active" : ""}`}>
+                    <Flame size={32} />
+                  </div>
                   <div className="option-title">Perder Peso</div>
                   <div className="option-desc">Queima de gordura</div>
                 </button>
@@ -112,7 +116,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setObjective('condicionamento')}
                   className={`option-card ${objective === 'condicionamento' ? "active" : ""}`}
                 >
-                  <div className="emoji">⚡</div>
+                  <div className={`emoji ${objective === 'condicionamento' ? "icon-active" : ""}`}>
+                    <Zap size={32} />
+                  </div>
                   <div className="option-title">Condicionamento</div>
                   <div className="option-desc">Fitness geral</div>
                 </button>
@@ -121,7 +127,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setObjective('resistencia')}
                   className={`option-card ${objective === 'resistencia' ? "active" : ""}`}
                 >
-                  <div className="emoji">🏃</div>
+                  <div className={`emoji ${objective === 'resistencia' ? "icon-active" : ""}`}>
+                    <HeartPulse size={32} />
+                  </div>
                   <div className="option-title">Resistência</div>
                   <div className="option-desc">Endurance e stamina</div>
                 </button>
@@ -140,7 +148,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setLevel('iniciante')}
                   className={`option-card ${level === 'iniciante' ? "active" : ""}`}
                 >
-                  <div className="emoji">🌱</div>
+                  <div className={`emoji ${level === 'iniciante' ? "icon-active" : ""}`}>
+                    <Leaf size={32} />
+                  </div>
                   <div className="option-title">Iniciante</div>
                   <div className="option-desc">Pouca ou nenhuma experiência</div>
                 </button>
@@ -149,7 +159,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setLevel('intermediario')}
                   className={`option-card ${level === 'intermediario' ? "active" : ""}`}
                 >
-                  <div className="emoji">🎯</div>
+                  <div className={`emoji ${level === 'intermediario' ? "icon-active" : ""}`}>
+                    <Target size={32} />
+                  </div>
                   <div className="option-title">Intermediário</div>
                   <div className="option-desc">Treina há alguns meses</div>
                 </button>
@@ -158,7 +170,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   onClick={() => setLevel('avancado')}
                   className={`option-card ${level === 'avancado' ? "active" : ""}`}
                 >
-                  <div className="emoji">🏆</div>
+                  <div className={`emoji ${level === 'avancado' ? "icon-active" : ""}`}>
+                    <Trophy size={32} />
+                  </div>
                   <div className="option-title">Avançado</div>
                   <div className="option-desc">Treina há +1 ano</div>
                 </button>
@@ -179,7 +193,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                     onClick={() => setDuration(t)}
                     className={`option-card ${duration === t ? "active" : ""}`}
                   >
-                    <div className="emoji">{["⚡", "🎯", "💪", "🔥"][i]}</div>
+                    <div className={`emoji ${duration === t ? "icon-active" : ""}`}>
+                      {[<Zap size={32}/>, <Target size={32}/>, <Dumbbell size={32}/>, <Flame size={32}/>][i]}
+                    </div>
                     <div className="option-title">{t} min</div>
                     <div className="option-desc">
                       {["Rápido e eficiente", "Equilibrado", "Completo", "Intenso"][i]}
@@ -198,16 +214,18 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
 
               <div className="option-grid column">
                 {[
-                  { key: "sem-equipamento", emoji: "🏠", title: "Sem Equipamento", desc: "Apenas peso corporal" },
-                  { key: "basico", emoji: "🏋️", title: "Básico", desc: "Halteres, elásticos, tapete" },
-                  { key: "completo", emoji: "🏢", title: "Completo", desc: "Máquinas de academia" },
+                  { key: "sem-equipamento", icon: <Home size={32} />, title: "Sem Equipamento", desc: "Apenas peso corporal" },
+                  { key: "basico", icon: <Dumbbell size={32} />, title: "Básico", desc: "Halteres, elásticos, tapete" },
+                  { key: "completo", icon: <Trophy size={32} />, title: "Completo", desc: "Máquinas de academia" },
                 ].map((item) => (
                   <button
                     key={item.key}
                     onClick={() => setEquipment(item.key)}
                     className={`option-card ${equipment === item.key ? "active" : ""}`}
                   >
-                    <div className="emoji">{item.emoji}</div>
+                    <div className={`emoji ${equipment === item.key ? "icon-active" : ""}`}>
+                      {item.icon}
+                    </div>
                     <div className="option-title">{item.title}</div>
                     <div className="option-desc">{item.desc}</div>
                   </button>
