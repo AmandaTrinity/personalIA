@@ -53,7 +53,7 @@
 
 .botao-inicial, .botao-saiba-mais {
     background-color: #E8FE61;
-    color: #174DAD;
+    color: #3883CE;
     padding: 0.8rem 2.5rem;
     border: none;
     font-size: 1.1rem;
@@ -63,8 +63,10 @@
 }
 
 .botao-inicial:hover {
-  color: #E8FE61;
-}
+   background-color: #3883CE;
+    color: #E8FE61;
+    border: 2px solid #E8FE61;
+  }
 
 .botao-saiba-mais {
   background-color: transparent;
@@ -545,7 +547,8 @@ color: #E8FE61;
   transform: scale(1.05) translateY(-2px);
   box-shadow: 0 20px 40px rgba(0,0,0,0.3);
   color: #E8FE61;
-  background-color: #fff; /* Fica branco no hover para destaque */
+  background-color: #3883CE;
+  border: 2px solid #E8FE61;
 }
 
 

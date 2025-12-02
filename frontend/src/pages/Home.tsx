@@ -125,7 +125,7 @@ function Home() {
               <div className="opcao-objetivo">
                 <Brain size={32} />
                 <span>Condicionamento</span>
-              </div>button
+              </div>
 
               <div className="opcao-objetivo">
                 <UserRound size={32} />
