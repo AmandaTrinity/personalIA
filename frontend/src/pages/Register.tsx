@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/pages/register.css'; // Importando o CSS
+import '../styles/pages/register.css';
 
 function Registro() {
   const navigate = useNavigate();

@@ -59,8 +59,8 @@
   padding: 0.9rem;
   border: none;
   border-radius: 5px;
-  background-color: #174DAD;
-  color: #FFFFFF;
+  background-color: #E8F361;
+  color: #174DAD;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -68,7 +68,8 @@
 }
 
 .login-button:hover {
-  background-color: #3883CE;
+  background-color: #d8e351;
+  color: #EEEEEE;
 }
 
 /* Links abaixo do formulário */
