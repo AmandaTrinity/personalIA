@@ -16,6 +16,8 @@ class UserCreate(BaseModel):
     altura: int  
     peso: float  
     objetivo: str
+    level: str
+    equipment: str
     limitacoes: str | None = None
     frequencia: str
 
