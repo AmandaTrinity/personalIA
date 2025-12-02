@@ -18,7 +18,7 @@ database_name = settings.DATABASE_NAME
 
 # Verificar se estamos em ambiente de teste
 is_testing = settings.is_testing
-is_main_process = True
+is_main_process = multiprocessing.current_process().name == "MainProcess"
 
 # Flags para evitar inicialização dupla
 _mongodb_initialized = False
