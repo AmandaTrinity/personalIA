@@ -34,9 +34,9 @@ export default function ProfileSetup() {
       peso: profile.weight,
       objetivo: profile.objective,
       frequencia: profile.duration, 
+      level: profile.level, 
+      equipment: profile.equipment,
       limitacoes: profile.limitations || null, 
-      
-      // Campos 'level' e 'equipment' do Onboarding (nível e equipamentos) não estão no schema UserCreate e são implicitamente ignorados aqui para não quebrar a API.
     };
 
     try {
