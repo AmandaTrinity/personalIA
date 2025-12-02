@@ -16,8 +16,8 @@
 
 /* Botão "Voltar para o Início" */
 .back-button-link button {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: #174DAD;
+  color: #FFFFFF;
   padding: 0.6rem 1.2rem;
   font-size: 1.1rem;
   border: none;
@@ -27,7 +27,7 @@
 }
 
 .back-button-link button:hover {
-  background-color: rgb(69, 108, 136);
+  background-color: #3883CE;
 }
 
 /* Responsividade */

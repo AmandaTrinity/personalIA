@@ -1,11 +1,10 @@
-/* Container principal - igual ao de login */
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3rem 0; /* Mais padding vertical */
-  background-color: #f4f7f6;
-  min-height: calc(100vh - 80px); /* Ajusta altura menos o navbar */
+  padding: 3rem 0;
+  background-color: #EEEEEE;
+  min-height: calc(100vh - 80px);
 }
 
 /* O card do formulário */
@@ -15,13 +14,13 @@
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 550px; /* Um pouco mais largo que o de login */
+  max-width: 550px;
   box-sizing: border-box;
 }
 
 .register-form h1 {
   text-align: center;
-  color: #000; /* Alterado para preto */
+  color: #174DAD;
   margin-bottom: 1rem;
   font-weight: 600;
 }
@@ -29,8 +28,8 @@
 /* Títulos das seções (ex: "Informações da Conta") */
 .register-form h2 {
   font-size: 1.25rem;
-  color: #000; /* Alterado para preto */
-  border-bottom: 1px solid #eee;
+  color: #174DAD;
+  border-bottom: 1px solid #EEEEEE;
   padding-bottom: 0.5rem;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
@@ -45,7 +44,7 @@
 .input-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #000; /* Alterado para preto */
+  color: #174DAD; /* Cor primária do projeto */
   font-weight: 500;
 }
 
@@ -54,7 +53,7 @@
 .input-group textarea {
   width: 100%;
   padding: 0.85rem;
-  border: 1px solid #ddd;
+  border: 1px solid #EEEEEE;
   border-radius: 5px;
   box-sizing: border-box;
   font-size: 1rem;
@@ -67,7 +66,7 @@
 .input-group select:focus,
 .input-group textarea:focus {
   outline: none;
-  border-color: #007bff; /* Destaque azul no foco */
+  border-color: #3883CE; 
 }
 
 
@@ -75,7 +74,7 @@
 .input-group small {
   display: block;
   font-size: 0.8rem;
-  color: #000; /* Alterado para preto */
+  color: #000;
   margin-top: 0.25rem;
 }
 
@@ -90,17 +89,17 @@
   padding: 0.9rem;
   border: none;
   border-radius: 5px;
-  background-color: #28a745; /* Verde para "sucesso" */
-  color: white;
+  background-color: #E8F361;
+  color: #174DAD;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   margin-top: 1rem;
 }
-
 .register-button:hover {
-  background-color: #218838;
+  background-color: #d8e351;
+  color: #EEEEEE;
 }
 
 /* Caixa de erro */
@@ -124,11 +123,11 @@
 }
 
 .register-links p {
-  color: #000; /* Alterado para preto */
+  color: #000;
 }
 
 .register-links a {
-  color: #007bff;
+  color: #174DAD;
   text-decoration: none;
   font-weight: 500;
 }

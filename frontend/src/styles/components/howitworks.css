@@ -21,7 +21,7 @@
   right: 80px;
   width: 260px;
   height: 260px;
-  background: #E8FE61;
+  background: #E8F361;
 }
 
 .blur-2 {
@@ -78,7 +78,7 @@
 
 .progress-fill {
   height: 100%;
-  background: #E8FE61;
+  background: #E8F361;
   transition: width 0.4s ease;
 }
 
@@ -120,7 +120,7 @@
 
 .option-card {
   padding: 28px;
-  border: 2px solid #ddd;
+  border: 2px solid #EEEEEE;
   border-radius: 20px;
   background: white;
   cursor: pointer;
@@ -131,6 +131,7 @@
 .option-card:hover {
   transform: scale(1.03);
   border-color: #5EA8E5;
+  color: white;
 }
 
 .option-card.active {
@@ -162,7 +163,7 @@
   width: 100%;
   height: 200px;
   padding: 20px;
-  border: 2px solid #ddd;
+  border: 2px solid #EEEEEE;
   border-radius: 18px;
   font-size: 1rem;
   resize: none;
@@ -173,13 +174,13 @@
   gap: 15px;
   margin-top: 30px;
   padding-top: 20px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #EEEEEE;
 }
 
 .back-btn, .next-btn {
   padding: 14px 20px;
   border-radius: 14px;
-  border: 2px solid #ccc;
+  border: 2px solid #EEEEEE;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -188,7 +189,7 @@
 }
 
 .back-btn:hover {
-  border-color: #aaa;
+  border-color: #3883CE;
 }
 
 .next-btn {
@@ -201,7 +202,7 @@
 }
 
 .next-btn.enabled {
-  background: #E8FE61;
+  background: #E8F361;
   color: #174DAD;
   cursor: pointer;
 }

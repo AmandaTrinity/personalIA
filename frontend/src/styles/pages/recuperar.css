@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   padding: 3rem 0;
-  background-color: #f4f7f6;
+  background-color: #EEEEEE;
   min-height: calc(100vh - 80px);
 }
 
@@ -80,7 +80,7 @@
 
 .rec-input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #3883CE;
 }
 
 .rec-actions {
@@ -94,8 +94,8 @@
   padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
-  color: white;
+  background-color: #174DAD;
+  color: #FFFFFF;
   font-size: 0.95rem;
   font-weight: bold;
   cursor: pointer;
@@ -103,16 +103,16 @@
 }
 
 .rec-btn:hover {
-  background-color: #0056b3;
+  background-color: #3883CE;
 }
 
 .rec-btn:disabled {
-  background-color: #aaa;
+  background-color: #b6b6b6;
   cursor: not-allowed;
 }
 
 .rec-link {
-  color: #007bff;
+  color: #174DAD;
   text-decoration: none;
   font-size: 0.9rem;
 }

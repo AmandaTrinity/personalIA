@@ -21,7 +21,7 @@
 
 .login-form h1 {
   text-align: center;
-  color: #000; /* Alterado para preto */
+  color: #174DAD;
   margin-bottom: 2rem;
   font-weight: 600;
 }
@@ -43,14 +43,14 @@
   padding: 0.85rem;
   border: 1px solid #ddd;
   border-radius: 5px;
-  box-sizing: border-box; /* Garante que o padding não afete a largura */
+  box-sizing: border-box;
   font-size: 1rem;
   transition: border-color 0.2s;
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #007bff; /* Destaque azul no foco */
+  border-color: #3883CE;
 }
 
 /* Botão de submit */
@@ -59,8 +59,8 @@
   padding: 0.9rem;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
-  color: white;
+  background-color: #174DAD;
+  color: #FFFFFF;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -68,7 +68,7 @@
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: #3883CE;
 }
 
 /* Links abaixo do formulário */
@@ -84,7 +84,7 @@
 }
 
 .login-links a {
-  color: #007bff;
+  color: #174DAD;
   text-decoration: none;
 }
 
