@@ -4,6 +4,10 @@ import "../styles/components/howitworks.css";
 
 interface OnboardingProps {
   onComplete: (profile: {
+    gender?: string;
+    age?: number;
+    height?: number;
+    weight?: number;
     objective?: string;
     level?: string;
     duration?: string;
@@ -13,6 +17,7 @@ interface OnboardingProps {
   userName: string;
 }
 
+
 export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [objective, setObjective] = useState('');
@@ -20,12 +25,17 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const [duration, setDuration] = useState('');
   const [equipment, setEquipment] = useState('');
   const [limitations, setLimitations] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+  const [weight, setWeight] = useState<number>(0);
+
 
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else {
-      onComplete({ objective, level, duration, equipment, limitations });
+      onComplete({ gender, age, height, weight, objective, level, duration, equipment, limitations });
     }
   };
 
@@ -38,14 +48,16 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return objective !== '';
+        return gender !== '' && age > 5 && height > 50 && weight > 20;
       case 2:
-        return level !== '';
+        return objective !== '';
       case 3:
-        return duration !== '';
+        return level !== '';
       case 4:
-        return equipment !== '';
+        return duration !== '';
       case 5:
+        return equipment !== '';
+      case 6:
         return true;
       default:
         return false;
@@ -69,22 +81,84 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
 
           <div className="progress-count">
             <span className="step">{currentStep}</span>
-            <span className="total">/5</span>
+            <span className="total">/6</span>
           </div>
         </div>
 
         <div className="progress-bar">
           <div
             className="progress-fill"
-            style={{ width: `${(currentStep / 5) * 100}%` }}
+            style={{ width: `${(currentStep / 6) * 100}%` }}
           />
         </div>
 
         {/* Card */}
         <div className="onboarding-card">
-
-          {/* Step 1 */}
+         
+          {/* Step 1 — Informações pessoais */}
           {currentStep === 1 && (
+            <div className="step-area">
+              <h2 className="onboarding-title">Informações Iniciais</h2>
+              <p className="onboarding-subtitle">Precisamos conhecer um pouco sobre você</p>
+
+              {/* Seleção de Gênero */}
+              <div className="option-grid">
+                <button
+                  onClick={() => setGender("masculino")}
+                  className={`option-card ${gender === "masculino" ? "active" : ""}`}
+                >
+                  <div className={`emoji ${gender === "masculino" ? "icon-active" : ""}`}>♂</div>
+                  <div className="option-title">Masculino</div>
+                </button>
+
+                <button
+                  onClick={() => setGender("feminino")}
+                  className={`option-card ${gender === "feminino" ? "active" : ""}`}
+                >
+                  <div className={`emoji ${gender === "feminino" ? "icon-active" : ""}`}>♀</div>
+                  <div className="option-title">Feminino</div>
+                </button>
+              </div>
+
+              {/* Inputs numéricos */}
+              <div className="option-grid column" style={{ marginTop: "25px" }}>
+                <label>
+                  Idade:
+                  <input
+                    type="number"
+                    value={age}
+                    onChange={(e) => setAge(Number(e.target.value))}
+                    className="textarea"
+                    style={{ height: "55px" }}
+                  />
+                </label>
+
+                <label>
+                  Altura (cm):
+                  <input
+                    type="number"
+                    value={height}
+                    onChange={(e) => setHeight(Number(e.target.value))}
+                    className="textarea"
+                    style={{ height: "55px" }}
+                  />
+                </label>
+
+                <label>
+                  Peso (kg):
+                  <input
+                    type="number"
+                    value={weight}
+                    onChange={(e) => setWeight(Number(e.target.value))}
+                    className="textarea"
+                    style={{ height: "55px" }}
+                  />
+                </label>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 2 && (
             <div className="step-area">
               <h2 className="onboarding-title">Qual é o seu objetivo?</h2>
               <p className="onboarding-subtitle">Escolha o que melhor descreve sua meta principal</p>
@@ -137,8 +211,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
             </div>
           )}
 
-          {/* Step 2 */}
-          {currentStep === 2 && (
+          {currentStep === 3 && (
             <div className="step-area">
               <h2 className="onboarding-title">Qual seu nível?</h2>
               <p className="onboarding-subtitle">Isso nos ajuda a ajustar a intensidade</p>
@@ -180,8 +253,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
             </div>
           )}
 
-          {/* Step 3 */}
-          {currentStep === 3 && (
+          {currentStep === 4 && (
             <div className="step-area">
               <h2 className="onboarding-title">Quanto tempo você tem?</h2>
               <p className="onboarding-subtitle">Duração ideal por sessão</p>
@@ -206,8 +278,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
             </div>
           )}
 
-          {/* Step 4 */}
-          {currentStep === 4 && (
+          {currentStep === 5 && (
             <div className="step-area">
               <h2 className="onboarding-title">Que equipamentos tem?</h2>
               <p className="onboarding-subtitle">Adaptamos os exercícios ao que você possui</p>
@@ -234,8 +305,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
             </div>
           )}
 
-          {/* Step 5 */}
-          {currentStep === 5 && (
+          {currentStep === 6 && (
             <div className="step-area">
               <h2 className="onboarding-title">Alguma limitação física?</h2>
               <p className="onboarding-subtitle">Opcional – Nos conte qualquer restrição</p>
@@ -262,7 +332,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
               onClick={handleNext}
               disabled={!canProceed()}
             >
-              {currentStep === 5 ? 'Finalizar' : 'Avançar'}{' '}
+              {currentStep === 6 ? 'Finalizar' : 'Avançar'}{' '}
               <ArrowRight size={20} />
             </button>
           </div>
