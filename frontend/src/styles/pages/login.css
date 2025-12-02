@@ -59,8 +59,8 @@
   padding: 0.9rem;
   border: none;
   border-radius: 5px;
-  background-color: #174DAD;
-  color: #FFFFFF;
+  background-color: #E8F361;
+  color: #174DAD;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -68,7 +68,8 @@
 }
 
 .login-button:hover {
-  background-color: #3883CE;
+  background-color: #d8e351;
+  color: #EEEEEE;
 }
 
 /* Links abaixo do formulário */
@@ -90,4 +91,15 @@
 
 .login-links a:hover {
   text-decoration: underline;
+}
+
+.login-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0.9rem;
 }

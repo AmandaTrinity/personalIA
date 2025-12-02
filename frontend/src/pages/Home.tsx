@@ -18,7 +18,7 @@ function Home() {
           <p> Crie planos de treino personalizados baseados nos seus objetivos, 
               experiência e preferências. Tudo de forma visual e intuitiva.</p>
           <div className="botoes-iniciais">
-            <a href="Chat" className="botao-inicial" >Começar Agora</a>
+            <a href="/login" className="botao-inicial" >Começar Agora</a>
             <button className="botao-saiba-mais">Saiba Mais</button>
           </div>
         </div>
@@ -197,7 +197,7 @@ function Home() {
             <h2>Pronto para Começar sua Transformação?</h2>
             <p>Junte-se as pessoas que já mudaram de vida com o <span>PersonalIA</span>. Seu plano perfeito está a apenas alguns cliques de distância.</p>
 
-            <a href="Chat" className="btn-cta-final">
+            <a href="/login" className="btn-cta-final">
               Começar agora <ArrowRight size={24} />
             </a>
           </div>

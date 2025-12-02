@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ChatArea from '../components/ChatArea';
 import ChatInput from '../components/ChatInput';
 import { getTreinos } from '../services/treino_api';
+import { getCurrentUser } from '../services/api';
 import '../styles/pages/chat.css'; 
 
 function Chat() {
@@ -20,14 +21,20 @@ function Chat() {
   //Estado para simular o carregamento (envio para a API)
   const [isLoading, setIsLoading] = useState(false);
 
+  const user = getCurrentUser();
+
   // Função que será chamada ao clicar em "Enviar"
   const handleSend = async () => {
     if (!currentPrompt.trim()) return; // Não envia se o input estiver vazio
 
+    if (!user || !user.id) {
+      setIaResponse('Você precisa estar logado para interagir com a IA.');
+      return;
+    }
+
     setIsLoading(true);
 
-    // Cria um ID de usuário fixo para o teste
-    const usuarioId = "68e96d1811086a10ae8c9173"; // CORREÇÃO PARA BACK E FRONT RODAREM. DEVE SER SUBSTITUÍDO POR ALGO MELHOR DEPOIS
+    const usuarioId = user.id;
     
     try {
       //chama a API com o prompt do usuário

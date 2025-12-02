@@ -35,7 +35,7 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-right">
-                <a href="Chat" className="login-button">Começar Agora</a>
+                <a href="/login" className="login-button">Começar Agora</a>
             </div>
         </nav>
     )

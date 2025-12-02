@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/pages/register.css'; // Importando o CSS
+import '../styles/pages/register.css';
 
 function Registro() {
   const navigate = useNavigate();
@@ -21,23 +21,9 @@ function Registro() {
     if (senha !== confirmarSenha) {
       setError('As senhas não coincidem.');
       return;
-    }
-
-    // Aqui você chamaria sua API de backend
-    // Por enquanto, vamos apenas mostrar no console
-    const dadosDoUsuario = {
-      nome,
-      email,
-      senha, // Em um app real, NUNCA logue a senha!
-    };
-    
-    console.log('Dados do novo usuário:', dadosDoUsuario);
-    setError(''); // Limpa a mensagem de erro em caso de sucesso
-    
-    // TODO: Adicionar lógica de API aqui
-
+    }    
     // Após o sucesso, redireciona para a tela de personalização do perfil
-    navigate('/profile-setup', { state: { nome: nome } });
+    navigate('/profile-setup', { state: { nome: nome, email: email, senha: senha } });
   };
 
   return (
@@ -48,7 +34,6 @@ function Registro() {
         {/* Exibe a mensagem de erro, se houver */}
         {error && <div className="register-error">{error}</div>}
 
-        {/* --- Seção 1: Informações da Conta --- */}
         <h2>Informações da Conta</h2>
         <div className="input-group">
           <label htmlFor="nome">Nome Completo</label>
