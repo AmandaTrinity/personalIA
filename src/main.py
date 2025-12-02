@@ -1,10 +1,24 @@
+import warnings
 import uvicorn
+
+# Suprimir warning específico do passlib que aparece em alguns ambientes
+# quando o módulo 'crypt' (stdlib) emite DeprecationWarning. Isso evita
+# spam nos logs de teste/CI; o comportamento de hash não é afetado.
+warnings.filterwarnings(
+    "ignore",
+    message=r".*crypt is deprecated and slated for removal.*",
+    category=DeprecationWarning,
+    module=r".*passlib.*",
+)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
-from config.settings import settings
+load_dotenv()
+
 from routes.treino_routes import treino_router
-from routes.user_routes import user_router
+from routes.auth_routes import auth_router 
+from config.settings import settings 
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -27,7 +41,7 @@ app.add_middleware(
     allow_headers=["*"],  # Permite todos os cabeçalhos
 )
 
-
+app.include_router(auth_router)  
 app.include_router(treino_router)
 app.include_router(user_router)
 
@@ -52,4 +66,5 @@ if __name__ == "__main__":
         port=settings.PORT,
         reload=settings.is_development,  # Só habilita reload em desenvolvimento
         log_level="info",
+        app_dir="."
     )

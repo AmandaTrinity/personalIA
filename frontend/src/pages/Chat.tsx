@@ -24,7 +24,6 @@ function Chat() {
   const handleSend = async () => {
     if (!currentPrompt.trim()) return; // Não envia se o input estiver vazio
 
-    //ativa o estado de carregamento
     setIsLoading(true);
 
     // Cria um ID de usuário fixo para o teste
@@ -48,23 +47,26 @@ function Chat() {
 
   return (
     <div className="chat-page-container">
-      {/* Área de Exibição(Título, Resposta da IA)*/}
       <ChatArea iaResponse={iaResponse} />
-
-      {/*Área de Input(Prompt do Usuário e Botão)*/}
-      <ChatInput 
+      <ChatInput
         prompt={currentPrompt}
         setPrompt={setCurrentPrompt}
         onSend={handleSend}
         isLoading={isLoading}
       />
 
-      {/* O botão "Voltar"*/}
-      <Link to="/" className="back-button-link">
-        <button style={{ marginTop: '20px' }}>Voltar para o Início</button>
-      </Link>
+      <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
+        <Link to="/" className="back-button-link">
+          <button>Voltar para o Início</button>
+        </Link>
+
+        {!user && (
+          <>
+            <Link to="/login"><button>Entrar</button></Link>
+            <Link to="/register"><button>Criar conta</button></Link>
+          </>
+        )}
+      </div>
     </div>
   );
 }
-
-export default Chat;

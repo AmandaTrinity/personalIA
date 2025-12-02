@@ -1,87 +1,636 @@
-.home-page-wrapper {
-    display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center;
-    min-height: 100vh;
-    width: 100%;
-    padding: 20px;
+.container-inicial {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3883CE;
+  color: white;
+  padding: 2rem;
+  gap: 2rem;
 }
 
-.home-page-wrapper h1 {
-  font-size: 3.5rem;
-  font-weight: 900;
+.texto-inicial{
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.plano {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.texto-inicial h1 {
+  color: white;
+  text-align: left;
+  font-size: 4rem; 
+  line-height: 1.1;
+  margin: 0;
+}
+
+.texto-inicial p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.botoes-iniciais {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.botao-inicial, .botao-saiba-mais {
+    background-color: #E8FE61;
+    color: #3883CE;
+    padding: 0.8rem 2.5rem;
+    border: none;
+    font-size: 1.1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.botao-inicial:hover {
+   background-color: #3883CE;
+    color: #E8FE61;
+    border: 2px solid #E8FE61;
+  }
+
+.botao-saiba-mais {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.botao-saiba-mais:hover {
+  color: #E8FE61;
+  border: 2px solid #E8FE61;
+}
+
+.container {
+  position: relative;
+  flex: 1; /* Faz o container crescer para ocupar o espaço disponível */
+  max-width: 500px; 
+  min-width: 400px; 
+  display: flex;
+}
+
+/* Card unificado com efeito de vidro */
+.card-visual {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  border-radius: 24px;
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* PRIMEIRA LINHA */
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bolinha-ai {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #174DAD;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.texto-falso {
+  flex: 1;
+}
+
+.linha-grande {
+  width: 75%;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 12px;
+}
+
+.linha-pequena {
+  width: 50%;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+/* CARD DE PLANO */
+.card-plano {
+  background: linear-gradient(to right, #174DAD, #5EA8E5);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+}
+
+.titulo-plano {
+  opacity: 0.9;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* ITEMS */
+.item-plano {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.indicador {
+  width: 24px;
+  height: 24px;
+  background: #E8FE61;
+  border-radius: 50%;
+}
+
+/*SEÇÃO COMO FUNCIONA*/
+.section-como-funciona {
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
   text-align: center;
-  margin-bottom: 2rem;
+}
+
+/*Titulo*/
+.title-como-funciona h2 {
+  font-size: 2.5rem;
   color: #174DAD;
 }
 
-.home-page-wrapper .card{
-  width: 100%;
-  max-width: 600px;
-  min-height: 250px;
-  background-image: linear-gradient(to right, #3883CE, #174DAD);
-  backdrop-filter: blur(12px);
-  border: 1px solid #52525b;
-  border-radius: 1.5rem;
-  padding: 2.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+.title-como-funciona p {
+  font-size: 1.4rem;
+  opacity: 0.9;
+  line-height: 1.6;
 }
 
-.text-card{
-  font-size: 2rem;
-  text-align: center;
-  font-weight: bold;
-  line-height: 1.4;
+/*Passos Como Funciona?*/
+.passos-como-funciona{
+  gap: 2rem;
+  display: grid;
+  /*grid para ficar um no lado do outro*/
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
-.description-text {
-  color: #f0f0f0;
-  font-size: 1.1rem;
+.passo {
+  position: relative;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin: 2rem 0;
   text-align: center;
-  margin: 0;
+  /* animaçãosinha do balacubaco */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+/* animaçãosinha do balacubaco 2*/
+.passo:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(23, 77, 173, 0.15); /* Sombra azulada suave */
+}
+
+.passo h3 {
+  color: #174DAD;
+  margin-bottom: 1rem;
+}
+
+.passo p {
+  font-size: 1rem;
+  color: #555;
   line-height: 1.5;
 }
 
-.start-button {
-  background-color: #E8F361;
-  color: #174DAD;
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 10px;
-  margin-top: 0.5rem;
+.passo .numero-passo {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  background-color: #E8FE61;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: #3883CE;
+  box-shadow: 0 20px 40px rgba(20, 47, 178, 0.2); /* Sombra para profundidade */
+  margin-bottom: 1rem;
+}
+
+.passo .icone-cadastro {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+
+  background-color: #174DAD;
+  color: white;
+  width: 60px;
+  height: 60px;
+}
+
+/* Ícone quadrado centralizado */
+.icone-cadastro {
+  width: 80px;               /* tamanho do quadrado */
+  height: 80px;
+  background-color: #174DAD;
+  color: white;
+  border-radius: 12px;       /* cantos arredondados */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto;            /* centraliza horizontalmente */
+  margin-bottom: 1.5rem;     /* espaço abaixo do ícone */
+  
+  font-size: 2rem;           /* tamanho do ícone */
+}
+
+/*SEÇÃO CADASTRO 100% VISUAL*/
+.cadastro-visual {
+  display: flex;
+  flex-direction: row; /* Lado a lado */
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  margin-top: 6rem;
+  background-color: transparent; /* Removemos o fundo azul sólido do container geral */
+  padding: 2rem 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Estilização do lado ESQUERDO (Texto) */
+.explicacao-cadastro {
+  font-size: 1.2rem;
+  text-align: left; /* Alinhamento à esquerda como no template */
+  max-width: 500px;
+  color: #444;
+}
+
+.explicacao-cadastro h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  color: #174DAD; /* Mantendo a identidade azul */
+  line-height: 1.2;
+}
+
+.explicacao-cadastro p {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.explicacao-cadastro ul {
+  list-style: none;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column; /* Lista vertical */
+  gap: 1rem;
+}
+
+.explicacao-cadastro li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+}
+
+/* Icone de check estilizado */
+.check-icon {
+  color: #174DAD; 
+  background: #E8FE61;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+/* Estilização do lado DIREITO (Mockup Visual) */
+.container-cadastro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+    background: linear-gradient(145deg, #174DAD, #103B8A);
+  padding: 3rem;
+  border-radius: 30px;
+  box-shadow: 0 20px 50px rgba(23, 77, 173, 0.25);
+  color: white;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Titulo dentro do card azul */
+.container-cadastro h2 {
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.opcoes-objetivo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Grid 2x2 dentro do card */
+  gap: 1rem;
+  width: 100%;
+}
+
+.opcao-objetivo {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(5px);
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.8rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 140px;
+}
+
+.opcao-objetivo span {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.opcao-objetivo:hover {
+  background: white;
+  color: #E8FE61;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* animaçãosinha do balacubaco 2*/
+.opcao-objetivo:hover {
+background: rgba(255,255,255,0.25);
+transform: translateY(-5px);
+box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+border-color: #E8FE61; /* Borda verde neon ao passar o mouse */
+}
+
+/*SEÇÃO PORQUE ESCOLHER*/
+.porque-escolher {
+margin-top: 6rem; /* Espaço para separar da seção anterior */
+width: 100%;
+}
+
+.header-escolher {
+text-align: center;
+margin-bottom: 3rem;
+}
+
+.header-escolher h2 {
+font-size: 2.5rem;
+color: #174DAD;
+margin-bottom: 1rem;
+}
+
+.header-escolher span {
+color: #5EA8E5; /* Um tom de azul mais claro para destaque, conforme screenshot */
+}
+
+.header-escolher p {
+font-size: 1.2rem;
+color: #555;
+max-width: 600px;
+margin: 0 auto;
+}
+
+/* Grid System para os Cards */
+.grid-motivos {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 2rem;
+width: 100%;
+}
+
+/* Estilo Individual do Card */
+.card-motivo {
+background-color: white;
+padding: 2rem;
+border-radius: 20px;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+display: flex;
+flex-direction: column;
+align-items: flex-start; /* Alinhado à esquerda conforme screenshot */
+text-align: left;
+/* animaçãosinha do balacubaco */
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* animaçãosinha do balacubaco 2*/
+.card-motivo:hover {
+transform: translateY(-5px);
+box-shadow: 0 20px 40px rgba(23, 77, 173, 0.15);
+border-color: #E8FE61; /* Detalhe extra: borda neon suave */
+}
+
+/* Ícone com fundo azul */
+.icone-motivo {
+background-color: #174DAD; /* Azul primário */
+color: white;
+width: 60px;
+height: 60px;
+border-radius: 16px; /* Bordas arredondadas (squircle) */
+display: flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 1.5rem;
+}
+
+/* Títulos e Textos do Card */
+.card-motivo h3 {
+color: #174DAD;
+font-size: 1.25rem;
+margin-bottom: 0.75rem;
+font-weight: 600;
+}
+
+.card-motivo p {
+color: #555;
+font-size: 1rem;
+line-height: 1.6;
+}
+
+/* SEÇÃO PRONTO PARA COMEÇAR SUA TRANSFORMAÇÃO */
+.cta-transformacao {
+  width: 100%;
+  background-color: #174DAD; 
+  padding: 6rem 2rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-conteudo {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-conteudo span {
+color: #E8FE61;
+}
+.cta-transformacao h2 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.cta-transformacao p {
+  font-size: 1.4rem;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+  max-width: 650px;
+  line-height: 1.6;
+}
+
+/* Botão Gigante de CTA */
+.btn-cta-final {
+  background-color: #E8FE61; /* Verde Neon */
+  color: #174DAD; /* Azul no texto */
+  padding: 1.2rem 4rem;
+  border-radius: 50px;
+  font-size: 1.4rem;
+  font-weight: 800;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.start-button:hover {
-  background-color: #d8e351;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(232, 243, 97, 0.4);
+.btn-cta-final:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  color: #E8FE61;
+  background-color: #3883CE;
+  border: 2px solid #E8FE61;
 }
 
-@media (max-width: 600px) {
-  .home-page-wrapper h1 {
-    font-size: 2.5rem;
-  }
-  
-  .home-page-wrapper .card {
-    padding: 2rem 1.5rem;
-  }
-  
-  .text-card {
-    font-size: 1.2rem;
-  }
-  
-  .description-text {
-    font-size: 1rem;
-  }
+
+/* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+.grid-motivos {
+  grid-template-columns: repeat(2, 1fr);
+}
+}
+
+@media (max-width: 768px) {
+.container-inicial {
+  flex-direction: column;
+  text-align: center;
+  padding-top: 4rem;
+}
+
+.container {
+    min-width: auto;
+}
+
+.texto-inicial {
+  align-items: center;
+  text-align: center;
+}
+
+.texto-inicial h1 {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.botoes-iniciais {
+    flex-direction: column;
+    width: 100%;
+}
+
+.botao-inicial, .botao-saiba-mais {
+    width: 100%;
+}
+
+.cadastro-visual {
+    flex-direction: column;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.explicacao-cadastro {
+    text-align: center;
+    align-items: center;
+}
+
+.explicacao-cadastro ul {
+    align-items: flex-start;
+    display: inline-flex;
+}
+
+.porque-escolher {
+  margin-top: 4rem;
+}
+
+.grid-motivos {
+  grid-template-columns: 1fr;
+}
+
+.card-motivo {
+  align-items: center;
+  text-align: center;
+}
+
+/* Responsividade CTA */
+.cta-transformacao {
+  padding: 4rem 1.5rem;
+}
+
+.cta-transformacao h2 {
+  font-size: 2.2rem;
+}
+
+.btn-cta-final {
+  width: 100%;
+  justify-content: center;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
 }

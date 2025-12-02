@@ -1,7 +1,7 @@
 import smtplib
 from config.settings import settings
 
-def enviar_email(email_usr: str, token: str):
+def send_email(email_usr: str, token: str):
     servico = smtplib.SMTP('smtp.gmail.com', 587)
     servico.starttls()
     email = settings.EMAIL

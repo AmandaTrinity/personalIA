@@ -11,7 +11,9 @@ from pymongo.server_api import ServerApi
 from config.settings import settings
 
 # Carregar configurações da aplicação
-uri = settings.MONGO_URI
+# Para facilitar testes que usam patch.dict(os.environ, ...)
+# preferimos ler a variável de ambiente diretamente ao importar o módulo.
+uri = os.getenv("MONGO_URI", settings.MONGO_URI)
 database_name = settings.DATABASE_NAME
 
 # Verificar se estamos em ambiente de teste
@@ -118,8 +120,10 @@ def setup_mongodb():
     try:
         print("🔧 Configurando MongoDB...")
 
-        if client is None or db is None:
-            print("⚠️ Cliente MongoDB não disponível, pulando configuração")
+        # Se o db não estiver disponível (por exemplo, em mocks nos testes),
+        # pulamos a dependência do cliente real e continuamos usando os mocks.
+        if db is None:
+            print("⚠️ DB não disponível, pulando dependência do client real (usuário de testes/mocks)")
             return
 
         # --- Índices úteis ---

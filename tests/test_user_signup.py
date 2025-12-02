@@ -1,63 +1,63 @@
+"""Testes para cadastro de usuário (rota /auth/register).
+
+Verifica que a rota responde 201 e que o objeto `user` retornado
+não expõe a senha nem o hash de senha.
+"""
 from fastapi.testclient import TestClient
+
 from main import app
 
-client = TestClient(app)
 
-"""
-Testes para o signup de usuários
-"""
-import pytest
-import sys
-from pathlib import Path
+def test_register_user_no_password_exposed(monkeypatch):
+    client = TestClient(app)
 
-# Configuração de path para execução individual
-if __name__ == "__main__":
-    project_root = Path(__file__).parent.parent
-    src_path = project_root / "src"
-    sys.path.insert(0, str(project_root))
-    sys.path.insert(0, str(src_path))
+    payload = {
+        "email": "teste_signup@example.com",
+        "senha": "SenhaSegura123!",
+        "nome": "Teste Signup",
+        "idade": 30,
+        "sexo": "M",
+        "altura": 180,
+        "peso": 75.0,
+        "objetivo": "ganho de massa",
+        "limitacoes": None,
+        "frequencia": "3x por semana",
+    }
 
-class TestSignup:
-    """Testes para validação de signup"""
+    # Usuário criado falso (o serviço de criação normalmente retornaria o documento do DB)
+    fake_created_user = {
+        "_id": "64bfae6f1d2f4b5a6c7d8e9f",
+        "email": payload["email"],
+        "nome": payload["nome"],
+        # Simula que o DB armazenou um hash (que NÃO deve aparecer na resposta)
+        "hashed_password": "$pbkdf2-sha256$fakehash",
+    }
 
-    def test_user_signup_and_get(self):
-        payload = {
-            "email_usuario": "bvga@cin.ufpe.br",
-            "nome_usuario": "Brenda",
-            "idade_usuario": 24,
-            "peso_usuario": 60,
-            "altura_usuario": 175,
-            "limitacoes_usuario": False,
-            "dias_usuario": 3,
-            "minutos_usuario": 30,
-            "senha_usuario": "s3nh@s",
-            "lugar_usuario": "apartamento"
-        }
+    def fake_create_user(user_data):
+        # O rota espera um dict-like com campos — retornamos o fake_created_user
+        return fake_created_user
 
-        # POST /usuario/cadastro
-        response = client.post("/usuario/cadastro", json=payload)
-        assert response.status_code in (200, 201, 409)
-        data = response.json()
-        assert "status" in data
-        assert "usuario" in data
+    def fake_create_access_token(data: dict):
+        return "fake.access.token"
 
-        # Verifica se a senha não está exposta
-        usuario = data["usuario"]
-        assert "senha_hash" not in usuario
+    # Substitui as funções reais por versões controladas
+    monkeypatch.setattr("services.auth_service.create_user", fake_create_user)
+    monkeypatch.setattr("services.security.create_access_token", fake_create_access_token)
 
-        # GET /usuario/cadastro
-        response_get = client.get(f"/usuario/cadastro?email={payload['email_usuario']}")
-        assert response_get.status_code in (200, 404)
-        
-if __name__ == "__main__":
-    """Permite execução individual do arquivo de teste"""
-    print("🧪 Executando testes de signup...")
+    resp = client.post("/auth/register", json=payload)
+    assert resp.status_code == 201
+    body = resp.json()
 
-    test_instance = TestSignup()
+    # Verifica estrutura básica
+    assert "access_token" in body
+    assert "user" in body
 
-    try:
-        test_instance.test_user_signup_and_get()
-        print("✅ test_user_signup_and_get passou")
-    except Exception as e:
-        print(f"❌ test_user_signup_and_get falhou: {e}")
-    print("🎉 Testes de signup concluídos!")
+    user_obj = body["user"]
+
+    # Campos esperados
+    assert user_obj["email"] == payload["email"]
+    assert user_obj["nome"] == payload["nome"]
+
+    # NÃO expor senha ou hash
+    assert "senha" not in user_obj
+    assert "hashed_password" not in user_obj
