@@ -244,7 +244,8 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
               onClick={handleNext}
               disabled={!canProceed()}
             >
-              Avançar <ArrowRight size={20} />
+              {currentStep === 5 ? 'Finalizar' : 'Avançar'}{' '}
+              <ArrowRight size={20} />
             </button>
           </div>
         </div>

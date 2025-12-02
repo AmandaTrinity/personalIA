@@ -20,6 +20,10 @@ function Chat() {
   //Estado para simular o carregamento (envio para a API)
   const [isLoading, setIsLoading] = useState(false);
 
+  // TODO: Substituir pela lógica real de autenticação (ex: de um Context)
+  // Simula um usuário logado para esta página. O ideal é usar um Contexto de Autenticação.
+  const user = {};
+
   // Função que será chamada ao clicar em "Enviar"
   const handleSend = async () => {
     if (!currentPrompt.trim()) return; // Não envia se o input estiver vazio
