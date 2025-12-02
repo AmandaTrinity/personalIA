@@ -152,7 +152,7 @@ Para proteger informações sensíveis como chaves de API e credenciais de banco
 
 ```bash
 # Copie o arquivo de exemplo para criar seu .env
-cp .env.example .env
+cp config/.env.example .env
 ```
 
 #### 2. **Configure suas Chaves no .env**
