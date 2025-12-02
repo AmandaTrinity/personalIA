@@ -50,7 +50,7 @@ function Login() {
         <div className="login-links">
           <Link to="/recuperar-senha">Esqueceu a senha?</Link>
           <p>
-            Não tem uma conta? <Link to="/registro">Crie uma aqui</Link>
+            Não tem uma conta? <Link to="/register">Crie uma aqui</Link>
           </p>
         </div>
       </form>
