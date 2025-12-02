@@ -1,4 +1,3 @@
-import Navbar from './pages/Navbar'
 import Home from './pages/Home'     
 import Chat from './pages/Chat'
 import RecuperarSenha from './pages/RecuperarSenha'
@@ -11,7 +10,6 @@ function App() {
   return (
     // O container Routes vai cuidar do redirecionamento entre as páginas
     <>  
-      <Navbar/>
       <div>
         <Routes>
           {/* Aqui está setado "Home" como default/página inicial do site */}
