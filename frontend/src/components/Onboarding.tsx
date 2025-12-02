@@ -255,23 +255,27 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
 
           {currentStep === 4 && (
             <div className="step-area">
-              <h2 className="onboarding-title">Quanto tempo você tem?</h2>
-              <p className="onboarding-subtitle">Duração ideal por sessão</p>
+              <h2 className="onboarding-title">Com que frequência você treina?</h2>
+              <p className="onboarding-subtitle">Isso nos ajuda a criar um plano sustentável</p>
 
               <div className="option-grid">
-                {["15", "30", "45", "60+"].map((t, i) => (
+                {[
+                  // Mapeamento de valores para refletir frequência (frequencia)
+                  { value: "1-2 dias por semana", title: "Iniciante", desc: "1 a 2x/semana" },
+                  { value: "3 dias por semana", title: "Intermediário", desc: "3x/semana" },
+                  { value: "4-5 dias por semana", title: "Avançado", desc: "4 a 5x/semana" },
+                  { value: "Diariamente (6+ dias)", title: "Diariamente", desc: "6+ vezes/semana" }
+                ].map((t, i) => (
                   <button
                     key={i}
-                    onClick={() => setDuration(t)}
-                    className={`option-card ${duration === t ? "active" : ""}`}
+                    onClick={() => setDuration(t.value)} // Armazena a frequência em 'duration'
+                    className={`option-card ${duration === t.value ? "active" : ""}`}
                   >
-                    <div className={`emoji ${duration === t ? "icon-active" : ""}`}>
+                    <div className={`emoji ${duration === t.value ? "icon-active" : ""}`}>
                       {[<Zap size={32}/>, <Target size={32}/>, <Dumbbell size={32}/>, <Flame size={32}/>][i]}
                     </div>
-                    <div className="option-title">{t} min</div>
-                    <div className="option-desc">
-                      {["Rápido e eficiente", "Equilibrado", "Completo", "Intenso"][i]}
-                    </div>
+                    <div className="option-title">{t.title}</div>
+                    <div className="option-desc">{t.desc}</div>
                   </button>
                 ))}
               </div>
