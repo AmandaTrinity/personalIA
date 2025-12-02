@@ -1,5 +1,7 @@
 import Home from './pages/Home'     
 import Chat from './pages/Chat'
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import { Routes, Route } from 'react-router-dom' // A gente precisa disso pra poder ter múltiplas páginas
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
 
           {/* Este é o padrão de código para outras páginas que não sejam "Home" */}
           <Route path="/chat" element={<Chat />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </div>
     </>

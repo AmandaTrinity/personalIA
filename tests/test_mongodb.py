@@ -199,9 +199,12 @@ class TestMongoDBInitialization:
         """Testa comportamento quando MONGO_URI não está configurada fora de teste"""
         with patch('database.mongodb.settings.is_testing', False):
             with patch('database.mongodb.settings.MONGO_URI', ""):
+                # Forçar reload do módulo dentro do contexto de patch para garantir
+                # que as variáveis de ambiente e settings sejam reavaliadas.
                 with pytest.raises(ValueError) as exc_info:
-                    from database.mongodb import setup_mongodb
-                    pass
+                    import importlib
+                    import database.mongodb as mongodb_module
+                    importlib.reload(mongodb_module)
 
     @patch('database.mongodb.settings')
     def test_detecta_environment_teste(self, mock_settings):
