@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/pages/login.css'; // Importando o CSS
+import '../styles/pages/login.css';
 
 function Login() {
   // Estados para guardar o email e a senha
