@@ -113,6 +113,7 @@ def criar_treino_public(usuario_id: str, data: MensagemChat):
         return {"status": "ok", "treino": treino_salvo}
 
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 

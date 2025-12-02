@@ -1,0 +1,135 @@
+/* Container (baseado no login.css) */
+.rec-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+  background-color: #EEEEEE;
+  min-height: calc(100vh - 80px);
+}
+
+/* Card (baseado no login.css) */
+.rec-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+
+.rec-title {
+  text-align: center;
+  color: #000; /* Alterado para preto */
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.rec-subtitle {
+  text-align: center;
+  color: #000; /* Alterado para preto */
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Alertas de sucesso e erro */
+.rec-alert {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.rec-alert.ok {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.rec-alert.err {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* Formulário */
+.rec-form {
+  margin-top: 1rem;
+}
+
+.rec-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #000; /* Alterado para preto */
+  font-weight: 500;
+}
+
+.rec-input {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.rec-input:focus {
+  outline: none;
+  border-color: #3883CE;
+}
+
+.rec-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.rec-btn {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #174DAD;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.rec-btn:hover {
+  background-color: #3883CE;
+}
+
+.rec-btn:disabled {
+  background-color: #b6b6b6;
+  cursor: not-allowed;
+}
+
+.rec-link {
+  color: #174DAD;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.rec-link:hover {
+  text-decoration: underline;
+}
+
+.rec-hint {
+  font-size: 0.8rem;
+  color: #000; /* Alterado para preto */
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.rec-hint code {
+  background-color: #e9ecef;
+  padding: 2px 4px;
+  border-radius: 3px;
+}

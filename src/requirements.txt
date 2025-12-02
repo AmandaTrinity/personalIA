@@ -10,6 +10,7 @@ passlib>=1.7.4
 bcrypt>=3.2.0
 python-jose[cryptography]>=3.3.0
 email-validator>=2.1.0
+passlib[pbkdf2]
 
 #Dependências de teste
 
