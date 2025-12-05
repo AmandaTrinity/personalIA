@@ -1,0 +1,27 @@
+strictness: veryhigh 
+# Ativa o conjunto mais rigoroso de regras do Prospector
+# (inclui Pylint, Flake8, etc.).
+doc-warnings: false
+
+tools:
+  
+  mccabe:
+    max-complexity: 8 
+    
+  vulture:
+    run: true
+    confidence: 90
+    
+  pylint:
+    disable:
+      - R0903 
+
+  bandit:
+    run: true
+    tests: ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8']
+    
+  pydocstyle:
+    run: true
+    ignore:
+      - D203
+      - D213

@@ -1,0 +1,797 @@
+Messages
+========
+
+schemas (schemas.py):
+    L3:- None: pylint - line-too-long
+    Line too long (97/79)
+
+schemas (schemas.py):
+    L4:- None: pylint - line-too-long
+    Line too long (83/79)
+
+schemas (schemas.py):
+    L5:- None: pylint - line-too-long
+    Line too long (80/79)
+
+schemas (schemas.py):
+    L11:- MensagemChat: pylint - too-few-public-methods
+    Too few public methods (0/2)
+
+schemas (schemas.py):
+    L11:19 MensagemChat: pylint - undefined-variable
+    Undefined variable 'BaseModel'
+
+schemas (schemas.py):
+    L11:- MensagemChat: pylint - function-redefined
+    class already defined line 8
+
+schemas (schemas.py):
+    L13:11 MensagemChat: pylint - undefined-variable
+    Undefined variable 'Optional'
+
+schemas (schemas.py):
+    L14:14 MensagemChat: pylint - undefined-variable
+    Undefined variable 'Optional'
+
+schemas (schemas.py):
+    L15:18 MensagemChat: pylint - undefined-variable
+    Undefined variable 'Optional'
+
+schemas (schemas.py):
+    L16:16 MensagemChat: pylint - undefined-variable
+    Undefined variable 'Optional'
+
+schemas (schemas.py):
+    L19:- DadosUsr: pylint - too-few-public-methods
+    Too few public methods (0/2)
+
+schemas (schemas.py):
+    L19:15 DadosUsr: pylint - undefined-variable
+    Undefined variable 'BaseModel'
+
+schemas (schemas.py):
+    L8:- None: pylint - unused-import
+    Unused MensagemChat imported from models.schemas
+
+database.mongodb (database/mongodb.py):
+    L37:- None: pylint - line-too-long
+    Line too long (99/79)
+
+database.mongodb (database/mongodb.py):
+    L106:- None: pylint - line-too-long
+    Line too long (86/79)
+
+database.mongodb (database/mongodb.py):
+    L126:- None: pylint - line-too-long
+    Line too long (100/79)
+
+database.mongodb (database/mongodb.py):
+    L133:- None: pylint - line-too-long
+    Line too long (80/79)
+
+database.mongodb (database/mongodb.py):
+    L143:- None: pylint - line-too-long
+    Line too long (92/79)
+
+database.mongodb (database/mongodb.py):
+    L160:- None: pylint - line-too-long
+    Line too long (90/79)
+
+database.mongodb (database/mongodb.py):
+    L166:- None: pylint - line-too-long
+    Line too long (82/79)
+
+database.mongodb (database/mongodb.py):
+    L167:- None: pylint - line-too-long
+    Line too long (84/79)
+
+database.mongodb (database/mongodb.py):
+    L199:- None: pylint - line-too-long
+    Line too long (83/79)
+
+database.mongodb (database/mongodb.py):
+    L204:- None: pylint - line-too-long
+    Line too long (86/79)
+
+database.mongodb (database/mongodb.py):
+    L25:- None: pylint - invalid-name
+    Constant name "_mongodb_initialized" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L26:- None: pylint - invalid-name
+    Constant name "_connection_created" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L29:- None: pylint - invalid-name
+    Constant name "client" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L30:- None: pylint - invalid-name
+    Constant name "db" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L31:- None: pylint - invalid-name
+    Constant name "usuarios_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L32:- None: pylint - invalid-name
+    Constant name "treinos_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L33:- None: pylint - invalid-name
+    Constant name "historico_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L45:4 create_mongodb_client: pylint - redefined-outer-name
+    Redefining name 'process_info' from outer scope (line 164)
+
+database.mongodb (database/mongodb.py):
+    L50:8 create_mongodb_client: pylint - redefined-outer-name
+    Redefining name 'client' from outer scope (line 29)
+
+database.mongodb (database/mongodb.py):
+    L61:11 create_mongodb_client: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+database.mongodb (database/mongodb.py):
+    L78:11 create_mongodb_client: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+database.mongodb (database/mongodb.py):
+    L96:11 create_mongodb_client: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+database.mongodb (database/mongodb.py):
+    L113:4 setup_mongodb: pylint - global-statement
+    Using the global statement
+
+database.mongodb (database/mongodb.py):
+    L155:11 setup_mongodb: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+database.mongodb (database/mongodb.py):
+    L163:8 None: pylint - invalid-name
+    Constant name "_connection_created" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L181:12 None: pylint - invalid-name
+    Constant name "client" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L182:12 None: pylint - invalid-name
+    Constant name "db" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L183:12 None: pylint - invalid-name
+    Constant name "usuarios_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L184:12 None: pylint - invalid-name
+    Constant name "treinos_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L185:12 None: pylint - invalid-name
+    Constant name "historico_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L187:11 None: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+database.mongodb (database/mongodb.py):
+    L191:8 None: pylint - invalid-name
+    Constant name "client" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L192:8 None: pylint - invalid-name
+    Constant name "db" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L193:8 None: pylint - invalid-name
+    Constant name "usuarios_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L194:8 None: pylint - invalid-name
+    Constant name "treinos_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L195:8 None: pylint - invalid-name
+    Constant name "historico_collection" doesn't conform to UPPER_CASE naming style
+
+database.mongodb (database/mongodb.py):
+    L200:8 None: pylint - invalid-name
+    Constant name "_connection_created" doesn't conform to UPPER_CASE naming style
+
+services.security (services/security.py):
+    L27:8 get_pwd_context: pylint - invalid-name
+    Variable name "CryptContext" doesn't conform to snake_case naming style
+
+services.security (services/security.py):
+    L29:- None: pylint - line-too-long
+    Line too long (81/79)
+
+services.security (services/security.py):
+    L54:- None: pylint - line-too-long
+    Line too long (88/79)
+
+services.security (services/security.py):
+    L61:- None: pylint - line-too-long
+    Line too long (81/79)
+
+services.security (services/security.py):
+    L19:- None: pylint - invalid-name
+    Constant name "_pwd_context" doesn't conform to UPPER_CASE naming style
+
+services.security (services/security.py):
+    L24:4 get_pwd_context: pylint - global-statement
+    Using the global statement
+
+services.security (services/security.py):
+    L105:8 get_current_user_email: pylint - raise-missing-from
+    Consider explicitly re-raising using 'raise credentials_exception from e'
+
+main.py:
+    L14:1 None: pycodestyle - E402
+    module level import not at top of file
+
+main (main.py):
+    L14:- None: pylint - wrong-import-position
+    Import "from dotenv import load_dotenv" should be placed at the top of the module
+
+main.py:
+    L15:1 None: pycodestyle - E402
+    module level import not at top of file
+
+main (main.py):
+    L15:- None: pylint - wrong-import-position
+    Import "from fastapi import FastAPI" should be placed at the top of the module
+
+main.py:
+    L16:1 None: pycodestyle - E402
+    module level import not at top of file
+
+main (main.py):
+    L16:- None: pylint - wrong-import-position
+    Import "from fastapi.middleware.cors import CORSMiddleware" should be placed at the top of the module
+
+main.py:
+    L20:1 None: pycodestyle - E402
+    module level import not at top of file
+
+main (main.py):
+    L20:- None: pylint - wrong-import-position
+    Import "from config.settings import settings" should be placed at the top of the module
+
+main.py:
+    L21:1 None: pycodestyle - E402
+    module level import not at top of file
+
+main (main.py):
+    L21:- None: pylint - wrong-import-position
+    Import "from routes.auth_routes import auth_router" should be placed at the top of the module
+
+main.py:
+    L22:1 None: pycodestyle - E402
+    module level import not at top of file
+
+main (main.py):
+    L22:- None: pylint - wrong-import-position
+    Import "from routes.treino_routes import treino_router" should be placed at the top of the module
+
+main (main.py):
+    L58:- None: pylint - line-too-long
+    Line too long (95/79)
+
+main (main.py):
+    L67:- None: pylint - line-too-long
+    Line too long (80/79)
+
+config.settings (config/settings.py):
+    L12:50 None: pylint - trailing-whitespace
+    Trailing whitespace
+
+config.settings (config/settings.py):
+    L29:- None: pylint - line-too-long
+    Line too long (87/79)
+
+config.settings (config/settings.py):
+    L29:8 Settings.__init__: pylint - invalid-name
+    Attribute name "APP_DESCRIPTION" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L54:- None: pylint - line-too-long
+    Line too long (105/79)
+
+config/settings.py:
+    L69:1 None: pycodestyle - W391
+    blank line at end of file
+
+config.settings (config/settings.py):
+    L69:- None: pylint - trailing-newlines
+    Trailing newlines
+
+config.settings (config/settings.py):
+    L16:- Settings: pylint - too-many-instance-attributes
+    Too many instance attributes (14/7)
+
+config.settings (config/settings.py):
+    L27:8 Settings.__init__: pylint - invalid-name
+    Attribute name "APP_NAME" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L28:8 Settings.__init__: pylint - invalid-name
+    Attribute name "APP_VERSION" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L32:8 Settings.__init__: pylint - invalid-name
+    Attribute name "HOST" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L33:8 Settings.__init__: pylint - invalid-name
+    Attribute name "PORT" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L34:8 Settings.__init__: pylint - invalid-name
+    Attribute name "DEBUG" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L37:8 Settings.__init__: pylint - invalid-name
+    Attribute name "MONGO_URI" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L38:8 Settings.__init__: pylint - invalid-name
+    Attribute name "DATABASE_NAME" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L41:8 Settings.__init__: pylint - invalid-name
+    Attribute name "GEMINI_API_KEY" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L44:8 Settings.__init__: pylint - invalid-name
+    Attribute name "SECRET_KEY" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L47:8 Settings.__init__: pylint - invalid-name
+    Attribute name "EMAIL" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L48:8 Settings.__init__: pylint - invalid-name
+    Attribute name "SENHA_SMTP" doesn't conform to snake_case naming style
+
+config.settings (config/settings.py):
+    L51:8 Settings.__init__: pylint - invalid-name
+    Attribute name "ENVIRONMENT" doesn't conform to snake_case naming style
+
+services.auth_service (services/auth_service.py):
+    L29:- None: pylint - line-too-long
+    Line too long (96/79)
+
+services.auth_service (services/auth_service.py):
+    L45:- None: pylint - line-too-long
+    Line too long (96/79)
+
+services.auth_service (services/auth_service.py):
+    L83:- None: pylint - line-too-long
+    Line too long (80/79)
+
+services.auth_service (services/auth_service.py):
+    L92:- None: pylint - line-too-long
+    Line too long (94/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L10:- None: pylint - line-too-long
+    Line too long (97/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L19:- None: pylint - line-too-long
+    Line too long (80/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L26:- None: pylint - line-too-long
+    Line too long (88/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L50:- None: pylint - line-too-long
+    Line too long (100/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L52:- None: pylint - line-too-long
+    Line too long (82/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L62:- None: pylint - line-too-long
+    Line too long (98/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L66:- None: pylint - line-too-long
+    Line too long (94/79)
+
+routes.auth_routes (routes/auth_routes.py):
+    L1:- None: pylint - unused-import
+    Unused Depends imported from fastapi
+
+routes.auth_routes (routes/auth_routes.py):
+    L42:15 login_user: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+routes.auth_routes (routes/auth_routes.py):
+    L51:11 login_user: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.gemini_service (services/gemini_service.py):
+    L5:- None: pylint - line-too-long
+    Line too long (88/79)
+
+services/gemini_service.py:
+    L14:1 None: pycodestyle - E302
+    expected 2 blank lines, found 1
+
+services/gemini_service.py:
+    L20:1 None: pycodestyle - E302
+    expected 2 blank lines, found 1
+
+services.gemini_service (services/gemini_service.py):
+    L22:- None: pylint - line-too-long
+    Line too long (196/79)
+
+services.gemini_service (services/gemini_service.py):
+    L23:- None: pylint - line-too-long
+    Line too long (414/79)
+
+services.gemini_service (services/gemini_service.py):
+    L24:- None: pylint - line-too-long
+    Line too long (268/79)
+
+services.gemini_service (services/gemini_service.py):
+    L25:- None: pylint - line-too-long
+    Line too long (246/79)
+
+services.gemini_service (services/gemini_service.py):
+    L26:- None: pylint - line-too-long
+    Line too long (521/79)
+
+services.gemini_service (services/gemini_service.py):
+    L27:- None: pylint - line-too-long
+    Line too long (164/79)
+
+services.gemini_service (services/gemini_service.py):
+    L28:- None: pylint - line-too-long
+    Line too long (809/79)
+
+services.gemini_service (services/gemini_service.py):
+    L33:- None: pylint - line-too-long
+    Line too long (88/79)
+
+services.gemini_service (services/gemini_service.py):
+    L34:- None: pylint - line-too-long
+    Line too long (102/79)
+
+services.gemini_service (services/gemini_service.py):
+    L36:- None: pylint - line-too-long
+    Line too long (107/79)
+
+services.gemini_service (services/gemini_service.py):
+    L37:- None: pylint - line-too-long
+    Line too long (99/79)
+
+services.gemini_service (services/gemini_service.py):
+    L39:- None: pylint - line-too-long
+    Line too long (125/79)
+
+services.gemini_service (services/gemini_service.py):
+    L40:- None: pylint - line-too-long
+    Line too long (140/79)
+
+services.gemini_service (services/gemini_service.py):
+    L44:- None: pylint - line-too-long
+    Line too long (90/79)
+
+services.gemini_service (services/gemini_service.py):
+    L45:- None: pylint - line-too-long
+    Line too long (102/79)
+
+services.gemini_service (services/gemini_service.py):
+    L47:- None: pylint - line-too-long
+    Line too long (112/79)
+
+services.gemini_service (services/gemini_service.py):
+    L48:- None: pylint - line-too-long
+    Line too long (119/79)
+
+services.gemini_service (services/gemini_service.py):
+    L50:- None: pylint - line-too-long
+    Line too long (142/79)
+
+services.gemini_service (services/gemini_service.py):
+    L51:- None: pylint - line-too-long
+    Line too long (123/79)
+
+services/gemini_service.py:
+    L55:1 None: pycodestyle - E302
+    expected 2 blank lines, found 1
+
+services.gemini_service (services/gemini_service.py):
+    L78:- None: pylint - trailing-whitespace
+    Trailing whitespace
+
+services.gemini_service (services/gemini_service.py):
+    L81:- None: pylint - line-too-long
+    Line too long (99/79)
+
+services/gemini_service.py:
+    L83:1 None: pycodestyle - E302
+    expected 2 blank lines, found 1
+
+services.gemini_service (services/gemini_service.py):
+    L90:- None: pylint - line-too-long
+    Line too long (92/79)
+
+services.gemini_service (services/gemini_service.py):
+    L92:- None: pylint - line-too-long
+    Line too long (81/79)
+
+services.gemini_service (services/gemini_service.py):
+    L94:- None: pylint - line-too-long
+    Line too long (92/79)
+
+services.gemini_service (services/gemini_service.py):
+    L99:- None: pylint - trailing-whitespace
+    Trailing whitespace
+
+services.gemini_service (services/gemini_service.py):
+    L122:- None: pylint - line-too-long
+    Line too long (88/79)
+
+services.gemini_service (services/gemini_service.py):
+    L124:- None: pylint - line-too-long
+    Line too long (89/79)
+
+services.gemini_service (services/gemini_service.py):
+    L132:- None: pylint - line-too-long
+    Line too long (84/79)
+
+services/gemini_service.py:
+    L131:1 None: pycodestyle - E302
+    expected 2 blank lines, found 1
+
+services.gemini_service (services/gemini_service.py):
+    L213:- None: pylint - line-too-long
+    Line too long (92/79)
+
+services/gemini_service.py:
+    L223:1 None: pycodestyle - W391
+    blank line at end of file
+
+services.gemini_service (services/gemini_service.py):
+    L223:- None: pylint - trailing-newlines
+    Trailing newlines
+
+services.gemini_service (services/gemini_service.py):
+    L3:7 None: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.gemini_service (services/gemini_service.py):
+    L6:4 None: pylint - invalid-name
+    Constant name "genai" doesn't conform to UPPER_CASE naming style
+
+services.gemini_service (services/gemini_service.py):
+    L126:11 _tratar_erro: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.gemini_service (services/gemini_service.py):
+    L163:11 gerar_plano_de_treino: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.gemini_service (services/gemini_service.py):
+    L197:11 registrar_contexto_usuario: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.gemini_service (services/gemini_service.py):
+    L205:11 _configurar_gemini: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.gemini_service (services/gemini_service.py):
+    L209:42 _montar_resumo_usuario: pylint - unsupported-binary-operation
+    unsupported operand type(s) for |
+
+routes.user_routes (routes/user_routes.py):
+    L22:- None: pylint - line-too-long
+    Line too long (92/79)
+
+routes.user_routes (routes/user_routes.py):
+    L24:- None: pylint - line-too-long
+    Line too long (92/79)
+
+routes.user_routes (routes/user_routes.py):
+    L19:8 post_usuario: pylint - import-outside-toplevel
+    Import outside toplevel (fastapi.responses.JSONResponse)
+
+routes.user_routes (routes/user_routes.py):
+    L21:8 post_usuario: pylint - no-else-return
+    Unnecessary "else" after "return", remove the "else" and de-indent the code inside it
+
+routes.user_routes (routes/user_routes.py):
+    L26:8 post_usuario: pylint - raise-missing-from
+    Consider explicitly re-raising using 'raise HTTPException(status_code=500, detail=str(e)) from e'
+
+routes.user_routes (routes/user_routes.py):
+    L40:8 post_solicitacao: pylint - raise-missing-from
+    Consider explicitly re-raising using 'raise HTTPException(status_code=500, detail=str(e)) from e'
+
+routes.user_routes (routes/user_routes.py):
+    L49:8 post_alterar: pylint - raise-missing-from
+    Consider explicitly re-raising using 'raise HTTPException(status_code=500, detail=str(e)) from e'
+
+database.test_mongodb (database/test_mongodb.py):
+    L57:- None: pylint - line-too-long
+    Line too long (80/79)
+
+database.test_mongodb (database/test_mongodb.py):
+    L69:- None: pylint - line-too-long
+    Line too long (84/79)
+
+database.test_mongodb (database/test_mongodb.py):
+    L71:- None: pylint - line-too-long
+    Line too long (81/79)
+
+database.test_mongodb (database/test_mongodb.py):
+    L20:4 None: pylint - consider-using-sys-exit
+    Consider using 'sys.exit' instead
+
+database.test_mongodb (database/test_mongodb.py):
+    L87:7 None: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.sign_service (services/sign_service.py):
+    L46:- None: pylint - line-too-long
+    Line too long (88/79)
+
+services.sign_service (services/sign_service.py):
+    L58:- None: pylint - line-too-long
+    Line too long (94/79)
+
+services.treino_service (services/treino_service.py):
+    L28:- None: pylint - line-too-long
+    Line too long (99/79)
+
+services.treino_service (services/treino_service.py):
+    L47:- None: pylint - line-too-long
+    Line too long (82/79)
+
+services.treino_service (services/treino_service.py):
+    L64:- None: pylint - line-too-long
+    Line too long (92/79)
+
+services.treino_service (services/treino_service.py):
+    L73:- None: pylint - line-too-long
+    Line too long (81/79)
+
+services.treino_service (services/treino_service.py):
+    L80:- None: pylint - line-too-long
+    Line too long (82/79)
+
+services.treino_service (services/treino_service.py):
+    L83:- None: pylint - line-too-long
+    Line too long (80/79)
+
+services.treino_service (services/treino_service.py):
+    L92:- None: pylint - line-too-long
+    Line too long (96/79)
+
+services.treino_service (services/treino_service.py):
+    L99:- None: pylint - line-too-long
+    Line too long (100/79)
+
+services.treino_service (services/treino_service.py):
+    L111:- None: pylint - line-too-long
+    Line too long (92/79)
+
+services.treino_service (services/treino_service.py):
+    L121:- None: pylint - line-too-long
+    Line too long (96/79)
+
+services.treino_service (services/treino_service.py):
+    L5:- None: pylint - unused-import
+    Unused HTTPException imported from fastapi
+
+services.treino_service (services/treino_service.py):
+    L23:11 gerar_plano_de_treino: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+services.treino_service (services/treino_service.py):
+    L44:8 salvar_treino: pylint - self-assigning-variable
+    Assigning the same variable 'plano_gerado' to itself
+
+services.treino_service (services/treino_service.py):
+    L79:11 salvar_treino: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+routes.treino_routes (routes/treino_routes.py):
+    L31:- None: pylint - line-too-long
+    Line too long (88/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L32:- None: pylint - line-too-long
+    Line too long (99/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L50:- None: pylint - line-too-long
+    Line too long (81/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L65:- None: pylint - line-too-long
+    Line too long (102/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L71:- None: pylint - line-too-long
+    Line too long (96/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L94:- None: pylint - line-too-long
+    Line too long (81/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L110:- None: pylint - line-too-long
+    Line too long (90/79)
+
+routes.treino_routes (routes/treino_routes.py):
+    L67:8 criar_treino: pylint - raise-missing-from
+    Consider explicitly re-raising using 'raise HTTPException(status_code=500, detail=str(e)) from e'
+
+routes.treino_routes (routes/treino_routes.py):
+    L117:8 criar_treino_public: pylint - raise-missing-from
+    Consider explicitly re-raising using 'raise HTTPException(status_code=500, detail=str(e)) from e'
+
+routes.treino_routes (routes/treino_routes.py):
+    L125:11 get_treinos_public: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+models.user (models/user.py):
+    L48:- None: pylint - line-too-long
+    Line too long (87/79)
+
+models.user (models/user.py):
+    L24:16 UserCreate: pylint - unsupported-binary-operation
+    unsupported operand type(s) for |
+
+utils.serializers (utils/serializers.py):
+    L7:- None: pylint - unused-import
+    Unused Any imported from typing
+
+utils.serializers (utils/serializers.py):
+    L10:29 normalize_user: pylint - unsupported-binary-operation
+    unsupported operand type(s) for |
+
+utils.serializers (utils/serializers.py):
+    L10:64 normalize_user: pylint - unsupported-binary-operation
+    unsupported operand type(s) for |
+
+utils.serializers (utils/serializers.py):
+    L23:15 normalize_user: pylint - broad-exception-caught
+    Catching too general exception Exception
+
+utils.reset (utils/reset.py):
+    L24:11 verifica_token: pylint - undefined-variable
+    Undefined variable 'JWTError'
+
+utils.reset (utils/reset.py):
+    L8:- None: pylint - invalid-name
+    Constant name "algoritmo" doesn't conform to UPPER_CASE naming style
+
+utils.reset (utils/reset.py):
+    L9:- None: pylint - invalid-name
+    Constant name "tempo" doesn't conform to UPPER_CASE naming style
+
+
+
+Check Information
+=================
+         Started: 2025-12-04 22:36:57.767572
+        Finished: 2025-12-04 22:37:11.632698
+      Time Taken: 13.87 seconds
+       Formatter: text
+        Profiles: .prospector.yaml, no_doc_warnings, strictness_veryhigh, no_member_warnings, no_test_warnings
+      Strictness: from profile
+  Libraries Used: 
+       Tools Run: dodgy, mccabe, profile-validator, pycodestyle, pyflakes, pylint
+  Messages Found: 195
+
