@@ -26,10 +26,10 @@ function Login() {
       //Redireciona para a página de chat após o sucesso
       navigate('/chat');
       
-    } catch (e: any) {
-      console.error('Erro de Login:', e);
+    } catch (e: unknown) {
       //Exibe a mensagem de erro da API ou uma mensagem padrão
-      setError(e.message || 'Falha na conexão. Verifique seu email/senha ou o servidor.');
+      const errorMessage = e instanceof Error ? e.message : 'Falha na conexão. Verifique seu email/senha ou o servidor.';
+      setError(errorMessage);
       
     } finally {
       setIsLoading(false);
