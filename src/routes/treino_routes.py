@@ -1,10 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
+
 # Importações absolutas (sem '..')
-from models.schemas import MensagemChat   
-from services import gemini_service
-from services import security          
-from services import auth_service       
-from services import treino_service 
+from models.schemas import MensagemChat
+from services import auth_service, gemini_service, security, treino_service
 
 treino_router = APIRouter(prefix="/treinos", tags=["Treinos"])
 
@@ -14,19 +12,20 @@ treino_router = APIRouter(prefix="/treinos", tags=["Treinos"])
 salvar_treino = treino_service.salvar_treino
 listar_treinos_por_usuario = treino_service.listar_treinos_por_usuario
 
+
 @treino_router.post("/")
 def criar_treino(
-    data: MensagemChat, 
+    data: MensagemChat,
     # Dependência SÍNCRONA
-    email: str = Depends(security.get_current_user_email) 
-): # <-- MUDANÇA: SÍNCRONO
+    email: str = Depends(security.get_current_user_email),
+):  # <-- MUDANÇA: SÍNCRONO
     """
     Cria um novo plano de treino para o usuário LOGADO (SÍNCRONO).
     """
     user = auth_service.get_user_by_email(email)
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
-    
+
     try:
         # 1. Pega o histórico de treinos (síncrono)
         treinos_anteriores = treino_service.listar_treinos_por_usuario(str(user["_id"]))
@@ -38,7 +37,7 @@ def criar_treino(
         plano_de_treino = gemini_service.gerar_plano_de_treino(
             data, user=user, historico=historico_str
         )
-        
+
         # 3. Prepara o contexto
         user_context = {
             "email": user.get("email"),
@@ -48,34 +47,35 @@ def criar_treino(
             "objetivo": user.get("objetivo"),
             "frequencia": user.get("frequencia"),
             "limitacoes": user.get("limitacoes"),
-            "mensagem_usuario": data.mensagem_usuario, # Salva a pergunta também
+            "mensagem_usuario": data.mensagem_usuario,  # Salva a pergunta também
         }
-        
+
         # 4. Rota salva no DB (síncrono)
         # Use alias `salvar_treino` para permitir patching em testes
         treino_salvo = salvar_treino(
-            usuario_id=str(user["_id"]), 
+            usuario_id=str(user["_id"]),
             plano_gerado=plano_de_treino,
             user_context=user_context,
         )
-        
+
         return {"status": "ok", "treino": treino_salvo}
-    
+
     except Exception as e:
-        print(f"!!!!!!!!!!!! ERRO DETALHADO !!!!!!!!!!!!\n{e}\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print(
+            f"!!!!!!!!!!!! ERRO DETALHADO !!!!!!!!!!!!\n{e}\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        )
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @treino_router.get("/")
-def get_treinos(
-    email: str = Depends(security.get_current_user_email)
-): # <-- MUDANÇA: SÍNCRONO
+def get_treinos(email: str = Depends(security.get_current_user_email)):  # <-- MUDANÇA: SÍNCRONO
     """
     Lista os treinos salvos do usuário LOGADO (SÍNCRONO).
     """
     user = auth_service.get_user_by_email(email)
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
-        
+
     # Use alias `listar_treinos_por_usuario` para permitir patching em testes
     treinos = listar_treinos_por_usuario(str(user["_id"]))
     return treinos
@@ -124,4 +124,3 @@ def get_treinos_public(usuario_id: str):
         return listar_treinos_por_usuario(usuario_id)
     except Exception:
         return []
-

@@ -1,44 +1,40 @@
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+
 # Importações absolutas (sem '..')
-from models.user import UserCreate, UserLogin, TokenResponse, UserResponse
-from services import auth_service, security
-from services import gemini_service, email_service
+from models.user import TokenResponse, UserCreate, UserLogin, UserResponse
+from services import auth_service, email_service, gemini_service, security
 
 auth_router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
-@auth_router.post("/register", 
-             response_model=TokenResponse, 
-             status_code=status.HTTP_201_CREATED)
-def register_user(user_data: UserCreate): # <-- SÍNCRONO
-    """ Rota síncrona para registrar usuário """
+
+@auth_router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+def register_user(user_data: UserCreate):  # <-- SÍNCRONO
+    """Rota síncrona para registrar usuário"""
     try:
         # Chamada síncrona
         new_user = auth_service.create_user(user_data)
     except HTTPException as e:
-        raise e 
-    
-    access_token = security.create_access_token(
-        data={"sub": new_user["email"]}
-    )
+        raise e
+
+    access_token = security.create_access_token(data={"sub": new_user["email"]})
     user_resp = UserResponse.model_validate(new_user)
-    
+
     return TokenResponse(access_token=access_token, user=user_resp)
 
+
 @auth_router.post("/login", response_model=TokenResponse)
-def login_user(form_data: UserLogin, background_tasks: BackgroundTasks): # <-- SÍNCRONO
-    """ Rota síncrona para login """
+def login_user(form_data: UserLogin, background_tasks: BackgroundTasks):  # <-- SÍNCRONO
+    """Rota síncrona para login"""
     user = auth_service.authenticate(form_data.email, form_data.senha)
-    
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email ou senha incorretos.",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        
-    access_token = security.create_access_token(
-        data={"sub": user["email"]}
-    )
+
+    access_token = security.create_access_token(data={"sub": user["email"]})
     # Normalizar _id para string antes de validar com Pydantic
     if user and "_id" in user:
         try:
@@ -58,6 +54,7 @@ def login_user(form_data: UserLogin, background_tasks: BackgroundTasks): # <-- S
 
     return TokenResponse(access_token=access_token, user=user_resp)
 
+
 @auth_router.post("/forgot-password")
 def forgot_password(email: str):
     user = auth_service.get_user_by_email(email)
@@ -67,6 +64,7 @@ def forgot_password(email: str):
     auth_service.update_token(email, reset_token)
     email_service.send_email(email, reset_token)
     return {"message": "Se o e-mail estiver cadastrado, um link de recuperação será enviado."}
+
 
 @auth_router.post("/reset-password")
 def reset_password(token: str, password: str):

@@ -1,7 +1,12 @@
 from fastapi import APIRouter, HTTPException
 
 from schemas import DadosUsr
-from services.sign_service import criar_usuario, ler_usuario, mudar_senha, solicitar_recuperacao
+from services.sign_service import (
+    criar_usuario,
+    ler_usuario,
+    mudar_senha,
+    solicitar_recuperacao,
+)
 
 user_router = APIRouter(prefix="/usuario", tags=["Usr"])
 

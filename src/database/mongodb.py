@@ -3,6 +3,7 @@ import os
 import ssl
 import sys
 from datetime import datetime
+
 import certifi
 from pymongo.errors import ConnectionFailure
 from pymongo.mongo_client import MongoClient
@@ -36,13 +37,12 @@ if not uri and not is_testing:
         "❌ MONGO_URI não configurada no arquivo .env! Por favor, configure a variável de ambiente."
     )
 
+
 def create_mongodb_client():
     """Cria cliente MongoDB com diferentes estratégias de conexão"""
 
-
     # Detectar contexto do processo para logs mais informativos
     process_info = f"(PID: {os.getpid()})"
-
 
     # Estratégia 1: Conexão padrão com certificados do sistema
     try:
@@ -60,7 +60,6 @@ def create_mongodb_client():
         return client, database_name
     except Exception as e:
         print(f"❌ Conexão padrão falhou: {type(e).__name__}")
-
 
     # Estratégia 2: Usar certificados do certifi (padrão para muitos ambientes)
     try:
@@ -123,7 +122,9 @@ def setup_mongodb():
         # Se o db não estiver disponível (por exemplo, em mocks nos testes),
         # pulamos a dependência do cliente real e continuamos usando os mocks.
         if db is None:
-            print("⚠️ DB não disponível, pulando dependência do client real (usuário de testes/mocks)")
+            print(
+                "⚠️ DB não disponível, pulando dependência do client real (usuário de testes/mocks)"
+            )
             return
 
         # --- Índices úteis ---

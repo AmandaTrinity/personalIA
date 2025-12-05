@@ -4,6 +4,7 @@ from services.email_service import enviar_email
 from utils.hash import hash_pass
 from utils.reset import criar_token, verifica_token
 
+
 def criar_usuario(data: DadosUsr):
 
     usr_data = ler_usuario(data.email_usuario)
