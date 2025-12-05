@@ -3,6 +3,7 @@
 Colocamos aqui transformações reutilizáveis como converter ObjectId para str e
 remover campos sensíveis antes de retornar para a API.
 """
+
 from typing import Any
 
 

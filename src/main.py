@@ -1,4 +1,5 @@
 import warnings
+
 import uvicorn
 
 # Suprimir warning específico do passlib que aparece em alguns ambientes
@@ -10,15 +11,15 @@ warnings.filterwarnings(
     category=DeprecationWarning,
     module=r".*passlib.*",
 )
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 
 load_dotenv()
 
+from config.settings import settings
+from routes.auth_routes import auth_router
 from routes.treino_routes import treino_router
-from routes.auth_routes import auth_router 
-from config.settings import settings 
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -41,7 +42,7 @@ app.add_middleware(
     allow_headers=["*"],  # Permite todos os cabeçalhos
 )
 
-app.include_router(auth_router)  
+app.include_router(auth_router)
 app.include_router(treino_router)
 
 
@@ -65,5 +66,5 @@ if __name__ == "__main__":
         port=settings.PORT,
         reload=settings.is_development,  # Só habilita reload em desenvolvimento
         log_level="info",
-        app_dir="."
+        app_dir=".",
     )
