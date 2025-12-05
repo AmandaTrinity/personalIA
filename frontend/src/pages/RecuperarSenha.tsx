@@ -36,8 +36,9 @@ export default function RecuperarSenha() {
 
       setOk('Se o e-mail existir, um código foi enviado. Verifique sua caixa de entrada (e spam).');
       setEmail('');
-    } catch (e: any) {
-      setErr(e.message || 'Erro ao enviar solicitação.');
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Erro ao enviar solicitação.';
+      setErr(errorMessage);
     } finally {
       setLoading(false);
     }
