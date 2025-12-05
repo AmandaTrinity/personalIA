@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Onboarding } from '../components/Onboarding';
+import { Onboarding, type OnboardingProfile } from '../components/Onboarding';
 import { register, type RegisterData } from '../services/auth_api';
 import { saveSession } from '../services/api';
+
 
 export default function ProfileSetup() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function ProfileSetup() {
   const userName = registrationData.nome || 'Usuário';
 
   //Lida com a conclusão do Onboarding e envia o formulário completo
-  const handleOnboardingComplete = async (profile: unknown) => { 
+  const handleOnboardingComplete = async (profile: OnboardingProfile) => { 
     
     //Mapeia e combina os dados para o formato RegisterData (e UserCreate do BE)
     const fullRegistrationData: RegisterData = {
