@@ -4,9 +4,8 @@ Alguns testes e módulos importam `schemas` diretamente (e.g. `from schemas impo
 Historicamente havia um módulo top-level com esse nome. Para manter compatibilidade
 criamos este shim que apenas reexporta os símbolos públicos de `models.schemas`.
 """
-from models.schemas import (
-    MensagemChat,
-)
+
+from models.schemas import MensagemChat
 
 
 class MensagemChat(BaseModel):

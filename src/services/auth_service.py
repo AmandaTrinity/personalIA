@@ -2,15 +2,19 @@
 Lida com a lógica de criar e autenticar usuários.
 Versão SÍNCRONA para funcionar com mongodb.py
 """
-from fastapi import HTTPException, status
+
 from datetime import datetime, timezone
+
+from fastapi import HTTPException, status
+
+# Importa a coleção SÍNCRONA do seu arquivo mongodb.py
+from database.mongodb import usuarios_collection
+
+# Importa o "contrato" do seu 'models/user.py'
+from models.user import UserCreate
 
 # Importa o serviço de segurança
 from services.security import hash_password, verify_password
-# Importa a coleção SÍNCRONA do seu arquivo mongodb.py
-from database.mongodb import usuarios_collection
-# Importa o "contrato" do seu 'models/user.py'
-from models.user import UserCreate
 
 # Importa utilitário de normalização
 from utils.serializers import normalize_user
@@ -75,20 +79,21 @@ def authenticate(email: str, senha: str):
     return normalize_user(user_raw, safe=True)
 
 
-def update_token(email:str, token: str):
+def update_token(email: str, token: str):
     usuarios_collection.update_one({"email": email}, {"$set": {"token": token}})
+
 
 def update_user_password(email: str, senha: str, token: str):
     if usuarios_collection is None:
         return None
     if usuarios_collection.find_one({"email": email, "token": token}):
-        senha_nova = (senha)
+        senha_nova = senha
         usuarios_collection.update_one(
             {"email": email}, {"$set": {"senha_hash": senha_nova}, "$unset": {"token": token}}
         )
         return "Senha alterada com sucesso"
     return "Não foi possivel alterar a senha"
 
+
 # Backwards compatibility: antiga função ainda disponível
 # note: removed legacy `authenticate_user` wrapper; use `authenticate` directly
-

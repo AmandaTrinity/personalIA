@@ -1,4 +1,6 @@
 from datetime import datetime
+from typing import Optional
+
 from bson import ObjectId
 from fastapi import HTTPException
 
@@ -7,7 +9,6 @@ from database.mongodb import treinos_collection
 
 # Import Gemini (se necessário para gerar plano)
 from services import gemini_service
-from typing import Optional
 
 
 def gerar_plano_de_treino(data: Optional[object]) -> str:
@@ -57,11 +58,15 @@ def salvar_treino(usuario_id: str, plano_gerado=None, user_context: Optional[dic
 
     # Prepara documento para inserir
     treino_doc = dict(doc_context) if isinstance(doc_context, dict) else {}
-    treino_doc.update({
-        "usuario_id": ObjectId(usuario_id) if not isinstance(usuario_id, ObjectId) else usuario_id,
-        "plano_gerado": plano_gerado,
-        "criado_em": datetime.utcnow(),
-    })
+    treino_doc.update(
+        {
+            "usuario_id": (
+                ObjectId(usuario_id) if not isinstance(usuario_id, ObjectId) else usuario_id
+            ),
+            "plano_gerado": plano_gerado,
+            "criado_em": datetime.utcnow(),
+        }
+    )
 
     try:
         # Passe uma cópia para o insert_one para que alterações posteriores
@@ -88,15 +93,17 @@ def listar_treinos_por_usuario(usuario_id: str) -> list:
 
     treinos = []
     for t in cursor:
-        treinos.append({
-            "_id": str(t.get("_id")),
-            "usuario_id": str(t.get("usuario_id")) if t.get("usuario_id") is not None else None,
-            "nivel": t.get("nivel"),
-            "objetivo": t.get("objetivo"),
-            "equipamentos": t.get("equipamentos"),
-            "plano_gerado": t.get("plano_gerado"),
-            "criado_em": t.get("criado_em"),
-        })
+        treinos.append(
+            {
+                "_id": str(t.get("_id")),
+                "usuario_id": str(t.get("usuario_id")) if t.get("usuario_id") is not None else None,
+                "nivel": t.get("nivel"),
+                "objetivo": t.get("objetivo"),
+                "equipamentos": t.get("equipamentos"),
+                "plano_gerado": t.get("plano_gerado"),
+                "criado_em": t.get("criado_em"),
+            }
+        )
     return treinos
 
 
@@ -118,4 +125,3 @@ def buscar_treino_por_id(treino_id: str) -> Optional[dict]:
         "plano_gerado": doc.get("plano_gerado"),
         "criado_em": doc.get("criado_em"),
     }
-
