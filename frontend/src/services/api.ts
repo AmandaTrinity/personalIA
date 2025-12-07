@@ -1,47 +1,57 @@
-// src/services/api.ts
-
-// 1) Base URL da API via .env do FRONT (Vite)
-//    Crie/garanta: frontend/.env  ->  VITE_API_URL=http://127.0.0.1:8000
+//Base URL da API via .env do FRONT (Vite)
 export const API_URL: string =
   import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
 
-// 2) Tipos de resposta e sessão
+export interface UserSessionData {
+  id: string; // O ID normalizado
+  email?: string;
+  [k: string]: unknown;
+}
+
 export type AuthResponse = {
-  // seu backend pode devolver "access_token" OU "token"
   access_token?: string;
   token?: string;
-  // pode devolver "user" com vários formatos
-  user?: {
-    id?: string;
-    _id?: string;
-    usuarioId?: string;
-    email?: string;
-    [k: string]: any;
-  } & Record<string, any>;
-  [k: string]: any;
+  // O backend devolve um objeto, mas não tipamos a estrutura completa aqui
+  user?: Record<string, unknown>; 
+  [k: string]: unknown;
 };
 
 export type Session = {
   token: string;
-  user: { id: string; email?: string; [k: string]: any };
+  user: UserSessionData;
 };
 
-// 3) Helpers de sessão
+//Helpers de sessão
 const TOKEN_KEY = "token";
 const USER_KEY = "user";
+
+// Lógica isolada para mapear diferentes chaves de ID
+function normalizeUserId(userObject: Record<string, unknown>): string | null {
+  return (
+    (userObject.id as string) ??
+    (userObject._id as string) ??
+    (userObject.usuarioId as string) ??
+    null
+  );
+}
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
 
-export function getCurrentUser(): { id: string; email?: string } | null {
+// Usa UserSessionData e normalizeUserId
+export function getCurrentUser(): UserSessionData | null {
   const raw = localStorage.getItem(USER_KEY);
   if (!raw) return null;
   try {
-    const u = JSON.parse(raw);
-    const id = u?.id ?? u?._id ?? u?.usuarioId ?? null;
+    // Trata o JSON como Record<string, unknown>
+    const u = JSON.parse(raw) as Record<string, unknown>;
+    
+    const id = normalizeUserId(u);
     if (!id) return null;
-    return { id, email: u?.email };
+    
+    // Converte de volta para UserSessionData
+    return { id, email: u.email as string | undefined }; 
   } catch {
     return null;
   }
@@ -61,14 +71,14 @@ export function clearSession() {
   localStorage.removeItem(USER_KEY);
 }
 
-// 4) Cliente HTTP genérico (JSON-first)
+//Cliente HTTP genérico (JSON-first)
 type ApiInit = Omit<RequestInit, "body" | "headers"> & {
   json?: unknown;              // passa um objeto e virará JSON
   headers?: Record<string, string>;
   skipAuth?: boolean;          // true -> não envia Authorization
 };
 
-export async function api<T = any>(path: string, init: ApiInit = {}): Promise<T> {
+export async function api<T = unknown>(path: string, init: ApiInit = {}): Promise<T> {
   const url = path.startsWith("http") ? path : `${API_URL}${path}`;
 
   const headers: Record<string, string> = {
@@ -95,7 +105,7 @@ export async function api<T = any>(path: string, init: ApiInit = {}): Promise<T>
   });
 
   // tenta ler JSON; se falhar, pega texto
-  let data: any = null;
+  let data: unknown = null;
   const text = await resp.text();
   try {
     data = text ? JSON.parse(text) : null;
@@ -104,10 +114,13 @@ export async function api<T = any>(path: string, init: ApiInit = {}): Promise<T>
   }
 
   if (!resp.ok) {
+
+    const errorData = data as Record<string, unknown>;
     // tenta uma mensagem de erro amigável
     const msg =
-      (data && (data.detail || data.message || data.error)) ||
+      (errorData && (errorData.detail || errorData.message || errorData.error)) ||
       `${resp.status} ${resp.statusText}`;
+      
     throw new Error(typeof msg === "string" ? msg : "Falha na requisição");
   }
 

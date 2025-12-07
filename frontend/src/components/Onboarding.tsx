@@ -2,21 +2,22 @@ import { useState } from "react";
 import { ArrowRight, ArrowLeft, Dumbbell, Flame, Zap, HeartPulse, Leaf, Target, Trophy, Home} from "lucide-react";
 import "../styles/components/howitworks.css";
 
-interface OnboardingProps {
-  onComplete: (profile: {
-    gender?: string;
-    age?: number;
-    height?: number;
-    weight?: number;
-    objective?: string;
-    level?: string;
-    duration?: string;
-    equipment?: string;
-    limitations?: string;
-  }) => void;
-  userName: string;
+export interface OnboardingProfile {
+    gender: string;
+    age: number;
+    height: number;
+    weight: number;
+    objective: string;
+    level: string;
+    duration: string;
+    equipment: string;
+    limitations?: string | null;
 }
 
+interface OnboardingProps {
+  onComplete: (profile: OnboardingProfile) => void;
+  userName: string;
+}
 
 export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const [currentStep, setCurrentStep] = useState(1);
