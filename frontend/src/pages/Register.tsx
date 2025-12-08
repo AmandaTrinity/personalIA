@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { api } from '../services/api'; // Importando a instância da API
 import '../styles/pages/register.css';
 
 function Registro() {
@@ -11,19 +12,38 @@ function Registro() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   
   // Estado para mensagens de erro
-  const [error, setError] = useState('');
+  const [error, setError] = useState(''); 
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(''); // Limpa erros anteriores
+    setIsLoading(true);
 
     // Validação simples de senha
     if (senha !== confirmarSenha) {
       setError('As senhas não coincidem.');
+      setIsLoading(false);
       return;
-    }    
-    // Após o sucesso, redireciona para a tela de personalização do perfil
-    navigate('/profile-setup', { state: { nome: nome, email: email, senha: senha } });
+    }
+
+    try {
+      //Pré-validação do e-mail
+      await api('/auth/check-email', {
+        method: 'POST',
+        json: { email },
+      });
+
+      // Se a verificação for bem-sucedida (não lançou erro), continua para a próxima etapa
+      navigate('/profile-setup', { state: { nome, email, senha } });
+
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido.';
+      // Exibe o erro de e-mail já existente ou outro erro de validação
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,6 +62,7 @@ function Registro() {
             id="nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
+            disabled={isLoading}
             required 
           />
         </div>
@@ -52,6 +73,7 @@ function Registro() {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
             required 
           />
         </div>
@@ -62,6 +84,7 @@ function Registro() {
             id="senha" 
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
+            disabled={isLoading}
             required 
           />
         </div>
@@ -72,11 +95,14 @@ function Registro() {
             id="confirmarSenha" 
             value={confirmarSenha}
             onChange={(e) => setConfirmarSenha(e.target.value)}
+            disabled={isLoading}
             required 
           />
         </div>
         
-        <button type="submit" className="register-button">Criar Conta</button>
+        <button type="submit" className="register-button" disabled={isLoading}>
+          {isLoading ? 'Verificando...' : 'Avançar para Perfil'}
+        </button>
         
         <div className="register-links">
           <p>
