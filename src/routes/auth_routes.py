@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from models.user import UserCreate, UserLogin, TokenResponse, UserResponse
 from services import auth_service, security
 from services import gemini_service, email_service
+from pydantic import BaseModel, EmailStr
 
 auth_router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
@@ -57,6 +58,24 @@ def login_user(form_data: UserLogin, background_tasks: BackgroundTasks): # <-- S
         pass
 
     return TokenResponse(access_token=access_token, user=user_resp)
+
+class EmailCheckRequest(BaseModel):
+    email: EmailStr
+
+@auth_router.post("/check-email", status_code=status.HTTP_200_OK)
+def check_email_exists(data: EmailCheckRequest):
+    """
+    Verifica se um e-mail já está cadastrado no sistema.
+    Retorna 200 OK se o e-mail estiver disponível.
+    Retorna 409 Conflict se o e-mail já estiver em uso.
+    """
+    user = auth_service.get_user_by_email(data.email)
+    if user:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Este e-mail já está cadastrado. Por favor, tente outro ou faça login."
+        )
+    return {"message": "E-mail disponível"}
 
 @auth_router.post("/forgot-password")
 def forgot_password(email: str):
