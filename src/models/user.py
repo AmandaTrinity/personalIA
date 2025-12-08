@@ -16,8 +16,8 @@ class UserCreate(BaseModel):
     altura: int  
     peso: float  
     objetivo: str
-    level: str
-    equipment: str
+    nivel: str
+    equipamentos: str
     limitacoes: str | None = None
     frequencia: str
 
@@ -33,6 +33,16 @@ class UserResponse(BaseModel):
     id: str
     email: EmailStr
     nome: str
+    # Adicionando os campos do perfil para que sejam retornados na API
+    idade: int | None = None
+    sexo: str | None = None
+    altura: int | None = None
+    peso: float | None = None
+    objetivo: str | None = None
+    nivel: str | None = None
+    equipamentos: str | None = None
+    limitacoes: str | None = None
+    frequencia: str | None = None
     
     model_config = ConfigDict(
         from_attributes=True,
@@ -45,4 +55,3 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserResponse
-

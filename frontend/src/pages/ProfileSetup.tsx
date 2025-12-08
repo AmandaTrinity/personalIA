@@ -34,9 +34,9 @@ export default function ProfileSetup() {
       altura: profile.height,
       peso: profile.weight,
       objetivo: profile.objective,
-      frequencia: profile.duration, 
-      level: profile.level, 
-      equipment: profile.equipment,
+      frequencia: profile.duration,
+      nivel: profile.level,
+      equipamentos: profile.equipment,
       limitacoes: profile.limitations || null, 
     };
 
