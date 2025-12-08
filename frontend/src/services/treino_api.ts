@@ -2,8 +2,9 @@
 
 // Lê a URL da API do .env do frontend (Vite)
 // Se não existir, cai no 127.0.0.1:8000
-const API_URL: string =
-  import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
+const API_URL: string = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
+
+if (!API_URL) throw new Error("VITE_API_URL não está definida no ambiente.");
 
 // Header de auth opcional a partir do localStorage ("token")
 function authHeader() {
