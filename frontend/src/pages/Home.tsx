@@ -146,7 +146,7 @@ function Home() {
               <div className="icone-motivo">
                 <Brain size={32} />
               </div>
-              <h3>IA Personalizada</h3>button
+              <h3>IA Personalizada</h3>
               <p>Nossa inteligência artificial cria treinos únicos baseados no seu perfil completo, não apenas templates genéricos.</p>
             </div>
            
