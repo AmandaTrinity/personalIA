@@ -2,8 +2,8 @@
 import { api, saveSession, clearSession, type AuthResponse } from "./api";
 
 // 2. Definimos as rotas (elas batem com o backend síncrono)
-const LOGIN_PATH = "/auth/login";
-const REGISTER_PATH = "/auth/register";
+const LOGIN_PATH = "auth/login";
+const REGISTER_PATH = "auth/register";
 
 // 3. Exportamos o TIPO de dados que o RegisterPage precisa
 //    Isso garante que o frontend e o backend usam o mesmo "contrato"
