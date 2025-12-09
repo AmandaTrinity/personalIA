@@ -130,8 +130,14 @@
 
 .option-card:hover {
   transform: scale(1.03);
-  border-color: #5EA8E5;
-  color: white;
+  background-color: #3883CE;
+  color: #E8FE61;
+  border: 2px solid #E8FE61;
+}
+.option-card:hover .option-title,
+.option-card:hover .option-desc,
+.option-card:hover .emoji {
+color: #E8FE61;
 }
 
 .option-card.active {

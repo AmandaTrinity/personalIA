@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ArrowRight, ArrowLeft, Dumbbell, Flame, Zap, HeartPulse, Leaf, Target, Trophy, Home} from "lucide-react";
 import "../styles/components/howitworks.css";
 
@@ -31,14 +31,49 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const [age, setAge] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
   const [weight, setWeight] = useState<number>(0);
+
+  const ageRef = useRef<HTMLInputElement>(null);
+  const heightRef = useRef<HTMLInputElement>(null);
+  const weightRef = useRef<HTMLInputElement>(null);
+
+  // Garante que o usuário não digite besteira e atualiza estado
   const handleNumberChange = (value: string, setter: (val: number) => void) => {
-    const numberValue = Number(value);
+    
+    // Se estiver vazio reseta para 0
+    if (value === "") {
+      setter(0);
+      return;
+    }
 
-    // Se for negativo, ignora
-    if (numberValue < 0) return;
-
-    setter(numberValue);
+    // Só atualiza o estado se o valor for puramente numérico
+    if (/^\d+$/.test(value)) {
+      setter(Number(value));
+    }
   };
+
+  // Garante que o usuário não digite besteira
+  const preventNonNumericKeys = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Bloqueia: ponto, vírgula, traço (negativo), mais e 'e' (notação científica)
+    if (["e", "E", "+", "-", ".", ","].includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  // Melhora fluxo. Pressionar "ENTER" coloca cursor no próximo campo
+  const handleInputKeyDown = (
+      e: React.KeyboardEvent<HTMLInputElement>,
+      nextRef?: React.RefObject<HTMLInputElement | null>) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          
+          // Se houver referência válida, foca nela
+          if (nextRef && nextRef.current) nextRef.current.focus();
+
+          return;
+        }
+      
+        preventNonNumericKeys(e);
+    };
 
   const handleNext = () => {
     if (currentStep < 6) {
@@ -134,9 +169,11 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                 <label>
                   Idade:
                   <input
+                    ref={ageRef}
                     type="number"
                     value={age || ""}
                     onChange={(e) => handleNumberChange(e.target.value, setAge)}
+                    onKeyDown={(e) => handleInputKeyDown(e, heightRef)}
                     className="textarea"
                     placeholder="Ex: 25"
                     style={{ height: "55px" }}
@@ -146,9 +183,11 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                 <label>
                   Altura (cm):
                   <input
+                    ref={heightRef}
                     type="number"
-                    value={height}
+                    value={height || ""}
                     onChange={(e) => handleNumberChange(e.target.value, setHeight)}
+                    onKeyDown={(e) => handleInputKeyDown(e, weightRef)}
                     className="textarea"
                     placeholder="Ex: 175"
                     style={{ height: "55px" }}
@@ -158,9 +197,11 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                 <label>
                   Peso (kg):
                   <input
+                    ref={weightRef}
                     type="number"
-                    value={weight}
+                    value={weight || ""}
                     onChange={(e) => handleNumberChange(e.target.value, setWeight)}
+                    onKeyDown={(e) => handleInputKeyDown(e)}
                     className="textarea"
                     placeholder="Ex: 70"
                     style={{ height: "55px" }}
