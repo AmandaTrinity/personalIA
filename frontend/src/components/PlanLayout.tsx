@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Info } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/pages/trainingPlan.css'; 
+// Importa a nova função para comunicação com a API e o tipo de dados
+import { sendPlanRequest, type PlanRequestData } from '../services/treino_api';
 
 // --- Tipos de Dados ---
 interface UserProfile {
@@ -43,7 +45,8 @@ interface PlanLayoutProps {
   userProfile: UserProfile;
 }
 
-// --- Funções Auxiliares (MOCKS) ---
+// --- Funções Auxiliares ---
+// Funções mantidas para display/UX
 
 function getObjectiveText(objective?: string): string {
   const objectives: Record<string, string> = {
@@ -73,16 +76,7 @@ function getEquipmentText(equipment?: string): string {
   return equipments[equipment || 'sem-equipamento'] || 'Sem Equipamento';
 }
 
-function generateAIResponse(userMessage: string, profile: UserProfile): string {
-  // MOCK de resposta da IA (simplificado)
-  const lowerMessage = userMessage.toLowerCase();
-  
-  if (lowerMessage.includes('flexão')) {
-    return "A flexão (push-up) é excelente para peito, ombros e tríceps. Mantenha seu corpo em linha reta e desça até que o peito quase toque o chão. Para facilitar, use a alternativa com joelhos no chão!";
-  }
-  
-  return 'Obrigado pela sua pergunta! Meu foco é em planos de treino. Gostaria de tirar dúvidas sobre a execução de algum exercício ou pedir uma alternativa?';
-}
+// REMOVIDA: function generateAIResponse(userMessage: string, profile: UserProfile): string {
 
 // --- Componente Principal ---
 
@@ -150,7 +144,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     const welcomeMessage: Message = {
       id: 1,
       sender: 'ai',
-      text: `Olá ${userProfile.name}! 👋 Seu plano de treino já está pronto e personalizado para ${getObjectiveText(userProfile.objective)}!`,
+      text: `Olá ${userProfile.name}! Seu plano de treino já está pronto e personalizado para ${getObjectiveText(userProfile.objective)}!`,
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
@@ -170,13 +164,24 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulação de resposta da IA
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(userMessage.text, userProfile);
+    try {
+      // Mapeia o perfil do usuário para o corpo da API (PlanRequestData)
+      const requestBody: PlanRequestData = {
+          mensagem_usuario: userMessage.text,
+          nivel: userProfile.level,
+          objetivo: userProfile.objective,
+          // O backend espera List[str] para equipamentos
+          equipamentos: userProfile.equipment ? [userProfile.equipment] : undefined,
+          frequencia: userProfile.duration,
+      };
+
+      // Chamada real à API do Gemini via backend
+      const aiResponse = await sendPlanRequest(requestBody);
+      
       const aiMessage: Message = {
         id: messages.length + 2,
         sender: 'ai',
@@ -184,8 +189,19 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
+
+    } catch (error) {
+        console.error('Erro ao enviar mensagem para IA:', error);
+        const errorMessage: Message = {
+            id: messages.length + 2,
+            sender: 'ai',
+            text: '❌ Ocorreu um erro ao conectar com o PersonalIA. Tente novamente.',
+            timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -227,7 +243,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     setMessages((prev) => [...prev, aiMessage]);
   };
   
-  // MOCK: Renderiza os detalhes do exercício na tabela, baseado na imagem
+  // Renderiza os detalhes do exercício na tabela
   const renderExerciseRow = (exercise: Exercise, index: number, workoutDay: WorkoutDay) => {
     const isCompleted = exercise.completed;
 
@@ -349,10 +365,6 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
             <Dumbbell size={18} />
             Meu Treino
           </div>
-          <div className={`tab ${activeTab === 'progress' ? 'active' : ''}`} onClick={() => setActiveTab('progress')}>
-            <BarChart3 size={18} />
-            Evolução
-          </div>
         </div>
 
         {/* Tab Content: Meu Treino */}
@@ -400,20 +412,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
             </div>
           </div>
         )}
-
-        {/* Tab Content: Evolução (Mock simples) */}
-        {activeTab === 'progress' && (
-          <div className="progress-content-area">
-            <div className="progress-card">
-              <BarChart3 size={40} className="text-[#174DAD] mx-auto mb-4" />
-              <h2>Acompanhe sua Evolução</h2>
-              <p>Esta seção mostrará seu progresso em força, frequência e consistência ao longo das semanas. Por enquanto, é um mock!</p>
-              <button className="start-button mt-4">
-                <Info size={18} /> Ver Métricas de Progresso
-              </button>
-            </div>
-          </div>
-        )}
+        
       </div>
 
       {/* 3. Chat Sidebar/Modal */}
