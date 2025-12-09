@@ -111,7 +111,6 @@
 /* Workout Content */
 .workout-content-area {
   flex-grow: 1; padding: 20px;
-  overflow-y: scroll; scrollbar-gutter: stable;
 }
 
 .workout-overview-grid {
