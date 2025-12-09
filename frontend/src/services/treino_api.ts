@@ -27,8 +27,7 @@ export async function sendPlanRequest(
 ): Promise<string> {
   try {
     // Rota autenticada: POST /treinos (o usuário é inferido pelo token no authHeader)
-    // CORREÇÃO: Removendo a barra final para tentar resolver o 404
-    const resp = await fetch(`${API_URL}treinos`, {
+    const resp = await fetch(`${API_URL}/treinos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
