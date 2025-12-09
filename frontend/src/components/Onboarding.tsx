@@ -20,6 +20,7 @@ interface OnboardingProps {
 }
 
 export function Onboarding({ onComplete, userName }: OnboardingProps) {
+  // Estados
   const [currentStep, setCurrentStep] = useState(1);
   const [objective, setObjective] = useState('');
   const [level, setLevel] = useState('');
@@ -30,7 +31,14 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const [age, setAge] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
   const [weight, setWeight] = useState<number>(0);
+  const handleNumberChange = (value: string, setter: (val: number) => void) => {
+    const numberValue = Number(value);
 
+    // Se for negativo, ignora
+    if (numberValue < 0) return;
+
+    setter(numberValue);
+  };
 
   const handleNext = () => {
     if (currentStep < 6) {
@@ -127,9 +135,10 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   Idade:
                   <input
                     type="number"
-                    value={age}
-                    onChange={(e) => setAge(Number(e.target.value))}
+                    value={age || ""}
+                    onChange={(e) => handleNumberChange(e.target.value, setAge)}
                     className="textarea"
+                    placeholder="Ex: 25"
                     style={{ height: "55px" }}
                   />
                 </label>
@@ -139,8 +148,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   <input
                     type="number"
                     value={height}
-                    onChange={(e) => setHeight(Number(e.target.value))}
+                    onChange={(e) => handleNumberChange(e.target.value, setHeight)}
                     className="textarea"
+                    placeholder="Ex: 175"
                     style={{ height: "55px" }}
                   />
                 </label>
@@ -150,8 +160,9 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
                   <input
                     type="number"
                     value={weight}
-                    onChange={(e) => setWeight(Number(e.target.value))}
+                    onChange={(e) => handleNumberChange(e.target.value, setWeight)}
                     className="textarea"
+                    placeholder="Ex: 70"
                     style={{ height: "55px" }}
                   />
                 </label>

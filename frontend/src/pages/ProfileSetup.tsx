@@ -12,7 +12,7 @@ export default function ProfileSetup() {
   const registrationData = location.state as { nome: string, email: string, senha: string } | undefined;
 
   if (!registrationData || !registrationData.email || !registrationData.senha) {
-    navigate('/register');
+    navigate('/register', { replace: true });
     return null; 
   }
 
@@ -46,7 +46,7 @@ export default function ProfileSetup() {
       
       //Salva a sessão (token e usuário) para manter o usuário logado
       saveSession(response); 
-      navigate('/chat');
+      navigate('/chat', { replace: true });
       
     } catch (error: unknown) {
 
