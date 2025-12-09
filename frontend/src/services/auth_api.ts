@@ -2,8 +2,9 @@
 import { api, saveSession, clearSession, type AuthResponse } from "./api";
 
 // 2. Definimos as rotas (elas batem com o backend síncrono)
-const LOGIN_PATH = "auth/login";
-const REGISTER_PATH = "auth/register";
+const LOGIN_PATH = "/auth/login";
+const CHECK_EMAIL_PATH = "/auth/check-email";
+const REGISTER_PATH = "/auth/register";
 
 // 3. Exportamos o TIPO de dados que o RegisterPage precisa
 //    Isso garante que o frontend e o backend usam o mesmo "contrato"
@@ -52,3 +53,14 @@ export function logout() {
   clearSession();
 }
 
+/**
+ * Verifica no backend se um e-mail já está cadastrado.
+ * Retorna uma promessa que resolve para um objeto com a propriedade 'exists'.
+ */
+export async function checkEmail(email: string): Promise<{ exists: boolean }> {
+  return api<{ exists: boolean }>(CHECK_EMAIL_PATH, {
+    method: "POST",
+    json: { email },
+    skipAuth: true,
+  });
+}
