@@ -237,30 +237,28 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         className={`exercise-row ${isCompleted ? 'completed' : 'pending'}`}
         onClick={() => toggleExercise(workoutDay, exercise.name)} // Permite marcar/desmarcar
       >
-        <div className="exercise-info">
-          <button className="check-button" onClick={(e) => { e.stopPropagation(); toggleExercise(workoutDay, exercise.name); }}>
-            {isCompleted ? (
-              <CheckCircle2 size={24} className="check-icon" />
-            ) : (
-              <Circle size={24} className="circle-icon" />
-            )}
-          </button>
-          <span className={`exercise-name ${isCompleted ? 'text-strikethrough' : ''}`}>
-            {exercise.name}
-          </span>
-        </div>
-        <div className="exercise-stats">
-          <div className="stat-item">
-            <span className="stat-label">Séries</span>
+        {/* COLUNA 1: Checkbox (filho direto do Grid) */}
+        <button className="check-button" onClick={(e) => { e.stopPropagation(); toggleExercise(workoutDay, exercise.name); }}>
+          {isCompleted ? <CheckCircle2 size={24} className="check-icon" /> : <Circle size={24} className="circle-icon" />}
+        </button>        
+        {/* COLUNA 2: Nome (Filho direto do Grid, vai crescer e quebrar linha se precisar) */}
+        <span className={`exercise-name ${isCompleted ? 'text-strikethrough' : ''}`}>
+          {exercise.name}
+        </span>
+
+        {/* COLUNA 3: Estatísticas */}
+        <div className="exercise-stats-grid">
+          <div className="stat-box">
             <span className="stat-value">{exercise.sets}</span>
+            <span className="stat-label">Séries</span>
           </div>
-          <div className="stat-item">
-            <span className="stat-label">Reps</span>
+          <div className="stat-box">
             <span className="stat-value">{exercise.reps}</span>
+            <span className="stat-label">Reps</span>
           </div>
-          <div className="stat-item">
-            <span className="stat-label">Descanso</span>
+          <div className="stat-box">
             <span className="stat-value">{exercise.rest}</span>
+            <span className="stat-label">Descanso</span>
           </div>
         </div>
       </div>
@@ -384,8 +382,11 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
             {/* Detalhes do Treino Atual */}
             <div className="current-workout-details">
               <div className="details-header">
-                <div className="details-title">{currentWorkout.title}</div>
-                <div className="details-subtitle">{currentWorkout.day}</div>
+                <div className="header-text-group">
+                  <h2 className="details-title">{currentWorkout.title}</h2>
+                  <span className="details-subtitle">{currentWorkout.day}</span>
+                </div>
+                
                 <button className="start-button">
                   <Play size={18} /> Iniciar Treino
                 </button>

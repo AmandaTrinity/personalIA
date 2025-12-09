@@ -1,6 +1,5 @@
 /* frontend/src/styles/pages/treinoDetalhe.css */
 
-/* Cores e fontes (Devem ser definidos em index.css, mas repetidos aqui como referência) */
 :root {
   --blue-primary: #174DAD;
   --blue-secondary: #3883CE;
@@ -17,234 +16,104 @@
 
 /* Sidebar de Perfil */
 .profile-sidebar {
-  width: 300px;
-  background-color: var(--white);
-  padding: 30px 20px;
-  border-right: 1px solid #e0e0e0;
-  flex-shrink: 0; /* Impede que a sidebar diminua */
+  width: 300px; background-color: var(--white);
+  padding: 30px 20px; border-right: 1px solid #e0e0e0;
+  flex-shrink: 0;
 }
 
 .sidebar-header h2 {
-  color: var(--blue-primary);
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+  color: var(--blue-primary); font-size: 1.5rem;
+  margin-bottom: 20px; padding-bottom: 10px;
   border-bottom: 2px solid var(--yellow-accent);
 }
 
 .profile-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: center; gap: 15px;
+  padding: 15px 0; border-bottom: 1px solid #f0f0f0;
 }
+.profile-item:last-of-type { border-bottom: none; }
+.item-icon { color: var(--blue-secondary); flex-shrink: 0; }
+.item-text { display: flex; flex-direction: column; }
+.item-label { font-size: 0.85rem; color: #888; text-transform: uppercase; }
+.item-value { font-size: 1rem; font-weight: 600; color: var(--blue-primary); }
 
-.profile-item:last-of-type {
-  border-bottom: none;
-}
-
-.item-icon {
-  color: var(--blue-secondary);
-  flex-shrink: 0;
-}
-
-.item-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.item-label {
-  font-size: 0.85rem;
-  color: #888;
-  text-transform: uppercase;
-}
-
-.item-value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--blue-primary);
-}
-
-/* Treinos Salvos (MOCK) */
 .sidebar-saved-workouts {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0;
 }
+.sidebar-saved-workouts h3 { font-size: 1rem; color: #555; margin-bottom: 10px; }
 
-.sidebar-saved-workouts h3 {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
+/* Conteúdo Principal */
+.workout-main-content { flex-grow: 1; padding: 30px; }
 
-/* Conteúdo Principal do Treino */
-.workout-main-content {
-  flex-grow: 1;
-  padding: 30px;
-}
-
-/* Header Principal (Título e Botões) */
 .main-header {
-  background-color: var(--white);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background-color: var(--white); padding: 20px; border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); margin-bottom: 20px;
+  display: flex; justify-content: space-between; align-items: center;
 }
 
-.main-title-section {
-  text-align: left;
-}
+.main-title-section { text-align: left; }
+.main-workout-title { font-size: 1.8rem; color: var(--blue-primary); margin: 0; font-weight: 700; }
+.main-workout-subtitle { font-size: 1rem; color: #888; margin-top: 5px; }
 
-.main-workout-title {
-  font-size: 1.8rem;
-  color: var(--blue-primary);
-  margin: 0;
-  font-weight: 700;
-}
-
-.main-workout-subtitle {
-  font-size: 1rem;
-  color: #888;
-  margin-top: 5px;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-}
+.actions { display: flex; gap: 10px; }
 
 .btn-chat, .btn-salvar {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
+  display: flex; align-items: center; gap: 5px; padding: 10px 15px;
+  border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none;
 }
-
-.btn-chat {
-  background-color: var(--blue-secondary);
-  color: var(--white);
-}
-
-.btn-salvar {
-  background-color: var(--yellow-accent);
-  color: var(--blue-primary);
-}
+.btn-chat { background-color: var(--blue-secondary); color: var(--white); }
+.btn-salvar { background-color: var(--yellow-accent); color: var(--blue-primary); border: none;}
 
 /* Tabs */
 .workout-tabs {
-  display: flex;
-  gap: 20px;
-  border-bottom: 2px solid #e0e0e0;
-  margin-bottom: 20px;
-  padding-left: 20px;
+  display: flex; gap: 20px; border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 20px; padding-left: 20px;
 }
-
 .tab-button {
-  background: none;
-  border: none;
-  padding: 10px 0;
-  color: #888;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.3s;
+  background: none; border: none; padding: 10px 0; color: #888;
+  font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: color 0.3s;
 }
-
 .tab-button.active {
-  color: var(--blue-primary);
-  border-bottom: 3px solid var(--yellow-accent);
-  margin-bottom: -2px; /* Ajusta para a linha */
+  color: var(--blue-primary); border-bottom: 3px solid var(--yellow-accent); margin-bottom: -2px;
 }
 
-/* Overview Semanal (Cards de cima) */
+/* Overview */
 .workout-overview {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-  padding: 0 20px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px; margin-bottom: 30px; padding: 0 20px;
 }
 
 .day-card {
-  background-color: var(--white);
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  border: 2px solid transparent;
-  transition: all 0.2s;
+  background-color: var(--white); padding: 20px; border-radius: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column;
+  border: 2px solid transparent; transition: all 0.2s;
 }
-
 .day-card.active {
-  border-color: var(--yellow-accent);
-  box-shadow: 0 4px 10px rgba(232, 254, 97, 0.5);
+  border-color: var(--yellow-accent); box-shadow: 0 4px 10px rgba(232, 254, 97, 0.5);
 }
+.day-name { font-size: 0.9rem; color: #888; }
+.day-title { font-size: 1.2rem; color: var(--blue-primary); font-weight: 700; margin: 5px 0 10px; }
+.exercise-count { font-size: 0.9rem; color: #555; }
 
-.day-name {
-  font-size: 0.9rem;
-  color: #888;
-}
-
-.day-title {
-  font-size: 1.2rem;
-  color: var(--blue-primary);
-  font-weight: 700;
-  margin: 5px 0 10px;
-}
-
-.exercise-count {
-  font-size: 0.9rem;
-  color: #555;
-}
-
-/* Detalhes do Treino (Tabela) */
+/* Detalhes (Tabela) */
 .current-workout-details {
-  background-color: var(--white);
-  padding: 30px 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  margin-top: 20px;
+  background-color: var(--white); padding: 30px 20px; border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); margin-top: 20px;
 }
-
 .details-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
 }
-
-.details-header h2 {
-  font-size: 1.5rem;
-  color: var(--blue-primary);
-  margin: 0;
-}
+.details-header h2 { font-size: 1.5rem; color: var(--blue-primary); margin: 0; }
 
 .btn-iniciar {
-  background-color: var(--blue-secondary);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-weight: 600;
+  background-color: var(--blue-secondary); color: var(--white); border: none;
+  display: flex; align-items: center; gap: 5px; padding: 10px 15px;
+  border-radius: 8px; font-weight: 600;
 }
 
-.exercise-list-container {
-  display: flex;
-  flex-direction: column;
-}
+.exercise-list-container { display: flex; flex-direction: column; }
 
+/* --- ESTRUTURA GRID PARA DESKTOP --- */
 .exercise-list-item {
   display: grid;
   grid-template-columns: 50px 1fr 80px 80px 80px; /* Check | Nome | Séries | Reps | Descanso */
@@ -254,54 +123,68 @@
 }
 
 .exercise-list-item.header {
-  font-weight: 700;
-  color: var(--blue-primary);
-  border-bottom: 2px solid var(--blue-primary);
-  padding-bottom: 10px;
+  font-weight: 700; color: var(--blue-primary);
+  border-bottom: 2px solid var(--blue-primary); padding-bottom: 10px;
 }
 
-.check-box {
-  color: #ccc;
-  cursor: pointer;
-}
+.check-box { color: #ccc; cursor: pointer; display: flex; justify-content: center;}
+.ex-name { font-weight: 600; color: #333; }
+.ex-sets, .ex-reps, .ex-rest { text-align: center; }
 
-.ex-name {
-  font-weight: 600;
-  color: #333;
-}
-
-.ex-sets, .ex-reps, .ex-rest {
-  text-align: center;
-}
-
-/* Responsividade */
+/* --- RESPONSIVIDADE CORRIGIDA (EVITA O PULO/QUEBRA) --- */
 @media (max-width: 768px) {
-  .profile-sidebar {
-    display: none; /* Esconde a sidebar em telas pequenas, usando um botão 'Menu' no header */
-  }
+  .profile-sidebar { display: none; }
+  .workout-main-content { padding: 15px; }
 
-  .workout-main-content {
-    padding: 15px;
-  }
+  .main-header { flex-direction: column; align-items: flex-start; }
+  .actions { margin-top: 15px; width: 100%; justify-content: space-between; }
+  .btn-chat, .btn-salvar { flex-grow: 1; justify-content: center; }
 
-  .main-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  /* Esconde o cabeçalho da tabela no mobile, pois mudaremos o layout */
+  .exercise-list-item.header { display: none; }
 
-  .actions {
-    margin-top: 15px;
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .btn-chat, .btn-salvar {
-    flex-grow: 1;
-    justify-content: center;
-  }
-  
+  /* Layout Card para cada exercício no mobile */
   .exercise-list-item {
-    grid-template-columns: 30px 1fr 60px 60px 60px;
-    font-size: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+    gap: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #eee;
   }
+
+  /* 1. Check e Nome no topo */
+  .check-box { 
+    width: 30px; 
+    justify-content: flex-start;
+  }
+  
+  .ex-name {
+    width: calc(100% - 50px); /* Resto da linha */
+    font-size: 1rem;
+  }
+
+  /* 2. Stats em uma linha separada, distribuídos */
+  .ex-sets, .ex-reps, .ex-rest {
+    flex: 1;
+    text-align: center;
+    font-size: 0.85rem;
+    background-color: white;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    
+    /* Adiciona labels via CSS para contexto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Adiciona "Séries", "Reps" em texto pequeno acima do número */
+  .ex-sets::before { content: "Séries"; font-size: 0.7em; color: #888; margin-bottom: 2px; }
+  .ex-reps::before { content: "Reps"; font-size: 0.7em; color: #888; margin-bottom: 2px; }
+  .ex-rest::before { content: "Descanso"; font-size: 0.7em; color: #888; margin-bottom: 2px; }
 }
