@@ -20,53 +20,9 @@ O PersonalIA segue uma arquitetura **Full-Stack** moderna com separação clara 
 PersonalIA/
 │
 ├── frontend/                  # 🎨 Interface do usuário (React + TypeScript)
-│   ├── src/
-│   │   ├── App.tsx            # Componente principal da aplicação
-│   │   ├── main.tsx           # Ponto de entrada do React
-│   │   └── styles/            # Estilos CSS da aplicação
-│   │   └── components/        # Componentes reutilizáveis da interface
-│   │   └── pages/             # Componentes de páginas específicas da aplicação
-│   │   └── services/          # Funções ou chamadas a APIs externas
-│   │   └── tests/             # Testes da aplicação
-│   ├── package.json           # Dependências e scripts do frontend
-│   ├── vite.config.ts         # Configuração do Vite (build tool)
-│   └── tsconfig.json          # Configuração do TypeScript
-│   └── index.html             # Template HTML principal
-│
 ├── src/                       # 🖥️ Backend (FastAPI + MongoDB)
-│   ├── routes/
-│   │   └── treino_routes.py   # Rotas da API de treinos
-│   ├── services/
-│   │   └── gemini_service.py  # Integração com IA Gemini
-│   ├── database/
-│   │   ├── mongodb.py         # Configuração segura do MongoDB
-│   │   └── test_mongodb.py    # Testes de conexão do banco
-│   ├── config/                # Configurações da aplicação (estrutura futura)
-│   ├── models/                # Modelos de dados (estrutura futura)
-│   ├── schemas/               # Schemas Pydantic (estrutura futura)
-│   ├── utils/                 # Utilitários gerais (estrutura futura)
-│   ├── exceptions/            # Tratamento de exceções (estrutura futura)
-│   ├── schemas.py             # Schemas Pydantic centralizados
-│   └── main.py                # Servidor FastAPI principal
-│
 ├── tests/                     # 🧪 Testes automatizados
-│   ├── test_routes.py         # Testes das rotas da API
-│   ├── test_schemas.py        # Testes dos modelos Pydantic
-│   ├── test_gemini_service.py # Testes do serviço Gemini
-│   ├── test_gemini.py         # Testes de integração
-│   ├── conftest.py            # Configurações dos testes
-│   └── README.md              # Documentação dos testes
-│
 ├── requirements.txt           # 📦 Dependências Python
-├── .env.example               # 🔧 Modelo de configuração segura
-├── .env                       # � Variáveis de ambiente (não commitado)
-├── .gitignore                 # 🚫 Arquivos ignorados pelo Git
-├── .pylintrc                  # ⚙️ Configuração do Pylint
-├── .flake8                    # 📏 Configuração do Flake8
-├── pytest.ini                # 🧪 Configuração dos testes
-├── Makefile                   # 🔨 Automação de comandos
-├── README.md                  # 📚 Documentação do projeto
-└── pyproject.toml             # 📋 Configuração do projeto Python
 ```
 
 ### 🔄 Fluxo da Aplicação
@@ -135,10 +91,9 @@ PersonalIA/
 - **Leôncio** – Product Owner  
 - **Arthur** – Líder Técnico  
 - **Yasmin** – Design  
-- **Felipe** – Design  
+- **Felipe** – Design     
+- **Heitor** – Documentação
 - **Victor** – Processo/Pesquisa  
-- **Filipe** – Documentação  
-- **Heitor** – Documentação  
 
 ---
 
