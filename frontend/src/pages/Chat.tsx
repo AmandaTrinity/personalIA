@@ -1,79 +1,44 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom'; 
-import ChatArea from '../components/ChatArea';
-import ChatInput from '../components/ChatInput';
-import { getTreinos } from '../services/treino_api';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
+import { PlanLayout } from '../components/PlanLayout';
 import { getCurrentUser } from '../services/api';
 import '../styles/pages/chat.css'; 
 
 function Chat() {
-  // A resposta da IA. Mensagem fixa do PersonalIA para simular a tela
-  const [iaResponse, setIaResponse] = useState(
-    "Olá! Bem-Vindo ao PersonalIa Encontrar o treino perfeito começa com o seu estado de espírito e objetivos. Para que eu possa te ajudar, me diga um pouco mais:" + 
-    "\n1. Como você se sente agora? (Ex: Com energia, cansado, estressado.)" + 
-    "\n2. Qual o seu principal objetivo? (Ex: Perder peso, ganhar massa, flexibilidade.)" + 
-    "\n3. Quanto tempo você tem disponível? (Ex: 20 minutos, 1 hora.)"
-  );
-  
-  // O que o usuário vai digitar no input.
-  const [currentPrompt, setCurrentPrompt] = useState(""); 
-  
-  //Estado para simular o carregamento (envio para a API)
-  const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const user = getCurrentUser();
 
-  // Função que será chamada ao clicar em "Enviar"
-  const handleSend = async () => {
-    if (!currentPrompt.trim()) return; // Não envia se o input estiver vazio
-
-    if (!user || !user.id) {
-      setIaResponse('Você precisa estar logado para interagir com a IA.');
-      return;
+  useEffect(() => {
+    // Se não houver usuário logado, redireciona para a página de login
+    if (!user) {
+      navigate('/login');
     }
+  }, [user, navigate]);
 
-    setIsLoading(true);
+  // Se o usuário não estiver logado, não renderiza nada para evitar erros
+  if (!user) {
+    return null; 
+  }
 
-    const usuarioId = user.id;
-    
-    try {
-      //chama a API com o prompt do usuário
-      const response = await getTreinos(usuarioId, currentPrompt);
-      console.log('Resposta bruta da API:', response);
-      
-      //Atualiza a resposta da IA com o retorno da API
-      setIaResponse(response);
-      setCurrentPrompt('');
-    } catch(error) {
-      console.error('Erro ao buscar treinos', error);
-      setIaResponse('Erro ao processar sua solicitação. Tente novamente.')
-    } finally {
-      setIsLoading(false);
-    }
+  // Mapeia os dados do usuário logado para o formato esperado pelo PlanLayout
+  const profile = {
+    name: typeof user.nome === 'string' ? user.nome : 'Usuário',
+    email: typeof user.email === 'string' ? user.email : '',
+    age: typeof user.idade === 'number' ? user.idade : 0,
+    gender: typeof user.sexo === 'string' ? user.sexo : 'Não informado',
+    height: typeof user.altura === 'number' ? user.altura : 0,
+    weight: typeof user.peso === 'number' ? user.peso : 0,
+    objective: typeof user.objetivo === 'string' ? user.objetivo : 'Não informado',
+    level: typeof user.nivel === 'string' ? user.nivel : 'iniciante',
+    duration: typeof user.frequencia === 'string' ? user.frequencia : 'Não informado',
+    equipment: typeof user.equipamentos === 'string' ? user.equipamentos : 'Não informado',
+    limitacoes: typeof user.limitacoes === 'string' ? user.limitacoes : 'Nenhuma',
   };
 
   return (
     <div className="chat-page-container">
-      <ChatArea iaResponse={iaResponse} />
-      <ChatInput
-        prompt={currentPrompt}
-        setPrompt={setCurrentPrompt}
-        onSend={handleSend}
-        isLoading={isLoading}
-      />
-
-      <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
-        <Link to="/" className="back-button-link">
-          <button>Voltar para o Início</button>
-        </Link>
-
-        {!user && (
-          <>
-            <Link to="/login"><button>Entrar</button></Link>
-            <Link to="/register"><button>Criar conta</button></Link>
-          </>
-        )}
-      </div>
+      {/* O componente PlanLayout implementa a tela do mockup */}
+      <PlanLayout userProfile={profile} />
     </div>
   );
 }

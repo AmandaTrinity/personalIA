@@ -48,10 +48,10 @@ export function getCurrentUser(): UserSessionData | null {
     const u = JSON.parse(raw) as Record<string, unknown>;
     
     const id = normalizeUserId(u);
-    if (!id) return null;
+    if (!id) return null; // Se não houver ID, o usuário é inválido
     
-    // Converte de volta para UserSessionData
-    return { id, email: u.email as string | undefined }; 
+    // Retorna o objeto de usuário completo, como está no localStorage
+    return u as UserSessionData;
   } catch {
     return null;
   }

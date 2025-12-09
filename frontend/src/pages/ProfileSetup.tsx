@@ -12,7 +12,7 @@ export default function ProfileSetup() {
   const registrationData = location.state as { nome: string, email: string, senha: string } | undefined;
 
   if (!registrationData || !registrationData.email || !registrationData.senha) {
-    navigate('/register');
+    navigate('/register', { replace: true });
     return null; 
   }
 
@@ -34,9 +34,9 @@ export default function ProfileSetup() {
       altura: profile.height,
       peso: profile.weight,
       objetivo: profile.objective,
-      frequencia: profile.duration, 
-      level: profile.level, 
-      equipment: profile.equipment,
+      frequencia: profile.duration,
+      nivel: profile.level,
+      equipamentos: profile.equipment,
       limitacoes: profile.limitations || null, 
     };
 
@@ -46,7 +46,7 @@ export default function ProfileSetup() {
       
       //Salva a sessão (token e usuário) para manter o usuário logado
       saveSession(response); 
-      navigate('/chat');
+      navigate('/chat', { replace: true });
       
     } catch (error: unknown) {
 
