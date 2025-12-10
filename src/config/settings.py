@@ -40,7 +40,7 @@ class Settings:
         # Configurações da API do Gemini
         self.GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
         # Modelo do Gemini a ser usado por padrão (pode ser sobrescrito via ENV)
-        self.GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash-001")
+        self.GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
         # Chave para Tokens JWT (Lida do .env)
         self.SECRET_KEY: str = os.getenv("SECRET_KEY", "")
@@ -70,5 +70,5 @@ class Settings:
 settings = Settings()
 
 # Força o uso do modelo gemini-2.0 por padrão (garante mudança mesmo que .env contenha outro valor)
-settings.GEMINI_MODEL = "gemini-2.0-flash-001"
+settings.GEMINI_MODEL = "gemini-2.5-flash"
 

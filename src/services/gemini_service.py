@@ -109,7 +109,7 @@ def gerar_plano_de_treino(arg1=None, arg2=None, user: Optional[dict] = None, his
 
         model_name = getattr(settings, "GEMINI_MODEL", None)
         if not isinstance(model_name, str) or not model_name:
-            model_name = "gemini-2.0-flash-001"
+            model_name = "gemini-2.5-flash"
 
         # Monta o PROMPT DO USUÁRIO
         equipamentos_str = ", ".join(data.equipamentos) if getattr(data, "equipamentos", None) else "peso corporal"

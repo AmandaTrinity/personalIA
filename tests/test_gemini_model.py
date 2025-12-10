@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
-MODEL = os.getenv("GEMINI_MODEL") or "gemini-2.0-flash-001"
+MODEL = os.getenv("GEMINI_MODEL") or "gemini-2.5-flash"
 
 pytestmark = pytest.mark.skipif(not API_KEY, reason="GEMINI_API_KEY não definida no ambiente")
 
