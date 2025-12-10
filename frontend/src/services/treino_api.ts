@@ -5,11 +5,7 @@ const API_URL: string = (import.meta.env.VITE_API_URL as string) || "http://127.
 
 if (!API_URL) throw new Error("VITE_API_URL não está definida no ambiente.");
 
-// Header de auth opcional a partir do localStorage ("token")
-function authHeader() {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
+// Nota: construímos headers inline como Record<string,string> para evitar conflitos com HeadersInit
 
 // Novo tipo para o corpo da mensagem, espelhando o Pydantic MensagemChat do backend
 export interface PlanRequestData {
@@ -26,48 +22,52 @@ export async function sendPlanRequest(
   data: PlanRequestData
 ): Promise<string> {
   try {
-    // Rota autenticada: POST /treinos (o usuário é inferido pelo token no authHeader)
-    const resp = await fetch(`${API_URL}/treinos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...authHeader(), // Usa o token do usuário logado
-      },
+    // Rota autenticada: POST /treinos (o usuário é inferido pelo token no token do localStorage)
+    const url = `${API_URL.replace(/\/+$/,'')}/treinos`;
+    const headers: Record<string,string> = { 'Content-Type': 'application/json' };
+    const token = localStorage.getItem('token');
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: headers as HeadersInit,
       body: JSON.stringify(data),
     });
 
     if (!resp.ok) {
       const errorText = await resp.text().catch(() => "");
-      let errorData: any = {};
+      let errorData: unknown = undefined;
       try {
-        errorData = JSON.parse(errorText);
-      } catch {}
-      const errorMessage = errorData?.detail || errorData?.message || errorText;
-      
-      throw new Error(
-        `Falha na requisição (${resp.status}): ${errorMessage}`
-      );
+        errorData = JSON.parse(errorText) as unknown;
+      } catch {
+        // se não for JSON, ignore e use o texto bruto
+        errorData = undefined;
+      }
+      const safeGet = (obj: unknown, key: string) => {
+        try {
+          if (!obj || typeof obj !== 'object') return undefined;
+          return (obj as Record<string, unknown>)[key];
+        } catch { return undefined; }
+      }
+      const errorMessage = safeGet(errorData, 'detail') || safeGet(errorData, 'message') || errorText;
+      throw new Error(`Falha na requisição (${resp.status}): ${errorMessage}`);
     }
 
     // O backend responde: { status: "ok", treino: { plano_gerado: string, ... } }
-    const responseData = await resp.json().catch(() => ({} as any));
-
-    // 1) Caso de sucesso esperado: { treino: { plano_gerado: string } }
-    if (responseData?.treino?.plano_gerado && typeof responseData.treino.plano_gerado === "string") {
-      return responseData.treino.plano_gerado as string;
+    const responseData: unknown = await resp.json().catch(() => ({} as unknown));
+    type BackendResponse = { treino?: { plano_gerado?: string }; plano_gerado?: string } | Record<string, unknown>;
+    const rd = responseData as BackendResponse;
+    if (rd && typeof rd === 'object') {
+      if ('treino' in rd) {
+        const treinoObj = (rd as { treino?: { plano_gerado?: string } }).treino;
+        if (treinoObj && typeof treinoObj.plano_gerado === 'string') return treinoObj.plano_gerado;
+      }
+      if ('plano_gerado' in rd && typeof (rd as { plano_gerado?: unknown }).plano_gerado === 'string') {
+        return (rd as { plano_gerado?: string }).plano_gerado as string;
+      }
     }
 
-    // 2) Fallback se o backend responder algo diferente (ex: para mensagens de "não relacionadas ao treino")
-    if (responseData?.plano_gerado && typeof responseData.plano_gerado === "string") {
-      return responseData.plano_gerado as string;
-    }
-    
-    // 3) Se for JSON, retorna stringify para debug
-    if (typeof responseData === 'object' && responseData !== null) {
-        return JSON.stringify(responseData, null, 2);
-    }
-
-    // 4) Se for texto puro
+    if (typeof responseData === 'object' && responseData !== null) return JSON.stringify(responseData, null, 2);
     return String(responseData);
 
   } catch (err) {
@@ -87,7 +87,7 @@ export async function sendPlanRequest(
  * com código que não usa a estrutura PlanRequestData.
  */
 export async function getTreinos(
-  usuarioId: string, // <-- Parâmetro ignorado, mas mantido para compatibilidade
+  _usuarioId: string, // <-- Parâmetro ignorado, mantido para compatibilidade (prefixado com _ para evitar lint)
   prompt: string
 ): Promise<string> {
     const defaultData: PlanRequestData = {
@@ -102,27 +102,32 @@ export async function getTreinos(
 // ----------------------------------------------------
 // Tipo e função necessários para TreinoDetalhe.tsx
 // ----------------------------------------------------
-export type TreinoDetalhe = any; // Tipo temporário a ser definido
+export type TreinoDetalhe = Record<string, unknown>; // tipo genérico até definirmos a interface correta
 
 export async function getTreinoDetalhe(treinoId: string): Promise<TreinoDetalhe> {
   // Rota GET para buscar um treino por ID
   try {
-    const resp = await fetch(`${API_URL}/treinos/${encodeURIComponent(treinoId)}`, {
-        method: "GET",
-        headers: authHeader(),
+    const url = `${API_URL.replace(/\/+$/,'')}/treinos/${encodeURIComponent(treinoId)}`;
+    const headers: Record<string,string> = {};
+    const token = localStorage.getItem('token');
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const resp = await fetch(url, {
+      method: 'GET',
+      headers: headers as HeadersInit,
     });
 
     if (resp.status === 404) {
-        throw new Error("Treino não encontrado.");
+      throw new Error('Treino não encontrado.');
     }
 
     if (!resp.ok) {
-        throw new Error(`Falha ao carregar detalhe do treino: ${resp.status} ${resp.statusText}`);
+      throw new Error(`Falha ao carregar detalhe do treino: ${resp.status} ${resp.statusText}`);
     }
 
-    return await resp.json();
+    return await resp.json() as TreinoDetalhe;
   } catch (err) {
-    console.error("Erro ao buscar detalhes do treino:", err);
-    throw new Error("Falha ao buscar detalhes do treino.");
+    console.error('Erro ao buscar detalhes do treino:', err);
+    throw new Error('Falha ao buscar detalhes do treino.');
   }
 }

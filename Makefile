@@ -4,8 +4,9 @@
 .PHONY: help install test lint format clean dev build docker run-server test-gemini check-env all
 
 # Variáveis
-PYTHON = python
-PIP = pip
+# Detecta o binário 'python' disponível no ambiente (venv/conda) e usa como padrão.
+PYTHON ?= $(shell command -v python || command -v python3 || echo python)
+PIP ?= $(shell command -v pip || command -v pip3 || echo pip)
 VENV = venv
 SRC_DIR = src
 TEST_DIR = tests

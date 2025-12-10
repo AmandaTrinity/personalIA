@@ -25,7 +25,7 @@ function parsePlanoDeTreino(markdown: string): ParsedWorkout | null {
   const lines = markdown.split('\n').filter(line => line.trim() !== '');
   const exercises: Exercise[] = [];
   let currentTitle = 'Treino Personalizado';
-  let currentDay = 'Dia de Treino';
+  const currentDay = 'Dia de Treino';
   let currentName = '';
   
   // Regex para capturar NOME e FOCO (usando os números 1., 2., etc.)
@@ -33,7 +33,7 @@ function parsePlanoDeTreino(markdown: string): ParsedWorkout | null {
   // Regex para capturar SÉRIES e REPETIÇÕES
   const executionRegex = /Execução:\s*(\d+)\s*série(s)?\s*de\s*(\d+)\s*repetiç(ões|ão)/i;
   // Regex para capturar Desanso
-  const restRegex = /(descan[sç]o|intervalo):\s*(\d+s|\d+m|[\d\.]+ min)/i;
+  const restRegex = /(descan[sç]o|intervalo):\s*(\d+s|\d+m|\d+\.?\d*\s*min)/i;
 
   for (const line of lines) {
     if (line.toLowerCase().includes('plano de treino:')) {
@@ -135,15 +135,22 @@ export default function TreinoDetalhe() {
       try {
         const data = await getTreinoDetalhe(treinoId);
         setTreino(data);
-        
+
         // Processa o plano gerado para o formato da UI
-        const parsed = parsePlanoDeTreino(data.plano_gerado);
+        const planoText = (typeof data === 'object' && data !== null ? (data as Record<string, unknown>)['plano_gerado'] : undefined) as unknown;
+        const planoStr = typeof planoText === 'string' ? planoText : '';
+        const parsed = parsePlanoDeTreino(planoStr);
         if (!parsed) {
           setError('Não foi possível estruturar o plano de treino. Exibindo texto bruto.');
         }
-        setParsedData(parsed); 
-      } catch (e: any) {
-        setError(e.message || 'Falha ao carregar detalhes do treino. Verifique o backend.');
+        setParsedData(parsed);
+      } catch (err: unknown) {
+        let msg: string | undefined;
+        if (typeof err === 'object' && err !== null && 'message' in err) {
+          const e = err as { message?: unknown };
+          if (typeof e.message === 'string') msg = e.message;
+        }
+        setError(msg || 'Falha ao carregar detalhes do treino. Verifique o backend.');
       } finally {
         setLoading(false);
       }
@@ -156,19 +163,21 @@ export default function TreinoDetalhe() {
   if (error && !treino) return <div className="treino-error">{error} <Link to="/chat">Voltar ao Chat</Link></div>;
 
   // Se houve erro no parsing, mas temos os dados, exibe o texto bruto.
-  if (!treino || (!parsedData && !treino.plano_gerado)) return <div className="treino-not-found">Treino não encontrado.</div>;
-  
+  const planoGeradoText = treino && typeof treino === 'object' ? (treino as Record<string, unknown>)['plano_gerado'] : undefined;
+  const planoGeradoStr = typeof planoGeradoText === 'string' ? planoGeradoText : '';
+  if (!treino || (!parsedData && !planoGeradoStr)) return <div className="treino-not-found">Treino não encontrado.</div>;
+
   // Usaremos o treino gerado como base para o nome do treino (o título grande)
-  const workoutTitle = treino.plano_gerado.split('\n')[0].replace('Plano de Treino:', '').trim() || 'Plano de Treino';
+  const workoutTitle = planoGeradoStr.split('\n')[0].replace('Plano de Treino:', '').trim() || 'Plano de Treino';
 
 
   // Mapeamento do Perfil para o Painel Lateral
   const profileItems = [
-    { label: 'Objetivo', value: getObjectiveText(treino.objetivo), icon: <Target size={20} /> },
-    { label: 'Nível', value: getLevelText(treino.level), icon: <Dumbbell size={20} /> },
-    { label: 'Frequência', value: treino.frequencia, icon: <Zap size={20} /> },
-    { label: 'Equipamento', value: getEquipmentText(treino.equipment), icon: <ClipboardList size={20} /> },
-    { label: 'Idade', value: treino.idade || 'N/A', icon: <HeartPulse size={20} /> },
+    { label: 'Objetivo', value: getObjectiveText(typeof treino === 'object' && treino ? (treino as Record<string, unknown>)['objetivo'] as string | undefined : undefined), icon: <Target size={20} /> },
+    { label: 'Nível', value: getLevelText(typeof treino === 'object' && treino ? (treino as Record<string, unknown>)['level'] as string | undefined : undefined), icon: <Dumbbell size={20} /> },
+    { label: 'Frequência', value: typeof treino === 'object' && treino ? ((treino as Record<string, unknown>)['frequencia'] as string | undefined) : undefined, icon: <Zap size={20} /> },
+    { label: 'Equipamento', value: getEquipmentText(typeof treino === 'object' && treino ? (treino as Record<string, unknown>)['equipment'] as string | undefined : undefined), icon: <ClipboardList size={20} /> },
+    { label: 'Idade', value: typeof treino === 'object' && treino ? ((treino as Record<string, unknown>)['idade'] as string | undefined) : 'N/A', icon: <HeartPulse size={20} /> },
   ];
 
   return (
@@ -267,7 +276,7 @@ export default function TreinoDetalhe() {
                 ) : (
                    <div className="raw-markdown-area mt-4">
                       <p>Não foi possível exibir em formato de tabela. Texto bruto da IA:</p>
-                      <ReactMarkdown>{treino.plano_gerado}</ReactMarkdown>
+                      <ReactMarkdown>{planoGeradoStr}</ReactMarkdown>
                   </div>
                 )}
             </section>

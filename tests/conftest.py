@@ -5,6 +5,10 @@ import sys
 import os
 from pathlib import Path
 import warnings
+import socket
+import subprocess
+import time
+import pytest
 
 # Definir ambiente de teste
 os.environ["ENVIRONMENT"] = "test"

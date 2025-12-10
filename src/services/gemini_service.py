@@ -45,7 +45,31 @@ SYSTEM_INSTRUCTION_PLANO = (
 )
 # --- FIM NOVOS CONSTANTES DE INSTRUÇÃO ---
 
-def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, historico: Optional[str] = None) -> str:
+def gerar_plano_de_treino(arg1, arg2=None, historico: Optional[str] = None) -> str:
+    """
+    Compatibilidade de chamada: suportamos chamadas antigas e novas assinaturas.
+    Possíveis formas:
+      - gerar_plano_de_treino(data: MensagemChat, user: Optional[dict]=None, historico=None)
+      - gerar_plano_de_treino(user_any, data: MensagemChat)
+
+    Aqui normalizamos os argumentos para (data: MensagemChat, user: Optional[dict], historico: Optional[str]).
+    """
+    # Normaliza argumentos
+    data: MensagemChat | None = None
+    user: Optional[dict] = None
+    if isinstance(arg1, MensagemChat):
+        data = arg1
+        user = arg2 if isinstance(arg2, dict) else None
+    else:
+        # arg1 provavelmente é o usuário (string id ou dict) e arg2 é o data
+        data = arg2 if isinstance(arg2, MensagemChat) else None
+        if isinstance(arg1, dict):
+            user = arg1
+        else:
+            user = None
+    # Validação mínima
+    if data is None:
+        raise ValueError('gerar_plano_de_treino: data (MensagemChat) não fornecida')
     """
     Gera o texto do plano de treino ou responde a uma dúvida (SÍNCRONO).
     """
@@ -54,7 +78,7 @@ def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, histo
         return "Erro: GEMINI_API_KEY não configurada"
 
     # 1. Lógica para DETECTAR INTENÇÃO (Geração de Plano vs. Dúvida/Chat)
-    mensagem_lower = data.mensagem_usuario.lower().strip()
+    mensagem_lower = getattr(data, 'mensagem_usuario', '').lower().strip()
     
     # Detecção V2: Se contiver palavras-chave de plano (treino, plano, foco)
     is_plan_request = any(
@@ -80,7 +104,7 @@ def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, histo
 
         model_name = getattr(settings, "GEMINI_MODEL", None)
         if not isinstance(model_name, str) or not model_name:
-            model_name = "gemini-2.5-flash-lite"
+            model_name = "gemini-2.0-flash-001"
 
         # Monta o PROMPT DO USUÁRIO
         equipamentos_str = ", ".join(data.equipamentos) if getattr(data, "equipamentos", None) else "peso corporal"

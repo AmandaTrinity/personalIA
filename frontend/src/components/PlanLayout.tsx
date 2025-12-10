@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Info, Loader, Youtube, Pencil, X, LogOut } from 'lucide-react';
+import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Loader, Youtube, Pencil, X, LogOut } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/pages/trainingPlan.css'; 
 // Importa a nova função para comunicação com a API e o tipo de dados
