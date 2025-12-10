@@ -1,9 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
-import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Info } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Info, Loader, Youtube, Pencil, X, LogOut } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/pages/trainingPlan.css'; 
 // Importa a nova função para comunicação com a API e o tipo de dados
 import { sendPlanRequest, type PlanRequestData } from '../services/treino_api';
+import { logout } from '../services/auth_api';
+import { getExerciseVideo } from '../../../docs/exerciseLibrary';
 
 // --- Tipos de Dados ---
 interface UserProfile {
@@ -76,83 +79,231 @@ function getEquipmentText(equipment?: string): string {
   return equipments[equipment || 'sem-equipamento'] || 'Sem Equipamento';
 }
 
-// REMOVIDA: function generateAIResponse(userMessage: string, profile: UserProfile): string {
-
 // --- Componente Principal ---
 
 export function PlanLayout({ userProfile }: PlanLayoutProps) {
-  // MOCK: Plano de treino baseado na imagem e no perfil mockado
-  const mockWorkoutPlan: WorkoutDay[] = [
-    {
-      day: "Segunda-feira",
-      title: "Peito e Braços em Casa",
-      exercises: [
-        { name: "Flexão de Braço no Chão", sets: "3", reps: "10-15", rest: "60s", completed: true },
-        { name: "Flexão com Joelhos Apoiados", sets: "3", reps: "15", rest: "45s", completed: true },
-        { name: "Mergulho na Cadeira (Tríceps)", sets: "3", reps: "12", rest: "45s", completed: false },
-        { name: "Abdominal Crunch", sets: "3", reps: "15", rest: "30s", completed: false },
-        { name: "Prancha (Core)", sets: "3", reps: "60s", rest: "30s", completed: false },
-        { name: "Alongamento Peitoral", sets: "1", reps: "30s", rest: "0s", completed: false },
-      ],
-    },
-    {
-      day: "Quarta-feira",
-      title: "Pernas e Glúteos",
-      exercises: [
-        { name: "Agachamento Livre", sets: "3", reps: "12-15", rest: "60s", completed: false },
-        { name: "Avanço (Afundo)", sets: "3", reps: "10 (cada perna)", rest: "60s", completed: false },
-        { name: "Elevação de Panturrilha", sets: "3", reps: "20", rest: "30s", completed: false },
-        { name: "Elevação de Quadril (Glúteo)", sets: "3", reps: "15", rest: "45s", completed: false },
-        { name: "Alongamento de Isquiotibiais", sets: "1", reps: "30s", rest: "0s", completed: false },
-      ],
-    },
-    {
-      day: "Sexta-feira",
-      title: "Abdômen e Core",
-      exercises: [
-        { name: "Elevação de Pernas", sets: "3", reps: "15", rest: "45s", completed: false },
-        { name: "Bicicleta no Chão", sets: "3", reps: "20 (total)", rest: "45s", completed: false },
-        { name: "Prancha Lateral", sets: "3", reps: "45s (cada lado)", rest: "30s", completed: false },
-        { name: "Rotação Russa", sets: "3", reps: "15 (cada lado)", rest: "45s", completed: false },
-      ],
-    },
-  ];
-
-  const [workoutPlan, setWorkoutPlan] = useState<WorkoutDay[]>(mockWorkoutPlan);
-  const [currentWorkout, setCurrentWorkout] = useState<WorkoutDay>(mockWorkoutPlan[0]);
+  const navigate = useNavigate();
+  // Estado local do perfil para permitir edição
+  const [profile, setProfile] = useState<UserProfile>(userProfile);
+  
+  const [workoutPlan, setWorkoutPlan] = useState<WorkoutDay[]>([]);
+  const [currentWorkout, setCurrentWorkout] = useState<WorkoutDay | null>(null);
+  const [isGenerating, setIsGenerating] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [savedWorkouts, setSavedWorkouts] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'workout' | 'progress'>('workout');
+  
+  // Estados para edição de perfil
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editFormData, setEditFormData] = useState<UserProfile>(userProfile);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Calcula a porcentagem de conclusão para o indicador de progresso
+  // (Movido para cima para ser usado no useMemo)
   const getCompletionPercentage = (workout: WorkoutDay) => {
     const completed = workout.exercises.filter(e => e.completed).length;
     if (workout.exercises.length === 0) return 0;
     return Math.round((completed / workout.exercises.length) * 100);
   };
+
+  // MVP: Gera dados mockados para o gráfico de evolução (estilo GitHub)
+  // Cria um array de ~150 dias atrás até hoje
+  const evolutionData = useMemo(() => {
+    const data = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normaliza para meia-noite
+
+    // Determina o início da semana atual (Domingo)
+    const currentDayOfWeek = today.getDay(); // 0 (Dom) a 6 (Sab)
+    const startOfCurrentWeek = new Date(today);
+    startOfCurrentWeek.setDate(today.getDate() - currentDayOfWeek);
+    startOfCurrentWeek.setHours(0, 0, 0, 0);
+
+    for (let i = 150; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      
+      let level = 0;
+
+      // Se a data for anterior a essa semana, inicia zerado
+      if (date < startOfCurrentWeek) {
+        level = 0;
+      } else {
+        // Se for a semana atual, usa os dados REAIS do workoutPlan (checkboxes)
+        const dayNameMap = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+        const dayName = dayNameMap[date.getDay()];
+        
+        // Procura se existe um treino para esse dia (ex: "Segunda-feira")
+        const workoutForDay = workoutPlan.find(w => w.day.toLowerCase().includes(dayName) || w.title.toLowerCase().includes(dayName));
+        
+        if (workoutForDay) {
+          const pct = getCompletionPercentage(workoutForDay);
+          if (pct > 0) level = 1;
+          if (pct > 25) level = 2;
+          if (pct > 50) level = 3;
+          if (pct > 75) level = 4;
+        }
+      }
+      
+      data.push({ date, level });
+    }
+    return data;
+  }, [workoutPlan]); // Recalcula sempre que o plano (checkboxes) mudar
   
+  // Calcula as estatísticas de evolução (dias treinados, sequências, etc.)
+  const evolutionStats = useMemo(() => {
+    const trainedDays = evolutionData.filter(d => d.level > 0).length;
+
+    let longestStreak = 0;
+    let currentLongest = 0;
+    for (const day of evolutionData) {
+      if (day.level > 0) {
+        currentLongest++;
+      } else {
+        longestStreak = Math.max(longestStreak, currentLongest);
+        currentLongest = 0;
+      }
+    }
+    longestStreak = Math.max(longestStreak, currentLongest); // Checagem final
+
+    let currentStreak = 0;
+    // A sequência "atual" é contada de hoje para trás.
+    const reversedData = [...evolutionData].reverse();
+    
+    // Permite que a sequência continue se o treino de hoje ainda não foi feito,
+    // mas o de ontem foi (para não zerar a sequência logo de manhã).
+    let startIndex = 0;
+    if (reversedData.length > 1 && reversedData[0].level === 0 && reversedData[1].level > 0) {
+      startIndex = 1;
+    }
+
+    for (let i = startIndex; i < reversedData.length; i++) {
+      if (reversedData[i].level > 0) {
+        currentStreak++;
+      } else {
+        break; // A sequência foi quebrada
+      }
+    }
+    
+    return { trainedDays, longestStreak, currentStreak };
+  }, [evolutionData]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   
+  // Função para parsear o Markdown da IA em objetos WorkoutDay
+  const parseMarkdownToWorkoutPlan = (text: string): WorkoutDay[] => {
+    const days: WorkoutDay[] = [];
+    // Divide por "### " que indica início de um dia
+    const daySections = text.split(/^###\s+/m).slice(1);
+
+    daySections.forEach(section => {
+      const lines = section.split('\n').filter(l => l.trim());
+      if (lines.length === 0) return;
+
+      // Primeira linha é o título do dia (ex: "Dia 1: Peito")
+      const header = lines[0].trim();
+      let day = "Treino";
+      let title = header;
+      
+      if (header.includes(':')) {
+        const parts = header.split(':');
+        day = parts[0].trim();
+        title = parts.slice(1).join(':').trim();
+      }
+
+      const exercises: Exercise[] = [];
+      // Regex para: 1. **Nome**: 3 séries de 10 reps, descanso de 60s
+      const regex = /^\d+\.\s*\*\*?(.*?)\*\*?:\s*(\d+)\s*séries\s*de\s*(.*?)\s*(?:reps|repetições|repeticoes),\s*(?:descanso|intervalo)\s*de\s*(.*)/i;
+
+      for (let i = 1; i < lines.length; i++) {
+        const match = lines[i].match(regex);
+        if (match) {
+          exercises.push({
+            name: match[1].trim(),
+            sets: match[2].trim(),
+            reps: match[3].trim(),
+            rest: match[4].trim(),
+            completed: false
+          });
+        }
+      }
+
+      if (exercises.length > 0) {
+        days.push({ day, title, exercises });
+      }
+    });
+    
+    return days;
+  };
+
   useEffect(() => {
     // Mensagem inicial de boas-vindas no chat
     const welcomeMessage: Message = {
       id: 1,
       sender: 'ai',
-      text: `Olá ${userProfile.name}! Seu plano de treino já está pronto e personalizado para ${getObjectiveText(userProfile.objective)}!`,
+      text: `Olá ${profile.name}! Estou gerando um plano de treino personalizado para ${getObjectiveText(profile.objective)}.`,
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
-  }, [userProfile.name]);
+  }, [profile.name, profile.objective]);
+
+  // Atualiza o perfil local se a prop mudar
+  useEffect(() => {
+    setProfile(userProfile);
+  }, [userProfile]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Gera o plano ao carregar
+  useEffect(() => {
+    const generatePlan = async () => {
+      setIsGenerating(true);
+      try {
+        const prompt = `Crie um plano de treino semanal completo para um usuário com:
+        - Objetivo: ${profile.objective}
+        - Nível: ${profile.level}
+        - Frequência: ${profile.duration}
+        - Equipamentos: ${profile.equipment}
+        - Limitações: ${profile.limitacoes || 'Nenhuma'}
+        
+        Formate a resposta estritamente em Markdown.
+        Para cada dia, use o formato "### Dia X: Dia da Semana - Foco do Treino".
+        Exemplo: "### Dia 1: Segunda-feira - Peito e Tríceps".
+        IMPORTANTE: O título DEVE especificar os grupos musculares (ex: "Costas e Bíceps", "Pernas"). Evite "Corpo Inteiro" para todos os dias, prefira dividir o treino se a frequência permitir.
+        IMPORTANTE: Cada dia de treino deve ter pelo menos 5 exercícios.
+        Para exercícios, use "1. **Nome**: X séries de Y reps, descanso de Z".`;
+
+        const requestData: PlanRequestData = {
+          mensagem_usuario: prompt,
+          nivel: profile.level,
+          objetivo: profile.objective,
+          equipamentos: profile.equipment ? [profile.equipment] : [],
+          frequencia: profile.duration
+        };
+
+        const response = await sendPlanRequest(requestData);
+        const parsed = parseMarkdownToWorkoutPlan(response);
+        
+        if (parsed.length > 0) {
+          setWorkoutPlan(parsed);
+          setCurrentWorkout(parsed[0]);
+        }
+      } catch (error) {
+        console.error("Erro ao gerar plano:", error);
+      } finally {
+        setIsGenerating(false);
+      }
+    };
+
+    generatePlan();
+  }, [profile]); // Regenera quando o perfil muda (ex: após edição)
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -172,11 +323,11 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       // Mapeia o perfil do usuário para o corpo da API (PlanRequestData)
       const requestBody: PlanRequestData = {
           mensagem_usuario: userMessage.text,
-          nivel: userProfile.level,
-          objetivo: userProfile.objective,
+          nivel: profile.level,
+          objetivo: profile.objective,
           // O backend espera List[str] para equipamentos
-          equipamentos: userProfile.equipment ? [userProfile.equipment] : undefined,
-          frequencia: userProfile.duration,
+          equipamentos: profile.equipment ? [profile.equipment] : undefined,
+          frequencia: profile.duration,
       };
 
       // Chamada real à API do Gemini via backend
@@ -233,6 +384,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
   };
 
   const handleSaveWorkout = () => {
+    if (!currentWorkout) return;
     setSavedWorkouts([...savedWorkouts, `${currentWorkout.title} - ${new Date().toLocaleDateString('pt-BR')}`]);
     const aiMessage: Message = {
       id: messages.length + 1,
@@ -246,6 +398,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
   // Renderiza os detalhes do exercício na tabela
   const renderExerciseRow = (exercise: Exercise, index: number, workoutDay: WorkoutDay) => {
     const isCompleted = exercise.completed;
+    const videoUrl = getExerciseVideo(exercise.name);
 
     return (
       <div 
@@ -260,6 +413,18 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         {/* COLUNA 2: Nome (Filho direto do Grid, vai crescer e quebrar linha se precisar) */}
         <span className={`exercise-name ${isCompleted ? 'text-strikethrough' : ''}`}>
           {exercise.name}
+          {videoUrl && (
+            <a
+              href={videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{ marginLeft: '8px', display: 'inline-flex', alignItems: 'center', color: '#3883CE', verticalAlign: 'middle' }}
+              title="Ver execução no YouTube"
+            >
+              <Youtube size={18} />
+            </a>
+          )}
         </span>
 
         {/* COLUNA 3: Estatísticas */}
@@ -281,6 +446,34 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     );
   };
 
+  // Handlers para edição de perfil
+  const openEditModal = () => {
+    setEditFormData({ ...profile });
+    setIsEditingProfile(true);
+  };
+
+  const saveProfileChanges = () => {
+    setProfile(editFormData);
+    setIsEditingProfile(false);
+    // Aqui você poderia adicionar uma chamada para salvar no backend
+    // e.g., updateProfile(editFormData);
+    setMessages(prev => [...prev, { id: Date.now(), sender: 'ai', text: `Perfil atualizado! Gerando um novo treino para ${getObjectiveText(editFormData.objective)}...`, timestamp: new Date() }]);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  if (isGenerating) {
+    return (
+      <div className="plan-page-container" style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+        <Loader className="animate-spin" size={48} color="#3883CE" />
+        <h2 style={{ marginTop: '20px', color: '#3883CE' }}>Criando seu treino personalizado...</h2>
+        <p style={{ color: '#666' }}>Analisando seu perfil e objetivos.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="plan-page-container">
@@ -289,32 +482,35 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         <div className="sidebar-header">
           <div className="logo-container">
             <Dumbbell className="logo-icon" />
-            <span className="logo-text">FitPlan AI</span>
+            <span className="logo-text">Personal IA</span>
           </div>
           <div className="user-info">
             <div className="user-text">Bem-vindo,</div>
-            <div className="user-name">{userProfile.name || 'Usuário'}</div>
+            <div className="user-name">{profile.name || 'Usuário'}</div>
           </div>
         </div>
 
         <div className="sidebar-content">
           <div className="profile-section">
-            <h3 className="section-title">Seu Perfil</h3>
+            <div className="section-header-row">
+              <h3 className="section-title">Seu Perfil</h3>
+              <button className="edit-profile-btn" onClick={openEditModal} title="Editar Perfil"><Pencil size={14} /></button>
+            </div>
             <div className="profile-item">
               <div className="item-label">Objetivo</div>
-              <div className="item-value">{getObjectiveText(userProfile.objective)}</div>
+              <div className="item-value">{getObjectiveText(profile.objective)}</div>
             </div>
             <div className="profile-item">
               <div className="item-label">Nível</div>
-              <div className="item-value">{getLevelText(userProfile.level)}</div>
+              <div className="item-value">{getLevelText(profile.level)}</div>
             </div>
             <div className="profile-item">
               <div className="item-label">Duração</div>
-              <div className="item-value">{userProfile.duration || '15 minutos'}</div>
+              <div className="item-value">{profile.duration || '15 minutos'}</div>
             </div>
             <div className="profile-item">
               <div className="item-label">Equipamento</div>
-              <div className="item-value">{getEquipmentText(userProfile.equipment)}</div>
+              <div className="item-value">{getEquipmentText(profile.equipment)}</div>
             </div>
           </div>
 
@@ -332,6 +528,13 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="sidebar-footer">
+          <button className="logout-button" onClick={handleLogout}>
+            <LogOut size={20} />
+            <span>Sair</span>
+          </button>
         </div>
       </div>
       
@@ -365,6 +568,10 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
             <Dumbbell size={18} />
             Meu Treino
           </div>
+          <div className={`tab ${activeTab === 'progress' ? 'active' : ''}`} onClick={() => setActiveTab('progress')}>
+            <BarChart3 size={18} />
+            Evolução
+          </div>
         </div>
 
         {/* Tab Content: Meu Treino */}
@@ -375,7 +582,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
               {workoutPlan.map((workout, index) => (
                 <div
                   key={index}
-                  className={`workout-card ${currentWorkout.day === workout.day ? 'active-card' : ''}`}
+                  className={`workout-card ${currentWorkout?.day === workout.day ? 'active-card' : ''}`}
                   onClick={() => setCurrentWorkout(workout)}
                 >
                   <div className="card-day">{workout.day}</div>
@@ -392,27 +599,49 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
             </div>
 
             {/* Detalhes do Treino Atual */}
-            <div className="current-workout-details">
-              <div className="details-header">
-                <div className="header-text-group">
-                  <h2 className="details-title">{currentWorkout.title}</h2>
-                  <span className="details-subtitle">{currentWorkout.day}</span>
+            {currentWorkout && (
+              <div className="current-workout-details">
+                <div className="details-header">
+                  <div className="header-text-group">
+                    <h2 className="details-title">{currentWorkout.title}</h2>
+                    <span className="details-subtitle">{currentWorkout.day}</span>
+                  </div>
+                  
+                  <button className="start-button">
+                    <Play size={18} /> Iniciar Treino
+                  </button>
                 </div>
-                
-                <button className="start-button">
-                  <Play size={18} /> Iniciar Treino
-                </button>
-              </div>
 
-              <div className="exercise-list-container">
-                {currentWorkout.exercises.map((exercise, index) =>
-                  renderExerciseRow(exercise, index, currentWorkout)
-                )}
+                <div className="exercise-list-container">
+                  {currentWorkout.exercises.map((exercise, index) =>
+                    renderExerciseRow(exercise, index, currentWorkout)
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* Tab Content: Evolução (MVP) */}
+        {activeTab === 'progress' && (
+          <div className="evolution-content-area">
+            <div className="stats-grid-mvp">
+              <div className="stat-card-mvp">
+                <h4>Dias Treinados</h4>
+                <div className="stat-number">{evolutionStats.trainedDays}</div>
+              </div>
+              <div className="stat-card-mvp">
+                <h4>Sequência Atual</h4>
+                <div className="stat-number">{evolutionStats.currentStreak} dias</div>
+              </div>
+              <div className="stat-card-mvp">
+                <h4>Maior Sequência</h4>
+                <div className="stat-number">{evolutionStats.longestStreak} dias</div>
               </div>
             </div>
           </div>
         )}
-        
+
       </div>
 
       {/* 3. Chat Sidebar/Modal */}
@@ -474,6 +703,77 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
               >
                 <Send size={18} />
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. Edit Profile Modal */}
+      {isEditingProfile && (
+        <div className="modal-overlay">
+          <div className="edit-profile-modal">
+            <div className="modal-header">
+              <h3>Editar Perfil</h3>
+              <button className="close-modal-btn" onClick={() => setIsEditingProfile(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Objetivo</label>
+                <select 
+                  value={editFormData.objective} 
+                  onChange={(e) => setEditFormData({...editFormData, objective: e.target.value})}
+                >
+                  <option value="ganhar-massa">Ganhar Massa</option>
+                  <option value="perder-peso">Perder Peso</option>
+                  <option value="condicionamento">Condicionamento</option>
+                  <option value="resistencia">Resistência</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Nível</label>
+                <select 
+                  value={editFormData.level} 
+                  onChange={(e) => setEditFormData({...editFormData, level: e.target.value})}
+                >
+                  <option value="iniciante">Iniciante</option>
+                  <option value="intermediario">Intermediário</option>
+                  <option value="avancado">Avançado</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Frequência</label>
+                <select 
+                  value={editFormData.duration} 
+                  onChange={(e) => setEditFormData({...editFormData, duration: e.target.value})}
+                >
+                  <option value="1-2 dias por semana">1-2 dias por semana</option>
+                  <option value="3 dias por semana">3 dias por semana</option>
+                  <option value="4-5 dias por semana">4-5 dias por semana</option>
+                  <option value="Diariamente (6+ dias)">Diariamente</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Equipamento</label>
+                <select 
+                  value={editFormData.equipment} 
+                  onChange={(e) => setEditFormData({...editFormData, equipment: e.target.value})}
+                >
+                  <option value="sem-equipamento">Sem Equipamento</option>
+                  <option value="basico">Básico (Halteres/Elásticos)</option>
+                  <option value="completo">Academia Completa</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <button className="cancel-btn" onClick={() => setIsEditingProfile(false)}>Cancelar</button>
+              <button className="save-btn" onClick={saveProfileChanges}>Salvar Alterações</button>
             </div>
           </div>
         </div>

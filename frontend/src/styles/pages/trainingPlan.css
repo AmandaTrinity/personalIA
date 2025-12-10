@@ -43,7 +43,16 @@
 }
 
 .profile-section, .saved-workouts-section { margin-bottom: 30px; }
-.section-title { font-size: 1rem; color: #666; margin-bottom: 15px; font-weight: 500; }
+
+.section-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.section-title { font-size: 1rem; color: #666; font-weight: 500; margin: 0; }
+
+.edit-profile-btn {
+  background: none; border: none; cursor: pointer; color: #999;
+  padding: 5px; border-radius: 4px; transition: all 0.2s; display: flex; align-items: center;
+}
+.edit-profile-btn:hover { background-color: #f0f0f0; color: var(--primary-color); }
+
 
 .profile-item { margin-bottom: 10px; padding: 8px 0; }
 .item-label { font-size: 0.85rem; color: #888; }
@@ -57,6 +66,34 @@
 .saved-list .saved-item {
   padding: 10px; background-color: #f0f0f0; border-radius: 6px;
   margin-bottom: 8px; font-size: 0.9rem; color: #333;
+}
+
+/* Footer da Sidebar (Logout) */
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+  background-color: var(--bg-color);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #fee2e2;
+  color: #ef4444;
 }
 
 /* 2. Main Content */
@@ -243,11 +280,78 @@
 }
 .stat-value { font-weight: 700; color: var(--primary-color); font-size: 1.1rem;}
 
-/* Progress & Chat */
-.progress-content-area { padding: 30px; }
-.progress-card {
-  background-color: var(--bg-color); padding: 40px; border-radius: 12px;
-  text-align: center; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* --- ÁREA DE EVOLUÇÃO (MVP) --- */
+.evolution-content-area {
+  padding: 30px;
+  flex-grow: 1;
+  animation: fadeIn 0.3s ease;
+}
+
+.evolution-card {
+  background-color: var(--bg-color);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+}
+
+.evolution-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 20px;
+}
+.evolution-header h3 { color: var(--primary-color); margin: 0; font-size: 1.2rem; }
+.evolution-subtitle { color: #888; font-size: 0.9rem; }
+
+.heatmap-container {
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+/* Grid estilo GitHub: Colunas são semanas, Linhas são dias (7) */
+.heatmap-grid {
+  display: grid;
+  grid-template-rows: repeat(7, 18px); /* AUMENTADO: 7 dias na vertical */
+  grid-auto-flow: column; /* Preenche colunas primeiro (semanas) */
+  gap: 5px; /* AUMENTADO: Espaçamento */
+  width: max-content;
+}
+
+.heatmap-day {
+  width: 18px; height: 18px; /* AUMENTADO: Tamanho do quadradinho */
+  border-radius: 2px;
+  background-color: #ebedf0; /* Nível 0 (Vazio) */
+  transition: transform 0.1s;
+}
+.heatmap-day:hover { transform: scale(1.2); border: 1px solid rgba(0,0,0,0.1); }
+
+/* Cores baseadas no tema Azul */
+.heatmap-day.level-0 { background-color: #f0f0f0; }
+.heatmap-day.level-1 { background-color: #bfdbfe; } /* Azul muito claro */
+.heatmap-day.level-2 { background-color: #60a5fa; } /* Azul claro */
+.heatmap-day.level-3 { background-color: #2563eb; } /* Azul médio */
+.heatmap-day.level-4 { background-color: #174DAD; } /* Azul escuro (Primary) */
+
+.heatmap-legend {
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 15px; font-size: 0.8rem; color: #666; justify-content: flex-end;
+}
+
+/* Cards de Estatísticas MVP */
+.stats-grid-mvp {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card-mvp {
+  background-color: white; padding: 20px; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center;
+}
+
+.stat-card-mvp h4 {
+  margin: 0 0 10px 0; color: #666; font-size: 0.9rem; font-weight: 500;
+}
+.stat-card-mvp .stat-number {
+  font-size: 1.8rem; font-weight: 700; color: var(--primary-color);
 }
 
 .chat-sidebar-overlay {
@@ -276,6 +380,53 @@
 .chat-send-button {
   width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color);
   display: flex; align-items: center; justify-content: center;
+}
+
+/* --- MODAL DE EDIÇÃO --- */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); z-index: 200;
+  display: flex; justify-content: center; align-items: center;
+}
+
+.edit-profile-modal {
+  background-color: white; width: 90%; max-width: 400px;
+  border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  overflow: hidden; animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.modal-header {
+  padding: 15px 20px; border-bottom: 1px solid #eee;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-header h3 { margin: 0; color: var(--primary-color); font-size: 1.1rem; }
+.close-modal-btn { background: none; border: none; cursor: pointer; color: #999; }
+.close-modal-btn:hover { color: #333; }
+
+.modal-body { padding: 20px; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 0.9rem; color: #666; margin-bottom: 5px; }
+.form-group select {
+  width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;
+  font-size: 1rem; color: #333; background-color: #fff;
+}
+.form-group select:focus { border-color: #3883CE; outline: none; }
+
+.modal-footer {
+  padding: 15px 20px; background-color: #f9f9f9; border-top: 1px solid #eee;
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
+.cancel-btn {
+  padding: 8px 15px; border: 1px solid #ddd; background: white;
+  border-radius: 6px; cursor: pointer; color: #666; font-weight: 500;
+}
+.save-btn {
+  padding: 8px 15px; background-color: #3883CE; color: white;
+  border: none; border-radius: 6px; cursor: pointer; font-weight: 600;
 }
 
 /* --- RESPONSIVIDADE (MOBILE) --- */
@@ -323,4 +474,14 @@
   
   .stat-box { border-left: none; flex: 1; }
   .exercise-row:hover { transform: none; }
+}
+
+/* Animação de rotação para o ícone de carregamento */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
