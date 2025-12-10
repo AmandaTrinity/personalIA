@@ -3,6 +3,7 @@
   display: flex;
   min-height: 100vh;
   background-color: var(--page-bg);
+  width: 100%;
 }
 
 /* 1. Sidebar */
