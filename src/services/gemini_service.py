@@ -45,7 +45,7 @@ SYSTEM_INSTRUCTION_PLANO = (
 )
 # --- FIM NOVOS CONSTANTES DE INSTRUÇÃO ---
 
-def gerar_plano_de_treino(arg1, arg2=None, historico: Optional[str] = None) -> str:
+def gerar_plano_de_treino(arg1=None, arg2=None, user: Optional[dict] = None, historico: Optional[str] = None) -> str:
     """
     Compatibilidade de chamada: suportamos chamadas antigas e novas assinaturas.
     Possíveis formas:
@@ -54,19 +54,24 @@ def gerar_plano_de_treino(arg1, arg2=None, historico: Optional[str] = None) -> s
 
     Aqui normalizamos os argumentos para (data: MensagemChat, user: Optional[dict], historico: Optional[str]).
     """
-    # Normaliza argumentos
+    # Normaliza argumentos (suporta: gerar_plano_de_treino(data, user=user, historico=...)
+    # e chamadas posicionais antigas como gerar_plano_de_treino(user, data) ou gerar_plano_de_treino(data, user)
     data: MensagemChat | None = None
-    user: Optional[dict] = None
+    # se user foi passado via keyword, já está em 'user'
     if isinstance(arg1, MensagemChat):
         data = arg1
-        user = arg2 if isinstance(arg2, dict) else None
+        # se arg2 for um dict e user não foi passado como keyword, considera arg2 como user
+        if user is None and isinstance(arg2, dict):
+            user = arg2
     else:
-        # arg1 provavelmente é o usuário (string id ou dict) e arg2 é o data
-        data = arg2 if isinstance(arg2, MensagemChat) else None
-        if isinstance(arg1, dict):
+        # arg1 pode ser user (dict) ou outro; arg2 pode ser data
+        if isinstance(arg2, MensagemChat):
+            data = arg2
+        elif isinstance(arg1, MensagemChat):
+            data = arg1
+        # se user não foi passado e arg1 for dict, considere arg1 como user
+        if user is None and isinstance(arg1, dict):
             user = arg1
-        else:
-            user = None
     # Validação mínima
     if data is None:
         raise ValueError('gerar_plano_de_treino: data (MensagemChat) não fornecida')
