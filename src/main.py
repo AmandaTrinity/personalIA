@@ -33,6 +33,8 @@ origins = [
     "http://localhost:5173",  # Endereço do frontend React/Vite
     "https://personal-ia-git-deploy-yasmins-projects-1c6ea981.vercel.app",
     "https://personal-qcaaj956e-yasmins-projects-1c6ea981.vercel.app",
+    "https://personal-ia-rouge.vercel.app",
+    "personal-hsip6asjk-yasmins-projects-1c6ea981.vercel.app"
 ]
 
 app.add_middleware(
