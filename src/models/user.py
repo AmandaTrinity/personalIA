@@ -41,7 +41,7 @@ class UserResponse(BaseModel):
     peso: float | None = None
     objetivo: str | None = None
     nivel: str | None = None
-    equipamentos: list[str] | None = None
+    equipamentos: str | None = None
     limitacoes: str | None = None
     frequencia: str | None = None
     
