@@ -12,8 +12,6 @@ export interface PlanRequestData {
   mensagem_usuario: string;
   nivel?: string;
   objetivo?: string;
-  // Em produção o backend pode receber string ou array; aqui aceitamos ambos
-  equipamentos?: string | string[];
   frequencia?: string;
 }
 
@@ -36,16 +34,10 @@ export async function sendPlanRequest(
     const payload: Record<string, unknown> = { ...data } as Record<string, unknown>;
     // Garantir que 'equipamentos' seja enviado como string para compatibilidade
     // com a versão do backend em produção que espera string.
-    const eq = data.equipamentos;
-    if (Array.isArray(eq)) {
-      payload.equipamentos = eq.join(', ');
-    } else if (typeof eq === 'string') {
-      // trim para evitar espaços desnecessários
-      payload.equipamentos = eq.trim();
-    } else {
-      // remove campo se undefined/null
-      if (payload.equipamentos === undefined) delete payload.equipamentos;
-    }
+    // Não enviamos mais o campo 'equipamentos' a partir do frontend.
+    // Garantimos que o payload não contenha a chave para evitar validações
+    // antigas no backend.
+    if ('equipamentos' in payload) delete (payload as Record<string, unknown>).equipamentos;
 
     const resp = await fetch(url, {
       method: 'POST',

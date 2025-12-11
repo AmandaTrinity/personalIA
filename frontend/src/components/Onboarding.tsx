@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { ArrowRight, ArrowLeft, Dumbbell, Flame, Zap, HeartPulse, Leaf, Target, Trophy, Home} from "lucide-react";
+import { ArrowRight, ArrowLeft, Dumbbell, Flame, Zap, HeartPulse, Leaf, Target, Trophy } from "lucide-react";
 import "../styles/components/howitworks.css";
 
 export interface OnboardingProfile {
@@ -10,7 +10,6 @@ export interface OnboardingProfile {
     objective: string;
     level: string;
     duration: string;
-    equipment: string;
     limitations?: string | null;
 }
 
@@ -25,7 +24,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
   const [objective, setObjective] = useState('');
   const [level, setLevel] = useState('');
   const [duration, setDuration] = useState('');
-  const [equipment, setEquipment] = useState('');
+  // equipment removed per frontend simplification
   const [limitations, setLimitations] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState<number>(0);
@@ -76,10 +75,10 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
     };
 
   const handleNext = () => {
-    if (currentStep < 6) {
+    if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     } else {
-      onComplete({ gender, age, height, weight, objective, level, duration, equipment, limitations });
+      onComplete({ gender, age, height, weight, objective, level, duration, limitations });
     }
   };
 
@@ -100,9 +99,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
       case 4:
         return duration !== '';
       case 5:
-        return equipment !== '';
-      case 6:
-        return true;
+        return true; // limitaÃ§Ãµes opcionais
       default:
         return false;
     }
@@ -123,16 +120,16 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
             <div className="progress-title">Vamos personalizar seu treino</div>
           </div>
 
-          <div className="progress-count">
-            <span className="step">{currentStep}</span>
-            <span className="total">/6</span>
-          </div>
+            <div className="progress-count">
+              <span className="step">{currentStep}</span>
+              <span className="total">/5</span>
+            </div>
         </div>
 
         <div className="progress-bar">
           <div
             className="progress-fill"
-            style={{ width: `${(currentStep / 6) * 100}%` }}
+            style={{ width: `${(currentStep / 5) * 100}%` }}
           />
         </div>
 
@@ -335,32 +332,7 @@ export function Onboarding({ onComplete, userName }: OnboardingProps) {
             </div>
           )}
 
-          {currentStep === 5 && (
-            <div className="step-area">
-              <h2 className="onboarding-title">Que equipamentos tem?</h2>
-              <p className="onboarding-subtitle">Adaptamos os exercícios ao que você possui</p>
-
-              <div className="option-grid column">
-                {[
-                  { key: "sem-equipamento", icon: <Home size={32} />, title: "Sem Equipamento", desc: "Apenas peso corporal" },
-                  { key: "basico", icon: <Dumbbell size={32} />, title: "Básico", desc: "Halteres, elásticos, tapete" },
-                  { key: "completo", icon: <Trophy size={32} />, title: "Completo", desc: "Máquinas de academia" },
-                ].map((item) => (
-                  <button
-                    key={item.key}
-                    onClick={() => setEquipment(item.key)}
-                    className={`option-card ${equipment === item.key ? "active" : ""}`}
-                  >
-                    <div className={`emoji ${equipment === item.key ? "icon-active" : ""}`}>
-                      {item.icon}
-                    </div>
-                    <div className="option-title">{item.title}</div>
-                    <div className="option-desc">{item.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Step 5 (limitations) moved up — equipments removed from onboarding */}
 
           {currentStep === 6 && (
             <div className="step-area">

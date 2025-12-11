@@ -36,7 +36,6 @@ export default function ProfileSetup() {
       objetivo: profile.objective,
       frequencia: profile.duration,
       nivel: profile.level,
-      equipamentos: profile.equipment,
       limitacoes: profile.limitations || null, 
     };
 

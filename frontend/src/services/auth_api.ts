@@ -20,7 +20,6 @@ export type RegisterData = {
   limitacoes?: string | null; // Opcional
   frequencia: string;
   nivel: string;
-  equipamentos: string;
 };
 
 // 4. A função 'login' permanece a mesma

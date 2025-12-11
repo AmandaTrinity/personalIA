@@ -19,7 +19,6 @@ interface UserProfile {
   objective?: string;
   level?: string;
   duration?: string; // Frequência do treino
-  equipment?: string;
   limitacoes?: string;
 }
 
@@ -70,14 +69,7 @@ function getLevelText(level?: string): string {
   return levels[level || 'iniciante'] || 'Iniciante';
 }
 
-function getEquipmentText(equipment?: string): string {
-  const equipments: Record<string, string> = {
-    'sem-equipamento': 'Sem Equipamento',
-    'basico': 'Equipamento Básico',
-    'completo': 'Academia Completa',
-  };
-  return equipments[equipment || 'sem-equipamento'] || 'Sem Equipamento';
-}
+// equipment removed from frontend; no helper needed
 
 // --- Componente Principal ---
 
@@ -266,12 +258,11 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     const generatePlan = async () => {
       setIsGenerating(true);
       try {
-        const prompt = `Crie um plano de treino semanal completo para um usuário com:
-        - Objetivo: ${profile.objective}
-        - Nível: ${profile.level}
-        - Frequência: ${profile.duration}
-        - Equipamentos: ${profile.equipment}
-        - Limitações: ${profile.limitacoes || 'Nenhuma'}
+  const prompt = `Crie um plano de treino semanal completo para um usuário com:
+  - Objetivo: ${profile.objective}
+  - Nível: ${profile.level}
+  - Frequência: ${profile.duration}
+  - Limitações: ${profile.limitacoes || 'Nenhuma'}
         
         Formate a resposta estritamente em Markdown.
         Para cada dia, use o formato "### Dia X: Dia da Semana - Foco do Treino".
@@ -284,7 +275,6 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
           mensagem_usuario: prompt,
           nivel: profile.level,
           objetivo: profile.objective,
-          equipamentos: profile.equipment ? [profile.equipment] : [],
           frequencia: profile.duration
         };
 
@@ -321,14 +311,12 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
 
     try {
       // Mapeia o perfil do usuário para o corpo da API (PlanRequestData)
-      const requestBody: PlanRequestData = {
-          mensagem_usuario: userMessage.text,
-          nivel: profile.level,
-          objetivo: profile.objective,
-          // O backend espera List[str] para equipamentos
-          equipamentos: profile.equipment ? [profile.equipment] : undefined,
-          frequencia: profile.duration,
-      };
+    const requestBody: PlanRequestData = {
+      mensagem_usuario: userMessage.text,
+      nivel: profile.level,
+      objetivo: profile.objective,
+      frequencia: profile.duration,
+    };
 
       // Chamada real à API do Gemini via backend
       const aiResponse = await sendPlanRequest(requestBody);
@@ -508,10 +496,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
               <div className="item-label">Duração</div>
               <div className="item-value">{profile.duration || '15 minutos'}</div>
             </div>
-            <div className="profile-item">
-              <div className="item-label">Equipamento</div>
-              <div className="item-value">{getEquipmentText(profile.equipment)}</div>
-            </div>
+            {/* Equipamento removed from profile display */}
           </div>
 
           <div className="saved-workouts-section">
@@ -758,17 +743,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label>Equipamento</label>
-                <select 
-                  value={editFormData.equipment} 
-                  onChange={(e) => setEditFormData({...editFormData, equipment: e.target.value})}
-                >
-                  <option value="sem-equipamento">Sem Equipamento</option>
-                  <option value="basico">Básico (Halteres/Elásticos)</option>
-                  <option value="completo">Academia Completa</option>
-                </select>
-              </div>
+              {/* Equipamento removed from profile edit */}
             </div>
 
             <div className="modal-footer">

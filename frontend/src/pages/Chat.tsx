@@ -31,7 +31,7 @@ function Chat() {
     objective: typeof user.objetivo === 'string' ? user.objetivo : 'Não informado',
     level: typeof user.nivel === 'string' ? user.nivel : 'iniciante',
     duration: typeof user.frequencia === 'string' ? user.frequencia : 'Não informado',
-    equipment: typeof user.equipamentos === 'string' ? user.equipamentos : 'Não informado',
+    // equipment removed from frontend profile
     limitacoes: typeof user.limitacoes === 'string' ? user.limitacoes : 'Nenhuma',
   };
 
