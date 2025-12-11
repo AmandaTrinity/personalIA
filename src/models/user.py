@@ -28,7 +28,7 @@ class UserLogin(BaseModel):
     senha: str
 
 # --- Schemas de Saída ---
-
+# -- teste
 class UserResponse(BaseModel):
     """ O que o frontend recebe de volta (sem senha) """
     id: str
