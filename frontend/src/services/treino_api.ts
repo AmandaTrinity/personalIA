@@ -28,10 +28,19 @@ export async function sendPlanRequest(
     const token = localStorage.getItem('token');
     if (token) headers.Authorization = `Bearer ${token}`;
 
+    // Normalizar payload: o backend pode esperar 'equipamentos' como string
+    // ou como lista dependendo da versão implantada. Para evitar 422 em
+    // backends que aguardam string, convertamos arrays em uma string
+    // separada por vírgulas ao enviar.
+    const payload: Record<string, unknown> = { ...data } as Record<string, unknown>;
+    if (Array.isArray(data.equipamentos)) {
+      payload.equipamentos = data.equipamentos.join(', ');
+    }
+
     const resp = await fetch(url, {
       method: 'POST',
       headers: headers as HeadersInit,
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
 
     if (!resp.ok) {
@@ -49,8 +58,13 @@ export async function sendPlanRequest(
           return (obj as Record<string, unknown>)[key];
         } catch { return undefined; }
       }
-      const errorMessage = safeGet(errorData, 'detail') || safeGet(errorData, 'message') || errorText;
-      throw new Error(`Falha na requisição (${resp.status}): ${errorMessage}`);
+  // Preferir mensagens claras: se o backend retornou um objeto de erro,
+  // stringify-o para facilitar debugging (ex: Pydantic validation errors).
+  const detail = safeGet(errorData, 'detail');
+  const message = safeGet(errorData, 'message');
+  const errorMessage = detail || message || errorText;
+  const pretty = typeof errorMessage === 'object' ? JSON.stringify(errorMessage, null, 2) : String(errorMessage);
+  throw new Error(`Falha na requisição (${resp.status}): ${pretty}`);
     }
 
     // O backend responde: { status: "ok", treino: { plano_gerado: string, ... } }

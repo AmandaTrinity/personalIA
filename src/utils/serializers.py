@@ -26,4 +26,10 @@ def normalize_user(user_doc: dict | None, safe: bool = True) -> dict | None:
         doc.pop("hashed_password", None)
         doc.pop("senha", None)
 
+    # Normalizar 'equipamentos' salvo como string em registros antigos
+    eq = doc.get("equipamentos")
+    if isinstance(eq, str):
+        parts = [p.strip() for p in eq.split(",") if p.strip()]
+        doc["equipamentos"] = parts if parts else [eq.strip()]
+
     return doc

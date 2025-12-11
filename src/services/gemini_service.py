@@ -112,8 +112,6 @@ def gerar_plano_de_treino(arg1=None, arg2=None, user: Optional[dict] = None, his
             model_name = "gemini-2.5-flash"
 
         # Monta o PROMPT DO USUÁRIO
-        equipamentos_str = ", ".join(data.equipamentos) if getattr(data, "equipamentos", None) else "peso corporal"
-
         user_parts = []
         if user:
             # Extrai campos úteis do perfil do usuário
@@ -127,6 +125,8 @@ def gerar_plano_de_treino(arg1=None, arg2=None, user: Optional[dict] = None, his
                 user_parts.append(f"Objetivo do usuário: {user.get('objetivo')}")
             if user.get("limitacoes"):
                 user_parts.append(f"Limitações: {user.get('limitacoes')}")
+            if user.get("equipamentos"):
+                user_parts.append(f"Equipamentos: {user.get('equipamentos')}")
 
         user_info_block = ("\n".join(user_parts) + "\n") if user_parts else ""
         historico_block = f"Histórico de treinos anteriores:\n{historico}\n\n" if historico else ""
@@ -137,7 +137,7 @@ def gerar_plano_de_treino(arg1=None, arg2=None, user: Optional[dict] = None, his
                 f"Por favor, gere um plano de treino para o usuário com base nas seguintes informações:\n"
                 f"- Nível de Experiência: {getattr(data, 'nivel', 'iniciante')}\n"
                 f"- Objetivo Principal: {getattr(data, 'objetivo', 'condicionamento')}\n"
-                f"- Equipamentos Disponíveis: {equipamentos_str}\n"
+                f"- Equipamentos Disponíveis: {getattr(data, 'equipamento', 'peso corporal')}\n"
                 f"- Disponibilidade na semana: {getattr(data, 'frequencia', '2 dias por semana')}\n"
                 f"\n{user_info_block}"
                 f"{historico_block}"
