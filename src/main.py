@@ -26,6 +26,12 @@ app = FastAPI(
     version=settings.APP_VERSION,
 )
 
+# Evita que Starlette envie redirects 307/308 automáticos quando a requisição
+# difere apenas pela barra final. Desabilitamos o redirect e registramos tanto
+# as rotas com quanto sem barra final nos pontos críticos — isso evita que o
+# navegador perca headers (ex: Authorization) em redirects cross-origin.
+app.router.redirect_slashes = False
+
 # CONFIGURAÇÃO DO CORS
 
 # Lista de origens que podem fazer requisições para a API
@@ -38,6 +44,9 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # Permite as origens da lista
+    # Além das origens explícitas, permitimos dinamicamente subdomínios do
+    # Vercel (ex: previews em https://<nome>.vercel.app) usando regex.
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
     allow_headers=["*"],  # Permite todos os cabeçalhos
