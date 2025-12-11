@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Loader, Youtube, Pencil, X, LogOut } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import '../styles/pages/trainingPlan.css'; 
+import '../styles/pages/trainingPlan.css';
 // Importa a nova função para comunicação com a API e o tipo de dados
 import { sendPlanRequest, type PlanRequestData } from '../services/treino_api';
 import { logout } from '../services/auth_api';
@@ -85,7 +85,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
   const navigate = useNavigate();
   // Estado local do perfil para permitir edição
   const [profile, setProfile] = useState<UserProfile>(userProfile);
-  
+
   const [workoutPlan, setWorkoutPlan] = useState<WorkoutDay[]>([]);
   const [currentWorkout, setCurrentWorkout] = useState<WorkoutDay | null>(null);
   const [isGenerating, setIsGenerating] = useState(true);
@@ -95,7 +95,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [savedWorkouts, setSavedWorkouts] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'workout' | 'progress'>('workout');
-  
+
   // Estados para edição de perfil
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editFormData, setEditFormData] = useState<UserProfile>(userProfile);
@@ -125,7 +125,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     for (let i = 150; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
-      
+
       let level = 0;
 
       // Se a data for anterior a essa semana, inicia zerado
@@ -135,10 +135,10 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         // Se for a semana atual, usa os dados REAIS do workoutPlan (checkboxes)
         const dayNameMap = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
         const dayName = dayNameMap[date.getDay()];
-        
+
         // Procura se existe um treino para esse dia (ex: "Segunda-feira")
         const workoutForDay = workoutPlan.find(w => w.day.toLowerCase().includes(dayName) || w.title.toLowerCase().includes(dayName));
-        
+
         if (workoutForDay) {
           const pct = getCompletionPercentage(workoutForDay);
           if (pct > 0) level = 1;
@@ -147,12 +147,12 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
           if (pct > 75) level = 4;
         }
       }
-      
+
       data.push({ date, level });
     }
     return data;
   }, [workoutPlan]); // Recalcula sempre que o plano (checkboxes) mudar
-  
+
   // Calcula as estatísticas de evolução (dias treinados, sequências, etc.)
   const evolutionStats = useMemo(() => {
     const trainedDays = evolutionData.filter(d => d.level > 0).length;
@@ -172,7 +172,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     let currentStreak = 0;
     // A sequência "atual" é contada de hoje para trás.
     const reversedData = [...evolutionData].reverse();
-    
+
     // Permite que a sequência continue se o treino de hoje ainda não foi feito,
     // mas o de ontem foi (para não zerar a sequência logo de manhã).
     let startIndex = 0;
@@ -187,14 +187,14 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         break; // A sequência foi quebrada
       }
     }
-    
+
     return { trainedDays, longestStreak, currentStreak };
   }, [evolutionData]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-  
+
   // Função para parsear o Markdown da IA em objetos WorkoutDay
   const parseMarkdownToWorkoutPlan = (text: string): WorkoutDay[] => {
     const days: WorkoutDay[] = [];
@@ -209,7 +209,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       const header = lines[0].trim();
       let day = "Treino";
       let title = header;
-      
+
       if (header.includes(':')) {
         const parts = header.split(':');
         day = parts[0].trim();
@@ -237,7 +237,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         days.push({ day, title, exercises });
       }
     });
-    
+
     return days;
   };
 
@@ -284,13 +284,13 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
           mensagem_usuario: prompt,
           nivel: profile.level,
           objetivo: profile.objective,
-          equipamentos: profile.equipment ? [profile.equipment] : [],
+          equipamentos: profile.equipment ? profile.equipment : "sem-peso",
           frequencia: profile.duration
         };
 
         const response = await sendPlanRequest(requestData);
         const parsed = parseMarkdownToWorkoutPlan(response);
-        
+
         if (parsed.length > 0) {
           setWorkoutPlan(parsed);
           setCurrentWorkout(parsed[0]);
@@ -322,17 +322,17 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     try {
       // Mapeia o perfil do usuário para o corpo da API (PlanRequestData)
       const requestBody: PlanRequestData = {
-          mensagem_usuario: userMessage.text,
-          nivel: profile.level,
-          objetivo: profile.objective,
-          // O backend espera List[str] para equipamentos
-          equipamentos: profile.equipment ? [profile.equipment] : undefined,
-          frequencia: profile.duration,
+        mensagem_usuario: userMessage.text,
+        nivel: profile.level,
+        objetivo: profile.objective,
+        // O backend espera List[str] para equipamentos
+        equipamentos: profile.equipment ? profile.equipment : "sem-peso",
+        frequencia: profile.duration,
       };
 
       // Chamada real à API do Gemini via backend
       const aiResponse = await sendPlanRequest(requestBody);
-      
+
       const aiMessage: Message = {
         id: messages.length + 2,
         sender: 'ai',
@@ -342,14 +342,14 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       setMessages((prev) => [...prev, aiMessage]);
 
     } catch (error) {
-        console.error('Erro ao enviar mensagem para IA:', error);
-        const errorMessage: Message = {
-            id: messages.length + 2,
-            sender: 'ai',
-            text: '❌ Ocorreu um erro ao conectar com o PersonalIA. Tente novamente.',
-            timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, errorMessage]);
+      console.error('Erro ao enviar mensagem para IA:', error);
+      const errorMessage: Message = {
+        id: messages.length + 2,
+        sender: 'ai',
+        text: '❌ Ocorreu um erro ao conectar com o PersonalIA. Tente novamente.',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
     }
@@ -394,22 +394,22 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     };
     setMessages((prev) => [...prev, aiMessage]);
   };
-  
+
   // Renderiza os detalhes do exercício na tabela
   const renderExerciseRow = (exercise: Exercise, index: number, workoutDay: WorkoutDay) => {
     const isCompleted = exercise.completed;
     const videoUrl = getExerciseVideo(exercise.name);
 
     return (
-      <div 
-        key={index} 
+      <div
+        key={index}
         className={`exercise-row ${isCompleted ? 'completed' : 'pending'}`}
         onClick={() => toggleExercise(workoutDay, exercise.name)} // Permite marcar/desmarcar
       >
         {/* COLUNA 1: Checkbox (filho direto do Grid) */}
         <button className="check-button" onClick={(e) => { e.stopPropagation(); toggleExercise(workoutDay, exercise.name); }}>
           {isCompleted ? <CheckCircle2 size={24} className="check-icon" /> : <Circle size={24} className="circle-icon" />}
-        </button>        
+        </button>
         {/* COLUNA 2: Nome (Filho direto do Grid, vai crescer e quebrar linha se precisar) */}
         <span className={`exercise-name ${isCompleted ? 'text-strikethrough' : ''}`}>
           {exercise.name}
@@ -537,7 +537,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
           </button>
         </div>
       </div>
-      
+
       {/* 2. Main Content */}
       <div className="main-content">
         <div className="main-header">
@@ -606,7 +606,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
                     <h2 className="details-title">{currentWorkout.title}</h2>
                     <span className="details-subtitle">{currentWorkout.day}</span>
                   </div>
-                  
+
                   <button className="start-button">
                     <Play size={18} /> Iniciar Treino
                   </button>
@@ -621,7 +621,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
             )}
           </div>
         )}
-        
+
         {/* Tab Content: Evolução (MVP) */}
         {activeTab === 'progress' && (
           <div className="evolution-content-area">
@@ -718,13 +718,13 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="modal-body">
               <div className="form-group">
                 <label>Objetivo</label>
-                <select 
-                  value={editFormData.objective} 
-                  onChange={(e) => setEditFormData({...editFormData, objective: e.target.value})}
+                <select
+                  value={editFormData.objective}
+                  onChange={(e) => setEditFormData({ ...editFormData, objective: e.target.value })}
                 >
                   <option value="ganhar-massa">Ganhar Massa</option>
                   <option value="perder-peso">Perder Peso</option>
@@ -735,9 +735,9 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
 
               <div className="form-group">
                 <label>Nível</label>
-                <select 
-                  value={editFormData.level} 
-                  onChange={(e) => setEditFormData({...editFormData, level: e.target.value})}
+                <select
+                  value={editFormData.level}
+                  onChange={(e) => setEditFormData({ ...editFormData, level: e.target.value })}
                 >
                   <option value="iniciante">Iniciante</option>
                   <option value="intermediario">Intermediário</option>
@@ -747,9 +747,9 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
 
               <div className="form-group">
                 <label>Frequência</label>
-                <select 
-                  value={editFormData.duration} 
-                  onChange={(e) => setEditFormData({...editFormData, duration: e.target.value})}
+                <select
+                  value={editFormData.duration}
+                  onChange={(e) => setEditFormData({ ...editFormData, duration: e.target.value })}
                 >
                   <option value="1-2 dias por semana">1-2 dias por semana</option>
                   <option value="3 dias por semana">3 dias por semana</option>
@@ -760,9 +760,9 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
 
               <div className="form-group">
                 <label>Equipamento</label>
-                <select 
-                  value={editFormData.equipment} 
-                  onChange={(e) => setEditFormData({...editFormData, equipment: e.target.value})}
+                <select
+                  value={editFormData.equipment}
+                  onChange={(e) => setEditFormData({ ...editFormData, equipment: e.target.value })}
                 >
                   <option value="sem-equipamento">Sem Equipamento</option>
                   <option value="basico">Básico (Halteres/Elásticos)</option>
