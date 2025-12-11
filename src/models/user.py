@@ -24,6 +24,14 @@ class UserCreate(BaseModel):
     limitacoes: str | None = None
     frequencia: str
 
+    @model_validator(mode="after")
+    def _normalize_equipamentos(self):
+        if isinstance(self.equipamentos, str):
+            # Se for string separada por vírgulas, split e limpe espaços
+            parts = [p.strip() for p in self.equipamentos.split(",") if p.strip()]
+            self.equipamentos = parts if parts else [self.equipamentos.strip()]
+        return self
+
 class UserLogin(BaseModel):
     """ Schema para /auth/login """
     email: EmailStr
@@ -58,7 +66,8 @@ class UserResponse(BaseModel):
         # Se equipamentos foi armazenado como string em versões antigas,
         # converte para lista com o valor.
         if isinstance(self.equipamentos, str):
-            self.equipamentos = [self.equipamentos]
+            parts = [p.strip() for p in self.equipamentos.split(",") if p.strip()]
+            self.equipamentos = parts if parts else [self.equipamentos.strip()]
         return self
 
 class TokenResponse(BaseModel):

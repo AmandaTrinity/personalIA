@@ -45,50 +45,63 @@ origins = [
     "personal-hsip6asjk-yasmins-projects-1c6ea981.vercel.app",
 ]
 
+# Para diagnosticabilidade e para suportar ambientes onde o middleware CORS
+# pode não ser aplicado corretamente, configuramos a middleware para permitir
+# origens amplas e também adicionamos handlers/middleware que ecoam o Origin
+# nas respostas. ATENÇÃO: isto torna a API permissiva para qualquer origem.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Permite as origens da lista
-    # Além das origens explícitas, permitimos dinamicamente subdomínios do
-    # Vercel (ex: previews em https://<nome>.vercel.app) usando regex.
-    # Regex to allow Vercel preview domains (matches with or without scheme)
-    allow_origin_regex=r".*\.vercel\.app",
+    allow_origins=["*"],  # permite todas as origens
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
-    allow_headers=["*"],  # Permite todos os cabeçalhos
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
-# Handle CORS preflight explicitly as a fallback for hosting environments
-# that may intercept or change middleware behavior (some proxies/load balancers
-# treat OPTIONS specially). This endpoint will reply to any OPTIONS request
-# with the appropriate Access-Control-Allow-* headers when the Origin matches
-# our allowed list or regex.
 @app.options("/{any_path:path}")
 async def _cors_preflight(any_path: str, request: Request):
+    """Resposta explícita para preflight OPTIONS que ecoa o Origin.
+
+    Isso garante que, mesmo que o proxy/hospedagem intercepte OPTIONS, a
+    aplicação retorne os cabeçalhos CORS necessários.
+    """
     origin = request.headers.get("origin")
-    if not origin:
-        return Response(status_code=204)
-
-    # permissive match: either exact in origins or matches the vercel regex
-    vercel_regex = re.compile(r".*\\.vercel\\.app")
-    # use search to match host anywhere in the origin string
-    allowed = origin in origins or bool(vercel_regex.search(origin))
-
-    # debug log to help diagnose production behavior (can be removed later)
-    print(f"CORS preflight - origin={origin!r} allowed={allowed}")
-
-    if not allowed:
-        # Do not attach CORS headers if origin is not allowed
-        return Response(status_code=403)
-
     req_headers = request.headers.get("access-control-request-headers", "*")
-    headers = {
-        "Access-Control-Allow-Origin": origin,
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-        "Access-Control-Allow-Headers": req_headers,
-        "Access-Control-Allow-Credentials": "true",
-    }
+
+    if origin:
+        headers = {
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS,PATCH,HEAD",
+            "Access-Control-Allow-Headers": req_headers,
+            "Access-Control-Allow-Credentials": "true",
+            "Vary": "Origin",
+        }
+    else:
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS,PATCH,HEAD",
+            "Access-Control-Allow-Headers": req_headers,
+            "Access-Control-Allow-Credentials": "true",
+        }
+
+    # Log simples para ajudar diagnóstico em produção — remover após verificação
+    print(f"CORS preflight handled for origin={origin!r}")
     return Response(status_code=204, headers=headers)
+
+
+# Middleware para garantir que todas as respostas contenham o header
+# Access-Control-Allow-Origin (ecoando o Origin quando presente).
+@app.middleware("http")
+async def _ensure_cors_headers(request: Request, call_next):
+    response = await call_next(request)
+    origin = request.headers.get("origin")
+    if origin:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Vary"] = "Origin"
+    else:
+        response.headers.setdefault("Access-Control-Allow-Origin", "*")
+    return response
 
 app.include_router(auth_router)  
 app.include_router(treino_router)
