@@ -12,7 +12,7 @@ export interface PlanRequestData {
   mensagem_usuario: string;
   nivel?: string;
   objetivo?: string;
-  equipamentos?: string[];
+  equipamentos?: string;
   frequencia?: string;
 }
 
@@ -23,8 +23,8 @@ export async function sendPlanRequest(
 ): Promise<string> {
   try {
     // Rota autenticada: POST /treinos (o usuário é inferido pelo token no token do localStorage)
-    const url = `${API_URL.replace(/\/+$/,'')}/treinos`;
-    const headers: Record<string,string> = { 'Content-Type': 'application/json' };
+    const url = `${API_URL.replace(/\/+$/, '')}/treinos`;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     const token = localStorage.getItem('token');
     if (token) headers.Authorization = `Bearer ${token}`;
 
@@ -90,13 +90,13 @@ export async function getTreinos(
   _usuarioId: string, // <-- Parâmetro ignorado, mantido para compatibilidade (prefixado com _ para evitar lint)
   prompt: string
 ): Promise<string> {
-    const defaultData: PlanRequestData = {
-        mensagem_usuario: prompt,
-        // O restante dos campos MensagemChat terá defaults definidos no backend
-    };
-    
-    // Chamamos a nova função com a rota autenticada POST /treinos
-    return sendPlanRequest(defaultData);
+  const defaultData: PlanRequestData = {
+    mensagem_usuario: prompt,
+    // O restante dos campos MensagemChat terá defaults definidos no backend
+  };
+
+  // Chamamos a nova função com a rota autenticada POST /treinos
+  return sendPlanRequest(defaultData);
 }
 
 // ----------------------------------------------------
@@ -107,8 +107,8 @@ export type TreinoDetalhe = Record<string, unknown>; // tipo genérico até defi
 export async function getTreinoDetalhe(treinoId: string): Promise<TreinoDetalhe> {
   // Rota GET para buscar um treino por ID
   try {
-    const url = `${API_URL.replace(/\/+$/,'')}/treinos/${encodeURIComponent(treinoId)}`;
-    const headers: Record<string,string> = {};
+    const url = `${API_URL.replace(/\/+$/, '')}/treinos/${encodeURIComponent(treinoId)}`;
+    const headers: Record<string, string> = {};
     const token = localStorage.getItem('token');
     if (token) headers.Authorization = `Bearer ${token}`;
 
