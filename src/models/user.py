@@ -18,7 +18,7 @@ class UserCreate(BaseModel):
     objetivo: str
     nivel: str
     nivel: str | None = None
-    equipamentos: list[str] | None = None
+    equipamentos: str | None = None
     limitacoes: str | None = None
     frequencia: str
 
