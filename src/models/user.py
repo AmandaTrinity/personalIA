@@ -2,7 +2,7 @@
 Define os "contratos" de dados (schemas) para
 entrada e saída de usuários, usando Pydantic.
 """
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, model_validator
 
 # --- Schemas de Entrada ---
 
@@ -18,7 +18,9 @@ class UserCreate(BaseModel):
     objetivo: str
     nivel: str
     nivel: str | None = None
-    equipamentos: str | None = None
+    # Aceitamos tanto lista quanto string por compatibilidade com dados antigos.
+    # Normalizamos para lista no model_validator abaixo.
+    equipamentos: list[str] | str | None = None
     limitacoes: str | None = None
     frequencia: str
 
@@ -41,7 +43,7 @@ class UserResponse(BaseModel):
     peso: float | None = None
     objetivo: str | None = None
     nivel: str | None = None
-    equipamentos: str | None = None
+    equipamentos: list[str] | str | None = None
     limitacoes: str | None = None
     frequencia: str | None = None
     
@@ -50,6 +52,14 @@ class UserResponse(BaseModel):
         populate_by_name=True,
         alias_generator=lambda field_name: "_id" if field_name == "id" else field_name
     )
+
+    @model_validator(mode="after")
+    def _normalize_equipamentos(self):
+        # Se equipamentos foi armazenado como string em versões antigas,
+        # converte para lista com o valor.
+        if isinstance(self.equipamentos, str):
+            self.equipamentos = [self.equipamentos]
+        return self
 
 class TokenResponse(BaseModel):
     """ A resposta de Login/Registro """
