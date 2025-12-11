@@ -21,7 +21,21 @@ def register_user(user_data: UserCreate): # <-- SÍNCRONO
     access_token = security.create_access_token(
         data={"sub": new_user["email"]}
     )
-    user_resp = UserResponse.model_validate(new_user)
+    # Normalizar campos para compatibilidade com esquemas (ex.: 'equipamentos' pode
+    # ter sido salvo como string em versões antigas). Garantimos que seja uma lista
+    # antes de validar com Pydantic.
+    user_dict = dict(new_user)
+    if "_id" in user_dict:
+        try:
+            user_dict["_id"] = str(user_dict["_id"])
+        except Exception:
+            pass
+    eq = user_dict.get("equipamentos")
+    if isinstance(eq, str):
+        # transformar string em lista contendo o valor
+        user_dict["equipamentos"] = [eq]
+
+    user_resp = UserResponse.model_validate(user_dict)
     
     return TokenResponse(access_token=access_token, user=user_resp)
 
@@ -40,14 +54,18 @@ def login_user(form_data: UserLogin, background_tasks: BackgroundTasks): # <-- S
     access_token = security.create_access_token(
         data={"sub": user["email"]}
     )
-    # Normalizar _id para string antes de validar com Pydantic
-    if user and "_id" in user:
+    # Normalizar _id e equipamentos para compatibilidade com o schema
+    user_dict = dict(user)
+    if user_dict and "_id" in user_dict:
         try:
-            user["_id"] = str(user["_id"])
+            user_dict["_id"] = str(user_dict["_id"])
         except Exception:
             pass
+    eq = user_dict.get("equipamentos")
+    if isinstance(eq, str):
+        user_dict["equipamentos"] = [eq]
 
-    user_resp = UserResponse.model_validate(user)
+    user_resp = UserResponse.model_validate(user_dict)
     # Agendamos envio do contexto do usuário ao Gemini em background.
     # O `user_resp` já é safe (sem hashed_password) e tem o perfil cadastrado
     # (idade, peso, altura, objetivo, limitacoes, etc) — passamos o dict.

@@ -14,6 +14,7 @@ treino_router = APIRouter(prefix="/treinos", tags=["Treinos"])
 salvar_treino = treino_service.salvar_treino
 listar_treinos_por_usuario = treino_service.listar_treinos_por_usuario
 
+@treino_router.post("")
 @treino_router.post("/")
 def criar_treino(
     data: MensagemChat, 
@@ -65,6 +66,7 @@ def criar_treino(
         print(f"!!!!!!!!!!!! ERRO DETALHADO !!!!!!!!!!!!\n{e}\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         raise HTTPException(status_code=500, detail=str(e))
 
+@treino_router.get("")
 @treino_router.get("/")
 def get_treinos(
     email: str = Depends(security.get_current_user_email)

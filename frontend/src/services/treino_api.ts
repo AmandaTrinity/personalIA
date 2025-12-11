@@ -23,7 +23,8 @@ export async function sendPlanRequest(
 ): Promise<string> {
   try {
     // Rota autenticada: POST /treinos (o usuário é inferido pelo token no token do localStorage)
-    const url = `${API_URL.replace(/\/+$/,'')}/treinos`;
+  // use trailing slash to avoid server redirect (which can drop Authorization header)
+  const url = `${API_URL.replace(/\/+$/,'')}/treinos/`;
     const headers: Record<string,string> = { 'Content-Type': 'application/json' };
     const token = localStorage.getItem('token');
     if (token) headers.Authorization = `Bearer ${token}`;
@@ -107,7 +108,8 @@ export type TreinoDetalhe = Record<string, unknown>; // tipo genérico até defi
 export async function getTreinoDetalhe(treinoId: string): Promise<TreinoDetalhe> {
   // Rota GET para buscar um treino por ID
   try {
-    const url = `${API_URL.replace(/\/+$/,'')}/treinos/${encodeURIComponent(treinoId)}`;
+  // request the canonical URL with trailing slash to avoid server redirect
+  const url = `${API_URL.replace(/\/+$/,'')}/treinos/${encodeURIComponent(treinoId)}/`;
     const headers: Record<string,string> = {};
     const token = localStorage.getItem('token');
     if (token) headers.Authorization = `Bearer ${token}`;
