@@ -66,7 +66,7 @@ class TestGeminiService:
         # Verifica que GenerativeModel foi chamado com model_name e system_instruction
         mock_genai.GenerativeModel.assert_called_once()
         call_args = mock_genai.GenerativeModel.call_args
-        assert call_args.kwargs['model_name'] == 'gemini-2.5-flash'
+        assert call_args.kwargs['model_name'] == 'gemini-2.0-flash'
         assert 'system_instruction' in call_args.kwargs
         mock_model.generate_content.assert_called_once()
     
