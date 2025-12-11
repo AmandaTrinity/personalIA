@@ -67,8 +67,8 @@ class Settings:
 
 
 # Instância global das configurações
+# A instância lê o valor de GEMINI_MODEL do ambiente (ou usa o default definido
+# dentro de Settings.__init__). Não sobrescrevemos aqui para permitir que
+# deployments/variáveis de ambiente controlem qual modelo será usado.
 settings = Settings()
-
-# Força o uso do modelo gemini-2.0 por padrão (garante mudança mesmo que .env contenha outro valor)
-settings.GEMINI_MODEL = "gemini-2.5-flash"
 
