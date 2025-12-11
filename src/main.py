@@ -31,7 +31,7 @@ app = FastAPI(
 # Lista de origens que podem fazer requisições para a API
 origins = [
     "http://localhost:5173",  # Endereço do frontend React/Vite
-    "personal-ia-git-testedeploy-yasmins-projects-1c6ea981.vercel.app",
+    "https://personal-ia-git-testedeploy-yasmins-projects-1c6ea981.vercel.app",
 ]
 
 app.add_middleware(
