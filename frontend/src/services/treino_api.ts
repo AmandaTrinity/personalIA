@@ -12,7 +12,8 @@ export interface PlanRequestData {
   mensagem_usuario: string;
   nivel?: string;
   objetivo?: string;
-  equipamentos?: string[];
+  // Em produção o backend pode receber string ou array; aqui aceitamos ambos
+  equipamentos?: string | string[];
   frequencia?: string;
 }
 
@@ -33,8 +34,17 @@ export async function sendPlanRequest(
     // backends que aguardam string, convertamos arrays em uma string
     // separada por vírgulas ao enviar.
     const payload: Record<string, unknown> = { ...data } as Record<string, unknown>;
-    if (Array.isArray(data.equipamentos)) {
-      payload.equipamentos = data.equipamentos.join(', ');
+    // Garantir que 'equipamentos' seja enviado como string para compatibilidade
+    // com a versão do backend em produção que espera string.
+    const eq = data.equipamentos;
+    if (Array.isArray(eq)) {
+      payload.equipamentos = eq.join(', ');
+    } else if (typeof eq === 'string') {
+      // trim para evitar espaços desnecessários
+      payload.equipamentos = eq.trim();
+    } else {
+      // remove campo se undefined/null
+      if (payload.equipamentos === undefined) delete payload.equipamentos;
     }
 
     const resp = await fetch(url, {

@@ -31,6 +31,8 @@ app = FastAPI(
 # Evita redirects automáticos de barra final (previne 307/308 que podem
 # remover headers em chamadas cross-origin)
 app.router.redirect_slashes = False
+import logging
+from datetime import datetime
 
 # CONFIGURAÇÃO DO CORS
 
