@@ -32,12 +32,14 @@ app = FastAPI(
 origins = [
     "http://localhost:5173",  # Endereço do frontend React/Vite
     "https://personal-ia-git-deploy-yasmins-projects-1c6ea981.vercel.app",
+    "https://personal-ia-git-deploynew-yasmins-projects-1c6ea981.vercel.app",
     "https://personal-qcaaj956e-yasmins-projects-1c6ea981.vercel.app",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # Permite as origens da lista
+    allow_origin_regex=r"https://.*-yasmins-projects-.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
     allow_headers=["*"],  # Permite todos os cabeçalhos
