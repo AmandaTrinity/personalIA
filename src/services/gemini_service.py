@@ -45,7 +45,7 @@ SYSTEM_INSTRUCTION_PLANO = (
 )
 # --- FIM NOVOS CONSTANTES DE INSTRUÇÃO ---
 
-def gerar_plano_de_treino(arg1, arg2=None, historico: Optional[str] = None) -> str:
+def gerar_plano_de_treino(*args, user: Optional[dict] = None, historico: Optional[str] = None) -> str:
     """
     Gera o texto do plano de treino ou responde a uma dúvida (SÍNCRONO).
 
@@ -58,17 +58,30 @@ def gerar_plano_de_treino(arg1, arg2=None, historico: Optional[str] = None) -> s
     chamadas existentes nos testes.
     """
 
-    # Normaliza os parâmetros: admite (data, user) ou (user, data)
+    # Normaliza os parâmetros: suporta chamadas:
+    #   gerar_plano_de_treino(data: MensagemChat, user=dict, historico=str)
+    #   gerar_plano_de_treino(user_dict, data: MensagemChat)
+    #   gerar_plano_de_treino("", data)  (test legacy)
     data = None
-    user = None
-    if isinstance(arg1, MensagemChat):
-        data = arg1
-        user = arg2
-    else:
-        # arg1 pode ser None ou um dict/string representando usuário; então
-        # arg2 deve conter o MensagemChat
-        user = arg1
-        data = arg2
+    # 'user' pode vir por keyword ou posicional
+    if args:
+        # Caso comum: (data, ) ou (data, user)
+        if isinstance(args[0], MensagemChat):
+            data = args[0]
+            if len(args) > 1 and user is None:
+                user = args[1]
+        else:
+            # Possível chamada legada: (user, data)
+            if len(args) > 1 and isinstance(args[1], MensagemChat):
+                user = args[0] if user is None else user
+                data = args[1]
+            elif len(args) == 2 and isinstance(args[1], MensagemChat):
+                data = args[1]
+            elif len(args) == 1:
+                # única string/valor enviado — não é MensagemChat
+                data = None
+
+    # Se 'user' já veio pelo keyword, respeitamos.
 
     api_key = settings.GEMINI_API_KEY
     if not api_key:
