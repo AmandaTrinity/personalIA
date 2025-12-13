@@ -21,3 +21,6 @@ httpx>=0.24.0
 passlib>=1.7.4
 python-jose[cryptography]>=3.3.0
 email-validator>=2.1.0
+pytest
+httpx
+coverage

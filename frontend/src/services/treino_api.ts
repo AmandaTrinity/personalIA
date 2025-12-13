@@ -6,9 +6,9 @@ const API_URL: string = (import.meta.env.VITE_API_URL as string) || "http://127.
 if (!API_URL) throw new Error("VITE_API_URL não está definida no ambiente.");
 
 // Header de auth opcional a partir do localStorage ("token")
-function authHeader() {
+function authHeader(): Record<string, string> | undefined {
   const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  return token ? { Authorization: `Bearer ${token}` } : undefined;
 }
 
 // Novo tipo para o corpo da mensagem, espelhando o Pydantic MensagemChat do backend
@@ -27,22 +27,40 @@ export async function sendPlanRequest(
 ): Promise<string> {
   try {
     // Rota autenticada: POST /treinos (o usuário é inferido pelo token no authHeader)
-    const resp = await fetch(`${API_URL}/treinos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...authHeader(), // Usa o token do usuário logado
-      },
-      body: JSON.stringify(data),
-    });
+  const resp = await fetch(`${API_URL}/treinos/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(authHeader() ?? {}), // Usa o token do usuário logado
+    },
+    body: JSON.stringify(data),
+  });
 
     if (!resp.ok) {
       const errorText = await resp.text().catch(() => "");
-      let errorData: any = {};
+      let errorData: unknown = {};
       try {
-        errorData = JSON.parse(errorText);
-      } catch {}
-      const errorMessage = errorData?.detail || errorData?.message || errorText;
+        const parsed = JSON.parse(errorText);
+        if (typeof parsed === "object" && parsed !== null) {
+          errorData = parsed;
+        }
+      } catch {
+        // Ignora erros de parsing JSON do corpo da resposta; manter errorData como {}
+        // Opcional: console.debug("Erro ao parsear JSON de erro:");
+      }
+      
+      const getStringField = (obj: unknown, key: string): string | undefined => {
+        if (typeof obj === "object" && obj !== null && key in obj) {
+          const val = (obj as Record<string, unknown>)[key];
+          return typeof val === "string" ? val : undefined;
+        }
+        return undefined;
+      };
+
+      const errorMessage =
+        getStringField(errorData, "detail") ??
+        getStringField(errorData, "message") ??
+        errorText;
       
       throw new Error(
         `Falha na requisição (${resp.status}): ${errorMessage}`
@@ -50,16 +68,21 @@ export async function sendPlanRequest(
     }
 
     // O backend responde: { status: "ok", treino: { plano_gerado: string, ... } }
-    const responseData = await resp.json().catch(() => ({} as any));
+    const responseData = await resp.json().catch(() => ({} as Record<string, unknown>));
 
     // 1) Caso de sucesso esperado: { treino: { plano_gerado: string } }
-    if (responseData?.treino?.plano_gerado && typeof responseData.treino.plano_gerado === "string") {
-      return responseData.treino.plano_gerado as string;
+    const treinoField = (responseData as Record<string, unknown>)['treino'];
+    if (typeof treinoField === 'object' && treinoField !== null) {
+      const plano = (treinoField as Record<string, unknown>)['plano_gerado'];
+      if (typeof plano === 'string') {
+        return plano;
+      }
     }
 
     // 2) Fallback se o backend responder algo diferente (ex: para mensagens de "não relacionadas ao treino")
-    if (responseData?.plano_gerado && typeof responseData.plano_gerado === "string") {
-      return responseData.plano_gerado as string;
+    const fallbackPlano = (responseData as Record<string, unknown>)['plano_gerado'];
+    if (typeof fallbackPlano === 'string') {
+      return fallbackPlano;
     }
     
     // 3) Se for JSON, retorna stringify para debug
@@ -90,6 +113,9 @@ export async function getTreinos(
   usuarioId: string, // <-- Parâmetro ignorado, mas mantido para compatibilidade
   prompt: string
 ): Promise<string> {
+    // Evita erro de parâmetro não utilizado em TypeScript
+    void usuarioId;
+
     const defaultData: PlanRequestData = {
         mensagem_usuario: prompt,
         // O restante dos campos MensagemChat terá defaults definidos no backend
@@ -102,12 +128,22 @@ export async function getTreinos(
 // ----------------------------------------------------
 // Tipo e função necessários para TreinoDetalhe.tsx
 // ----------------------------------------------------
-export type TreinoDetalhe = any; // Tipo temporário a ser definido
+export type TreinoDetalhe = {
+  id?: string;
+  usuario_id?: string;
+  titulo?: string;
+  descricao?: string;
+  plano_gerado?: string;
+  criado_em?: string;
+  atualizado_em?: string;
+  // Qualquer outro campo vindo do backend
+  [key: string]: unknown;
+};
 
 export async function getTreinoDetalhe(treinoId: string): Promise<TreinoDetalhe> {
   // Rota GET para buscar um treino por ID
   try {
-    const resp = await fetch(`${API_URL}/treinos/${encodeURIComponent(treinoId)}`, {
+  const resp = await fetch(`${API_URL}/treinos/${encodeURIComponent(treinoId)}`, {
         method: "GET",
         headers: authHeader(),
     });

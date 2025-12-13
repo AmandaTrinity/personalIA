@@ -16,8 +16,10 @@ class UserCreate(BaseModel):
     altura: int  
     peso: float  
     objetivo: str
-    nivel: str
-    equipamentos: str
+    # Tornamos 'nivel' e 'equipamentos' opcionais com valores padrão para
+    # compatibilidade com clientes que não enviam esses campos no payload.
+    nivel: str | None = "iniciante"
+    equipamentos: str | None = None
     limitacoes: str | None = None
     frequencia: str
 

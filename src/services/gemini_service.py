@@ -45,15 +45,41 @@ SYSTEM_INSTRUCTION_PLANO = (
 )
 # --- FIM NOVOS CONSTANTES DE INSTRUÇÃO ---
 
-def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, historico: Optional[str] = None) -> str:
+def gerar_plano_de_treino(arg1, arg2=None, historico: Optional[str] = None) -> str:
     """
     Gera o texto do plano de treino ou responde a uma dúvida (SÍNCRONO).
+
+    Compatibilidade: a função aceita duas assinaturas para compatibilidade com
+    diferentes pontos de chamada nos testes/histórico do projeto:
+      - gerar_plano_de_treino(data: MensagemChat, user: Optional[dict]=None, historico=None)
+      - gerar_plano_de_treino(user: Optional[dict]=None, data: MensagemChat, historico=None)
+
+    Detectamos qual argumento é o `data` baseado no tipo para não quebrar
+    chamadas existentes nos testes.
     """
+
+    # Normaliza os parâmetros: admite (data, user) ou (user, data)
+    data = None
+    user = None
+    if isinstance(arg1, MensagemChat):
+        data = arg1
+        user = arg2
+    else:
+        # arg1 pode ser None ou um dict/string representando usuário; então
+        # arg2 deve conter o MensagemChat
+        user = arg1
+        data = arg2
+
     api_key = settings.GEMINI_API_KEY
     if not api_key:
         return "Erro: GEMINI_API_KEY não configurada"
 
     # 1. Lógica para DETECTAR INTENÇÃO (Geração de Plano vs. Dúvida/Chat)
+    if not data or not hasattr(data, "mensagem_usuario"):
+        # Caso chamem com parâmetros na ordem antiga (ou dados inválidos),
+        # retornamos erro de forma clara para facilitar debug nos testes.
+        return "Erro: payload de MensagemChat inválido"
+
     mensagem_lower = data.mensagem_usuario.lower().strip()
     
     # Detecção V2: Se contiver palavras-chave de plano (treino, plano, foco)
@@ -77,8 +103,13 @@ def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, histo
 
     try:
         genai.configure(api_key=api_key)
+        # Log qual modelo está configurado para facilitar debug em produção
+        import logging
+
+        logger = logging.getLogger("personalai.gemini")
 
         model_name = getattr(settings, "GEMINI_MODEL", None)
+        logger.info("Usando GEMINI_MODEL=%s (settings) for request", model_name)
         if not isinstance(model_name, str) or not model_name:
             model_name = "gemini-2.5-flash-lite"
 
@@ -129,6 +160,12 @@ def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, histo
         # Mensagem de erro mais útil: se a biblioteca suportar listar modelos,
         # tentamos recuperar a lista disponível para ajudar na correção.
         err_text = str(e)
+        # Log detalhado do erro para facilitar diagnóstico em produção
+        try:
+            logger.exception("Erro ao gerar plano com model=%s: %s", model_name, err_text)
+        except Exception:
+            # se logger não estiver disponível, segue
+            pass
         try:
             list_models = getattr(genai, "list_models", None)
             if callable(list_models):
@@ -150,6 +187,11 @@ def gerar_plano_de_treino(data: MensagemChat, user: Optional[dict] = None, histo
                     model_names = []
 
                 if model_names:
+                    # também logamos os modelos disponíveis
+                    try:
+                        logger.info("Modelos disponíveis no genai: %s", ", ".join(model_names))
+                    except Exception:
+                        pass
                     return (
                         f"Ocorreu um erro ao se comunicar com a API do Gemini: {err_text}. "
                         f"Modelos disponíveis: {', '.join(model_names)}. "
