@@ -3,7 +3,7 @@ import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle,
 import ReactMarkdown from 'react-markdown';
 import '../styles/pages/trainingPlan.css'; 
 // Importa a nova função para comunicação com a API e o tipo de dados
-import { sendPlanRequest, type PlanRequestData } from '../services/treino_api';
+import { sendPlanRequest, type PlanRequestData, listTreinos } from '../services/treino_api';
 
 // --- Tipos de Dados ---
 interface UserProfile {
@@ -249,6 +249,32 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     setMessages([welcomeMessage]);
   }, [userProfile.name, userProfile.objective]);
 
+  // Ao montar, tenta carregar o último treino salvo do backend e popular a UI
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const treinos = await listTreinos();
+        if (!mounted) return;
+        if (treinos && treinos.length > 0) {
+          // Assume que o último elemento é o mais recente (backend retorna em ordem)
+          const latest = treinos[0];
+          const plano = latest.plano_gerado;
+          if (typeof plano === 'string' && plano.trim().length > 0) {
+            const parsed = parsePlanFromAI(plano);
+            if (parsed && parsed.length > 0) {
+              setWorkoutPlan(parsed);
+              setCurrentWorkout(parsed[0]);
+            }
+          }
+        }
+      } catch (e) {
+        console.debug('Falha ao carregar treinos salvos:', e);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -281,6 +307,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       // Chamada real à API do Gemini via backend
       const aiResponse = await sendPlanRequest(requestBody);
       
+      // Adiciona a mensagem bruta ao chat
       const aiMessage: Message = {
         id: messages.length + 2,
         sender: 'ai',
@@ -289,16 +316,53 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       };
       setMessages((prev) => [...prev, aiMessage]);
 
-      // Tenta parsear a resposta da IA em dias/exercícios. Se conseguir, atualiza o plano mostrado.
+      // DEBUG/robustez: tentar extrair um plano mesmo se o backend retornar JSON
+      // ou um objeto serializado. O sendPlanRequest às vezes pode retornar
+      // um JSON stringificado contendo { treino: { plano_gerado: '...' } }.
       try {
-        const parsed = parsePlanFromAI(aiResponse);
-        if (parsed && parsed.length > 0) {
-          setWorkoutPlan(parsed);
-          setCurrentWorkout(parsed[0]);
+        let planText: string | null = null;
+
+        // 1) se aiResponse já contém 'Plano de Treino' ou linhas, usa diretamente
+        if (typeof aiResponse === 'string' && /plano de treino|segunda-feira|dia 1|1\./i.test(aiResponse)) {
+          planText = aiResponse;
+        }
+
+        // 2) tenta parsear como JSON caso seja stringified JSON
+        if (!planText) {
+          try {
+            const parsedJson = JSON.parse(aiResponse);
+            // procura por treino.plano_gerado
+            if (parsedJson && typeof parsedJson === 'object') {
+              if ('treino' in parsedJson && parsedJson.treino && typeof parsedJson.treino === 'object' && 'plano_gerado' in parsedJson.treino) {
+                planText = parsedJson.treino.plano_gerado as string;
+              } else if ('plano_gerado' in parsedJson && typeof parsedJson.plano_gerado === 'string') {
+                planText = parsedJson.plano_gerado as string;
+              }
+            }
+          } catch {
+            // não é JSON, ignora
+          }
+        }
+
+        // 3) fallback: se a mensagem da IA contém um bloco de Markdown com listas numeradas,
+        // tratamos o texto raw como planText
+        if (!planText && typeof aiResponse === 'string') {
+          // pega até um limite razoável
+          planText = aiResponse;
+        }
+
+        if (planText) {
+          const parsed = parsePlanFromAI(planText);
+          if (parsed && parsed.length > 0) {
+            setWorkoutPlan(parsed);
+            setCurrentWorkout(parsed[0]);
+            console.debug('Plano extraído da resposta da IA:', parsed);
+          } else {
+            console.debug('Parser não extraiu dias/exercícios da resposta da IA. Raw:', planText);
+          }
         }
       } catch (e) {
-        // Se parsing falhar, apenas ignora — a mensagem da IA permanece no chat
-        console.debug('Parse IA falhou:', e);
+        console.debug('Erro ao tentar extrair plano da IA:', e);
       }
 
     } catch (error) {

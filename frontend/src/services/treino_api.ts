@@ -26,6 +26,25 @@ export async function sendPlanRequest(
   data: PlanRequestData
 ): Promise<string> {
   try {
+    // Dev-only: se VITE_USE_MOCK_PLAN estiver ativado, retorna um plano de exemplo
+    if ((import.meta.env.VITE_USE_MOCK_PLAN as string) === 'true') {
+      const samplePlan = `Segunda-feira: Peito e Tríceps (Dia A)
+1. Flexões tradicionais - 4 séries de 8-15 repetições - descanso 60-90s
+2. Flexão com pés elevados - 3 séries de 6-12 repetições - descanso 60-90s
+3. Flexão diamante - 3 séries de 8-12 repetições - descanso 60s
+
+Quarta-feira: Costas e Bíceps (Dia B)
+1. Remada australiana - 4 séries de 6-12 repetições - descanso 60-90s
+2. Chin-up negativas - 3 séries até falha/negativas - descanso 90s
+3. Remada com toalha - 3 séries de 8-12 repetições - descanso 60s
+
+Sexta-feira: Pernas e Ombros (Dia C)
+1. Agachamento livre - 4 séries de 12-20 repetições - descanso 60-90s
+2. Avanços (lunges) - 3 séries de 10-12 por perna - descanso 60-90s
+3. Step-ups - 3 séries de 6-10 por perna - descanso 60-90s`;
+
+      return samplePlan;
+    }
     // Rota autenticada: POST /treinos (o usuário é inferido pelo token no authHeader)
   const resp = await fetch(`${API_URL}/treinos/`, {
     method: "POST",
@@ -160,5 +179,26 @@ export async function getTreinoDetalhe(treinoId: string): Promise<TreinoDetalhe>
   } catch (err) {
     console.error("Erro ao buscar detalhes do treino:", err);
     throw new Error("Falha ao buscar detalhes do treino.");
+  }
+}
+
+// Lista treinos do usuário autenticado
+export async function listTreinos(): Promise<TreinoDetalhe[]> {
+  try {
+    const resp = await fetch(`${API_URL}/treinos/`, {
+      method: 'GET',
+      headers: authHeader(),
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Falha ao listar treinos: ${resp.status} ${resp.statusText}`);
+    }
+
+    const data = await resp.json();
+    if (Array.isArray(data)) return data as TreinoDetalhe[];
+    return [];
+  } catch (err) {
+    console.error('Erro ao listar treinos:', err);
+    return [];
   }
 }
