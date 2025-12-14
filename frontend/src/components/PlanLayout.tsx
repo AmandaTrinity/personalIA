@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play, BarChart3, Info } from 'lucide-react';
+import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/pages/trainingPlan.css'; 
 // Importa a nova função para comunicação com a API e o tipo de dados
@@ -76,6 +76,105 @@ function getEquipmentText(equipment?: string): string {
   return equipments[equipment || 'sem-equipamento'] || 'Sem Equipamento';
 }
 
+// Parser: converte o texto livre da IA em um array de WorkoutDay
+function parsePlanFromAI(text: string): WorkoutDay[] {
+  if (!text || typeof text !== 'string') return [];
+
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+
+  // Detecta indices onde começam novos dias (ex: Segunda-feira:, Dia 1:, Treino - Dia 1)
+  const dayStartIndexes: number[] = [];
+  const dayNameRegex = /^(segunda|terça|terca|quarta|quinta|sexta|sábado|sabado|domingo)[:\s-]?/i;
+  const diaRegex = /^dia\s+\d+/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (dayNameRegex.test(lines[i]) || diaRegex.test(lines[i]) || /^dia[:\s]/i.test(lines[i])) {
+      dayStartIndexes.push(i);
+    }
+  }
+
+  // Se não encontrar divisões por dia, tenta dividir por blocos separados por linhas em branco (já removidas),
+  // então assume que cada bloco de exercícios separado por "\n\n" no original corresponde a um dia.
+  if (dayStartIndexes.length === 0) {
+    // Tenta dividir por títulos que contenham 'Dia' ou 'Treino' ou por headings numeradas (1., 2., ...)
+    // fallback: agrupa tudo como um único dia
+    const single: WorkoutDay = {
+      day: 'Dia 1',
+      title: lines[0] || 'Treino Personalizado',
+      exercises: parseExercisesFromLines(lines),
+    };
+    return [single];
+  }
+
+  const days: WorkoutDay[] = [];
+  for (let d = 0; d < dayStartIndexes.length; d++) {
+    const start = dayStartIndexes[d];
+    const end = d + 1 < dayStartIndexes.length ? dayStartIndexes[d + 1] : lines.length;
+    const block = lines.slice(start, end);
+
+    // O primeiro line do bloco costuma conter o dia/título
+    const first = block[0];
+    // Remove prefixo como "Segunda-feira:" ou "Dia 1 -"
+  const title = first.replace(/^(segunda|terça|terca|quarta|quinta|sexta|sábado|sabado|domingo)[:\s-]*/i, '').replace(/^dia\s+\d+[:\s-]*/i, '').trim() || 'Treino';
+
+    const exercises = parseExercisesFromLines(block.slice(1));
+
+  days.push({ day: first.split(/[:-]/)[0] || 'Dia', title: title || 'Treino', exercises });
+  }
+
+  return days;
+}
+
+// Extrai exercícios de um bloco de linhas
+function parseExercisesFromLines(lines: string[]): Exercise[] {
+  const exercises: Exercise[] = [];
+
+  // Regex para capturar linhas como "1. Agachamento - 3 séries de 12" ou "1) Agachamento"
+  const exerciseLineRegex = /^\d+[.)]?\s*(.+)/;
+  const setsRepsRegex = /(\d+)\s*[xX]\s*(\d+)|(?:(\d+)\s*s(?:éries|eries)?\s*(?:de)?\s*(\d+))/i;
+  const restRegex = /(descans[oa]o|descanso|intervalo):?\s*(\d+s|\d+m|\d+\s*min)/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const nameMatch = line.match(exerciseLineRegex);
+    if (nameMatch) {
+      const name = nameMatch[1].split('-')[0].trim();
+
+      // procura sets/reps/rest nas próximas 2 linhas
+      let sets = '';
+      let reps = '';
+      let rest = '';
+
+      const lookahead = lines.slice(i + 1, i + 4).join(' ');
+      const sr = lookahead.match(setsRepsRegex);
+      if (sr) {
+        if (sr[1] && sr[2]) {
+          sets = sr[1];
+          reps = sr[2];
+        } else if (sr[3] && sr[4]) {
+          sets = sr[3];
+          reps = sr[4];
+        }
+      }
+
+      const rr = lookahead.match(restRegex);
+      if (rr) {
+        rest = rr[2];
+      }
+
+      exercises.push({ name: name || line, sets: sets || '3', reps: reps || '12', rest: rest || '60s', completed: false });
+    } else {
+      // Também aceita listas iniciadas com '-' ou '*'
+      if (/^[-*]\s+/.test(line)) {
+        const name = line.replace(/^[-*]\s+/, '').split('-')[0].trim();
+        exercises.push({ name, sets: '3', reps: '12', rest: '60s', completed: false });
+      }
+    }
+  }
+
+  return exercises;
+}
+
 // REMOVIDA: function generateAIResponse(userMessage: string, profile: UserProfile): string {
 
 // --- Componente Principal ---
@@ -148,7 +247,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
-  }, [userProfile.name]);
+  }, [userProfile.name, userProfile.objective]);
 
   useEffect(() => {
     scrollToBottom();
@@ -189,6 +288,18 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
+
+      // Tenta parsear a resposta da IA em dias/exercícios. Se conseguir, atualiza o plano mostrado.
+      try {
+        const parsed = parsePlanFromAI(aiResponse);
+        if (parsed && parsed.length > 0) {
+          setWorkoutPlan(parsed);
+          setCurrentWorkout(parsed[0]);
+        }
+      } catch (e) {
+        // Se parsing falhar, apenas ignora — a mensagem da IA permanece no chat
+        console.debug('Parse IA falhou:', e);
+      }
 
     } catch (error) {
         console.error('Erro ao enviar mensagem para IA:', error);

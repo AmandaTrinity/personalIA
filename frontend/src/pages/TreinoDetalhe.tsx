@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getTreinoDetalhe, type TreinoDetalhe } from '../services/treino_api';
 import { ClipboardList, Save, Dumbbell, Zap, HeartPulse, Target, BarChart3, MessageSquare, Play, Circle } from 'lucide-react';
@@ -25,7 +26,7 @@ function parsePlanoDeTreino(markdown: string): ParsedWorkout | null {
   const lines = markdown.split('\n').filter(line => line.trim() !== '');
   const exercises: Exercise[] = [];
   let currentTitle = 'Treino Personalizado';
-  let currentDay = 'Dia de Treino';
+  const currentDay = 'Dia de Treino';
   let currentName = '';
   
   // Regex para capturar NOME e FOCO (usando os números 1., 2., etc.)
@@ -33,7 +34,7 @@ function parsePlanoDeTreino(markdown: string): ParsedWorkout | null {
   // Regex para capturar SÉRIES e REPETIÇÕES
   const executionRegex = /Execução:\s*(\d+)\s*série(s)?\s*de\s*(\d+)\s*repetiç(ões|ão)/i;
   // Regex para capturar Desanso
-  const restRegex = /(descan[sç]o|intervalo):\s*(\d+s|\d+m|[\d\.]+ min)/i;
+  const restRegex = /(descan[sç]o|intervalo):\s*(\d+s|\d+m|[\d.]+ min)/i;
 
   for (const line of lines) {
     if (line.toLowerCase().includes('plano de treino:')) {
@@ -136,14 +137,19 @@ export default function TreinoDetalhe() {
         const data = await getTreinoDetalhe(treinoId);
         setTreino(data);
         
-        // Processa o plano gerado para o formato da UI
-        const parsed = parsePlanoDeTreino(data.plano_gerado);
-        if (!parsed) {
-          setError('Não foi possível estruturar o plano de treino. Exibindo texto bruto.');
+        // Processa o plano gerado para o formato da UI (somente se for string)
+        if (typeof data.plano_gerado === 'string') {
+          const parsed = parsePlanoDeTreino(data.plano_gerado);
+          if (!parsed) {
+            setError('Não foi possível estruturar o plano de treino. Exibindo texto bruto.');
+          }
+          setParsedData(parsed);
+        } else {
+          setParsedData(null);
         }
-        setParsedData(parsed); 
-      } catch (e: any) {
-        setError(e.message || 'Falha ao carregar detalhes do treino. Verifique o backend.');
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : 'Falha ao carregar detalhes do treino. Verifique o backend.';
+        setError(message);
       } finally {
         setLoading(false);
       }
@@ -159,16 +165,18 @@ export default function TreinoDetalhe() {
   if (!treino || (!parsedData && !treino.plano_gerado)) return <div className="treino-not-found">Treino não encontrado.</div>;
   
   // Usaremos o treino gerado como base para o nome do treino (o título grande)
-  const workoutTitle = treino.plano_gerado.split('\n')[0].replace('Plano de Treino:', '').trim() || 'Plano de Treino';
+  const workoutTitle = (typeof treino.plano_gerado === 'string' ? treino.plano_gerado : '').split('\n')[0].replace('Plano de Treino:', '').trim() || 'Plano de Treino';
 
+  // helper seguro para extrair strings de campos possivelmente unknown
+  const safeStr = (v: unknown): string | undefined => (typeof v === 'string' ? v : undefined);
 
-  // Mapeamento do Perfil para o Painel Lateral
-  const profileItems = [
-    { label: 'Objetivo', value: getObjectiveText(treino.objetivo), icon: <Target size={20} /> },
-    { label: 'Nível', value: getLevelText(treino.level), icon: <Dumbbell size={20} /> },
-    { label: 'Frequência', value: treino.frequencia, icon: <Zap size={20} /> },
-    { label: 'Equipamento', value: getEquipmentText(treino.equipment), icon: <ClipboardList size={20} /> },
-    { label: 'Idade', value: treino.idade || 'N/A', icon: <HeartPulse size={20} /> },
+  // Mapeamento do Perfil para o Painel Lateral (valores garantidos como string)
+  const profileItems: { label: string; value: string; icon: React.ReactNode }[] = [
+    { label: 'Objetivo', value: getObjectiveText(safeStr(treino?.['objetivo'])), icon: <Target size={20} /> },
+    { label: 'Nível', value: getLevelText(safeStr(treino?.['level'])), icon: <Dumbbell size={20} /> },
+    { label: 'Frequência', value: String(treino?.['frequencia'] ?? 'N/A'), icon: <Zap size={20} /> },
+    { label: 'Equipamento', value: getEquipmentText(safeStr(treino?.['equipment'])), icon: <ClipboardList size={20} /> },
+    { label: 'Idade', value: String(treino?.['idade'] ?? 'N/A'), icon: <HeartPulse size={20} /> },
   ];
 
   return (
