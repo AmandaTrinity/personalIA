@@ -325,7 +325,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         <div className="sidebar-header">
           <div className="logo-container">
             <Dumbbell className="logo-icon" />
-            <span className="logo-text">FitPlan AI</span>
+            <span className="logo-text">Personal AI</span>
           </div>
           <div className="user-info">
             <div className="user-text">Bem-vindo,</div>
