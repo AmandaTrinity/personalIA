@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Send, Brain, User, Dumbbell, Save, MessageSquare, CheckCircle2, Circle, Play } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/pages/trainingPlan.css'; 
-// Importa a nova função para comunicação com a API e o tipo de dados
-import { sendPlanRequest, type PlanRequestData, listTreinos } from '../services/treino_api';
+// Importa a função para comunicação com a API (endpoint de chat, não persiste planos)
+import { sendPlanRequest } from '../services/treino_api';
 
 // --- Tipos de Dados ---
 interface UserProfile {
@@ -76,104 +77,17 @@ function getEquipmentText(equipment?: string): string {
   return equipments[equipment || 'sem-equipamento'] || 'Sem Equipamento';
 }
 
-// Parser: converte o texto livre da IA em um array de WorkoutDay
-function parsePlanFromAI(text: string): WorkoutDay[] {
-  if (!text || typeof text !== 'string') return [];
-
-  const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
-
-  // Detecta indices onde começam novos dias (ex: Segunda-feira:, Dia 1:, Treino - Dia 1)
-  const dayStartIndexes: number[] = [];
-  const dayNameRegex = /^(segunda|terça|terca|quarta|quinta|sexta|sábado|sabado|domingo)[:\s-]?/i;
-  const diaRegex = /^dia\s+\d+/i;
-
-  for (let i = 0; i < lines.length; i++) {
-    if (dayNameRegex.test(lines[i]) || diaRegex.test(lines[i]) || /^dia[:\s]/i.test(lines[i])) {
-      dayStartIndexes.push(i);
-    }
-  }
-
-  // Se não encontrar divisões por dia, tenta dividir por blocos separados por linhas em branco (já removidas),
-  // então assume que cada bloco de exercícios separado por "\n\n" no original corresponde a um dia.
-  if (dayStartIndexes.length === 0) {
-    // Tenta dividir por títulos que contenham 'Dia' ou 'Treino' ou por headings numeradas (1., 2., ...)
-    // fallback: agrupa tudo como um único dia
-    const single: WorkoutDay = {
-      day: 'Dia 1',
-      title: lines[0] || 'Treino Personalizado',
-      exercises: parseExercisesFromLines(lines),
-    };
-    return [single];
-  }
-
-  const days: WorkoutDay[] = [];
-  for (let d = 0; d < dayStartIndexes.length; d++) {
-    const start = dayStartIndexes[d];
-    const end = d + 1 < dayStartIndexes.length ? dayStartIndexes[d + 1] : lines.length;
-    const block = lines.slice(start, end);
-
-    // O primeiro line do bloco costuma conter o dia/título
-    const first = block[0];
-    // Remove prefixo como "Segunda-feira:" ou "Dia 1 -"
-  const title = first.replace(/^(segunda|terça|terca|quarta|quinta|sexta|sábado|sabado|domingo)[:\s-]*/i, '').replace(/^dia\s+\d+[:\s-]*/i, '').trim() || 'Treino';
-
-    const exercises = parseExercisesFromLines(block.slice(1));
-
-  days.push({ day: first.split(/[:-]/)[0] || 'Dia', title: title || 'Treino', exercises });
-  }
-
-  return days;
+// Tipo que representa o corpo esperado pela API de chat/plano
+interface PlanRequestData {
+  mensagem_usuario: string;
+  nivel?: string | undefined;
+  objetivo?: string | undefined;
+  equipamentos?: string[] | undefined;
+  frequencia?: string | undefined;
 }
 
-// Extrai exercícios de um bloco de linhas
-function parseExercisesFromLines(lines: string[]): Exercise[] {
-  const exercises: Exercise[] = [];
-
-  // Regex para capturar linhas como "1. Agachamento - 3 séries de 12" ou "1) Agachamento"
-  const exerciseLineRegex = /^\d+[.)]?\s*(.+)/;
-  const setsRepsRegex = /(\d+)\s*[xX]\s*(\d+)|(?:(\d+)\s*s(?:éries|eries)?\s*(?:de)?\s*(\d+))/i;
-  const restRegex = /(descans[oa]o|descanso|intervalo):?\s*(\d+s|\d+m|\d+\s*min)/i;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const nameMatch = line.match(exerciseLineRegex);
-    if (nameMatch) {
-      const name = nameMatch[1].split('-')[0].trim();
-
-      // procura sets/reps/rest nas próximas 2 linhas
-      let sets = '';
-      let reps = '';
-      let rest = '';
-
-      const lookahead = lines.slice(i + 1, i + 4).join(' ');
-      const sr = lookahead.match(setsRepsRegex);
-      if (sr) {
-        if (sr[1] && sr[2]) {
-          sets = sr[1];
-          reps = sr[2];
-        } else if (sr[3] && sr[4]) {
-          sets = sr[3];
-          reps = sr[4];
-        }
-      }
-
-      const rr = lookahead.match(restRegex);
-      if (rr) {
-        rest = rr[2];
-      }
-
-      exercises.push({ name: name || line, sets: sets || '3', reps: reps || '12', rest: rest || '60s', completed: false });
-    } else {
-      // Também aceita listas iniciadas com '-' ou '*'
-      if (/^[-*]\s+/.test(line)) {
-        const name = line.replace(/^[-*]\s+/, '').split('-')[0].trim();
-        exercises.push({ name, sets: '3', reps: '12', rest: '60s', completed: false });
-      }
-    }
-  }
-
-  return exercises;
-}
+// (Parser removido intencionalmente: mantemos o plano mockado e
+// evitamos que respostas do chat sobrescrevam o mock.)
 
 // REMOVIDA: function generateAIResponse(userMessage: string, profile: UserProfile): string {
 
@@ -186,8 +100,8 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       day: "Segunda-feira",
       title: "Peito e Braços em Casa",
       exercises: [
-        { name: "Flexão de Braço no Chão", sets: "3", reps: "10-15", rest: "60s", completed: true },
-        { name: "Flexão com Joelhos Apoiados", sets: "3", reps: "15", rest: "45s", completed: true },
+        { name: "Flexão de Braço no Chão", sets: "3", reps: "10-15", rest: "60s", completed: false },
+        { name: "Flexão com Joelhos Apoiados", sets: "3", reps: "15", rest: "45s", completed: false },
         { name: "Mergulho na Cadeira (Tríceps)", sets: "3", reps: "12", rest: "45s", completed: false },
         { name: "Abdominal Crunch", sets: "3", reps: "15", rest: "30s", completed: false },
         { name: "Prancha (Core)", sets: "3", reps: "60s", rest: "30s", completed: false },
@@ -227,6 +141,22 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
   const [activeTab, setActiveTab] = useState<'workout' | 'progress'>('workout');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Gera ids razoavelmente únicos para mensagens (evita colisões simples)
+  const makeMessageId = () => Date.now() + Math.floor(Math.random() * 1000);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Limpa token de autenticação e navega para a página inicial
+    try {
+      localStorage.removeItem('token');
+      // opcional: remover user info se existir
+      // localStorage.removeItem('user');
+    } catch {
+      // ignore
+    }
+    navigate('/');
+  };
+
   // Calcula a porcentagem de conclusão para o indicador de progresso
   const getCompletionPercentage = (workout: WorkoutDay) => {
     const completed = workout.exercises.filter(e => e.completed).length;
@@ -249,31 +179,9 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     setMessages([welcomeMessage]);
   }, [userProfile.name, userProfile.objective]);
 
-  // Ao montar, tenta carregar o último treino salvo do backend e popular a UI
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const treinos = await listTreinos();
-        if (!mounted) return;
-        if (treinos && treinos.length > 0) {
-          // Assume que o último elemento é o mais recente (backend retorna em ordem)
-          const latest = treinos[0];
-          const plano = latest.plano_gerado;
-          if (typeof plano === 'string' && plano.trim().length > 0) {
-            const parsed = parsePlanFromAI(plano);
-            if (parsed && parsed.length > 0) {
-              setWorkoutPlan(parsed);
-              setCurrentWorkout(parsed[0]);
-            }
-          }
-        }
-      } catch (e) {
-        console.debug('Falha ao carregar treinos salvos:', e);
-      }
-    })();
-    return () => { mounted = false; };
-  }, []);
+  // NOTE: mantemos o plano mockado por padrão; não carregamos automaticamente
+  // treinos salvos nem atualizamos o plano a partir do chat. Isso evita que
+  // respostas de chat substituam o mock.
 
   useEffect(() => {
     scrollToBottom();
@@ -283,7 +191,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
     if (!inputMessage.trim()) return;
 
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: makeMessageId(),
       sender: 'user',
       text: inputMessage,
       timestamp: new Date(),
@@ -304,66 +212,19 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
           frequencia: userProfile.duration,
       };
 
-      // Chamada real à API do Gemini via backend
-      const aiResponse = await sendPlanRequest(requestBody);
-      
-      // Adiciona a mensagem bruta ao chat
+      // Envia para o backend (nota: rota atual é a mesma usada para gerar plano).
+      // Não fazemos mais parsing da resposta para alterar o plano exibido.
+      const rawResponse = await sendPlanRequest(requestBody);
+      const aiText = typeof rawResponse === 'string' ? rawResponse : JSON.stringify(rawResponse);
+
+      // Adiciona a mensagem bruta ao chat (somente exibição)
       const aiMessage: Message = {
-        id: messages.length + 2,
+        id: makeMessageId(),
         sender: 'ai',
-        text: aiResponse,
+        text: aiText,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
-
-      // DEBUG/robustez: tentar extrair um plano mesmo se o backend retornar JSON
-      // ou um objeto serializado. O sendPlanRequest às vezes pode retornar
-      // um JSON stringificado contendo { treino: { plano_gerado: '...' } }.
-      try {
-        let planText: string | null = null;
-
-        // 1) se aiResponse já contém 'Plano de Treino' ou linhas, usa diretamente
-        if (typeof aiResponse === 'string' && /plano de treino|segunda-feira|dia 1|1\./i.test(aiResponse)) {
-          planText = aiResponse;
-        }
-
-        // 2) tenta parsear como JSON caso seja stringified JSON
-        if (!planText) {
-          try {
-            const parsedJson = JSON.parse(aiResponse);
-            // procura por treino.plano_gerado
-            if (parsedJson && typeof parsedJson === 'object') {
-              if ('treino' in parsedJson && parsedJson.treino && typeof parsedJson.treino === 'object' && 'plano_gerado' in parsedJson.treino) {
-                planText = parsedJson.treino.plano_gerado as string;
-              } else if ('plano_gerado' in parsedJson && typeof parsedJson.plano_gerado === 'string') {
-                planText = parsedJson.plano_gerado as string;
-              }
-            }
-          } catch {
-            // não é JSON, ignora
-          }
-        }
-
-        // 3) fallback: se a mensagem da IA contém um bloco de Markdown com listas numeradas,
-        // tratamos o texto raw como planText
-        if (!planText && typeof aiResponse === 'string') {
-          // pega até um limite razoável
-          planText = aiResponse;
-        }
-
-        if (planText) {
-          const parsed = parsePlanFromAI(planText);
-          if (parsed && parsed.length > 0) {
-            setWorkoutPlan(parsed);
-            setCurrentWorkout(parsed[0]);
-            console.debug('Plano extraído da resposta da IA:', parsed);
-          } else {
-            console.debug('Parser não extraiu dias/exercícios da resposta da IA. Raw:', planText);
-          }
-        }
-      } catch (e) {
-        console.debug('Erro ao tentar extrair plano da IA:', e);
-      }
 
     } catch (error) {
         console.error('Erro ao enviar mensagem para IA:', error);
@@ -410,7 +271,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
   const handleSaveWorkout = () => {
     setSavedWorkouts([...savedWorkouts, `${currentWorkout.title} - ${new Date().toLocaleDateString('pt-BR')}`]);
     const aiMessage: Message = {
-      id: messages.length + 1,
+      id: makeMessageId(),
       sender: 'ai',
       text: `✅ Treino "${currentWorkout.title}" salvo com sucesso! Você pode acessá-lo na seção "Treinos Salvos".`,
       timestamp: new Date(),
@@ -653,6 +514,26 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
           </div>
         </div>
       )}
+      {/* Logout fixo no canto inferior esquerdo */}
+      <button
+        onClick={handleLogout}
+        aria-label="Logout"
+        style={{
+          position: 'fixed',
+          left: 16,
+          bottom: 16,
+          background: '#e53e3e',
+          color: '#fff',
+          border: 'none',
+          padding: '10px 14px',
+          borderRadius: 8,
+          zIndex: 1000,
+          cursor: 'pointer',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+        }}
+      >
+        Sair
+      </button>
     </div>
   );
 }
