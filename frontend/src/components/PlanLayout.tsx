@@ -87,8 +87,8 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
       day: "Segunda-feira",
       title: "Peito e Braços em Casa",
       exercises: [
-        { name: "Flexão de Braço no Chão", sets: "3", reps: "10-15", rest: "60s", completed: true },
-        { name: "Flexão com Joelhos Apoiados", sets: "3", reps: "15", rest: "45s", completed: true },
+        { name: "Flexão de Braço no Chão", sets: "3", reps: "10-15", rest: "60s", completed: false },
+        { name: "Flexão com Joelhos Apoiados", sets: "3", reps: "15", rest: "45s", completed: false },
         { name: "Mergulho na Cadeira (Tríceps)", sets: "3", reps: "12", rest: "45s", completed: false },
         { name: "Abdominal Crunch", sets: "3", reps: "15", rest: "30s", completed: false },
         { name: "Prancha (Core)", sets: "3", reps: "60s", rest: "30s", completed: false },
@@ -289,7 +289,7 @@ export function PlanLayout({ userProfile }: PlanLayoutProps) {
         <div className="sidebar-header">
           <div className="logo-container">
             <Dumbbell className="logo-icon" />
-            <span className="logo-text">FitPlan AI</span>
+            <span className="logo-text">Personal AI</span>
           </div>
           <div className="user-info">
             <div className="user-text">Bem-vindo,</div>
